@@ -1,0 +1,51 @@
+{
+  "textOpeningTitle": "AdeGreenTaxi. Your Electric Ride Companion.",
+  "textOpeningDesc": "Eco‑friendly electric taxi rides, fast and safe — all in one app.",
+  "textOpeningButtonStarted": "Get Started",
+  "textOpeningButtonLearn": "Learn More",
+  "semiNavbar": {
+    "buttonInstall": "Download App",
+    "languageChoice": "English"
+  },
+  "mainNavbar": {
+    "about": "About",
+    "service": "Services",
+    "feature": "Features",
+    "company": "Enterprise",
+    "faq": "FAQ"
+  },
+  "servicesHeaderTitle": "Our Core Services",
+  "servicesHeaderDesc": "AdeGreenTaxi delivers safe, fast, and eco‑friendly electric taxi rides designed for your everyday mobility.",
+  "services": [
+    {
+      "title": "Eco-Friendly Rides",
+      "desc": "Enjoy environmentally friendly journeys with energy-efficient vehicles."
+    },
+    {
+      "title": "Taxi Anywhere",
+      "desc": "Fast and safe transportation to your destination anytime."
+    },
+    {
+      "title": "Secure Payments",
+      "desc": "Safe and flexible digital payments directly from the app."
+    },
+    {
+      "title": "24/7 Availability",
+      "desc": "Service ready to assist you whenever you need."
+    }
+  ],
+  "extras": [
+    {
+      "title": "Guaranteed Safety",
+      "desc": "Every ride is equipped with high safety standards for passenger comfort."
+    },
+    {
+      "title": "Sustainability",
+      "desc": "Reduce carbon footprint with our eco-friendly electric fleet."
+    },
+    {
+      "title": "Customer Support",
+      "desc": "Our team is ready to assist you anytime through the app."
+    }
+  ]
+}

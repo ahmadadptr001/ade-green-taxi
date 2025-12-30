@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ⚡ AdeGreenTaxi
 
-## Getting Started
+**AdeGreenTaxi** is a modern, eco‑friendly ride‑hailing platform powered entirely by electric vehicles. Designed for sustainable urban mobility, it combines clean energy, cost efficiency, and a premium user experience.
 
-First, run the development server:
+---
+
+## 🌱 Why AdeGreenTaxi?
+
+- 🚗 **Electric Fleet** — 100% electric vehicles for zero emissions and quiet rides.
+- 💸 **Cost‑Efficient** — Lower operational costs mean affordable fares for everyone.
+- 🛡️ **Trusted Safety** — Trained drivers, secure systems, and real‑time monitoring.
+- 📱 **Smart App** — Intuitive UI, instant booking, and bilingual support.
+- 🕒 **24/7 Availability** — Request rides anytime, with cash payment always supported.
+
+---
+
+## ✨ Features
+
+| Feature              | Description                                                               |
+| -------------------- | ------------------------------------------------------------------------- |
+| Electric Vehicles    | All rides use electric taxis for clean, quiet, and efficient travel.      |
+| Bilingual Support    | Instantly switch between English and Indonesian via Zustand store.        |
+| Real‑Time UI         | Live ride status, map tracking, and responsive design across all devices. |
+| Modular Components   | Built with composable React architecture for rapid iteration and scaling. |
+| Cash‑Only Simplicity | No wallet setup required — just book and pay in cash.                     |
+
+---
+
+## 🧩 Tech Stack
+
+- **Frontend:** React, Next.js, Tailwind CSS, Zustand
+- **Infrastructure:** Nginx, PM2
+- **Design System:** ShadCN UI, Lucide Icons, AOS animations
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+# Clone the repo
+git clone https://github.com/ahmadadptr001/ade-green-taxi.git
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── app/                 # Next.js app directory
+├── components/          # UI components (accordion, modal, hex cards, etc.)
+├── locales/             # Bilingual JSON content (id.json, en.json)
+├── store/               # Zustand language and UI state
+├── public/              # Assets (logo, loading.gif, etc.)
+└── pages/               # Static pages (terms, privacy, landing)
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 Legal & Privacy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Terms & Conditions](https://adebgs.com/ade-green-taxi/terms)
+- [Privacy Policy](https://adebgs.com/ade-green-taxi/privacy)
+- [Legal Notices](https://adebgs.com/ade-green-taxi/legal)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧠 Built by
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Ahmad Bagas Adiputra**  
+Product Owner, UI/UX Designer, and Fullstack Architect  
+Specialized in real‑time systems, premium component design, and electric mobility platforms.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🟢 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💬 Feedback & Support
+
+For feature requests, bug reports, or partnership inquiries, contact:  
+📧 support@adegreentaxi.com  
+📍 Kendari, Sulawesi Tenggara
+
+---
+
+> “Clean rides. Smart design. Electric future.”  
+> — AdeGreenTaxi

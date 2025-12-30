@@ -1,0 +1,51 @@
+{
+  "textOpeningTitle": "AdeGreenTaxi. Sahabat Perjalanan Elektrik Anda.",
+  "textOpeningDesc": "Perjalanan taksi listrik ramah lingkungan, cepat dan aman — semua dalam satu aplikasi.",
+  "textOpeningButtonStarted": "Mulai",
+  "textOpeningButtonLearn": "Pelajari Lebih Lanjut",
+  "semiNavbar": {
+    "buttonInstall": "Unduh Aplikasi",
+    "languageChoice": "Indonesia"
+  },
+  "mainNavbar": {
+    "about": "Tentang",
+    "service": "Layanan",
+    "feature": "Fitur",
+    "company": "Perusahaan",
+    "faq": "FAQ"
+  },
+  "servicesHeaderTitle": "Layanan Utama Kami",
+  "servicesHeaderDesc": "AdeGreenTaxi menghadirkan perjalanan taksi listrik yang aman, cepat, dan ramah lingkungan untuk mobilitas harian Anda.",
+  "services": [
+    {
+      "title": "Perjalanan Ramah Lingkungan",
+      "desc": "Nikmati perjalanan ramah lingkungan dengan kendaraan hemat energi."
+    },
+    {
+      "title": "Taksi di Mana Saja",
+      "desc": "Transportasi cepat dan aman ke tujuanmu kapan saja."
+    },
+    {
+      "title": "Pembayaran Aman",
+      "desc": "Pembayaran digital aman dan fleksibel langsung dari aplikasi."
+    },
+    {
+      "title": "Tersedia 24/7",
+      "desc": "Layanan siap membantu kapan pun kamu butuhkan."
+    }
+  ],
+  "extras": [
+    {
+      "title": "Keamanan Terjamin",
+      "desc": "Setiap perjalanan dilengkapi standar keselamatan tinggi untuk kenyamanan penumpang."
+    },
+    {
+      "title": "Berkelanjutan",
+      "desc": "Mengurangi jejak karbon dengan armada mobil listrik ramah lingkungan."
+    },
+    {
+      "title": "Dukungan Pelanggan",
+      "desc": "Tim kami siap membantu melalui aplikasi kapan saja."
+    }
+  ]
+}
