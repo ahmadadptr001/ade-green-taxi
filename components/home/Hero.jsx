@@ -12,14 +12,6 @@ export default function Hero() {
 
   return (
     <main className="relative w-full h-screen p-5">
-      {/* Background image */}
-      {/* <Image
-        src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1920&auto=format&fit=crop&q=60"
-        alt="Taxi background"
-        fill
-        priority
-        className="object-conntain"
-      /> */}
       <video
         src="/bg.mp4"
         autoPlay
@@ -52,18 +44,10 @@ export default function Hero() {
             href="/"
             data-aos="zoom-out"
             data-aos-duration="500"
-            className="px-8 py-4 text-lg cursor-pointer hover:scale-105 flex items-center gap-2 rounded-lg bg-green-500 text-white transition-transform shadow-lg"
-          >
-            <span>{t?.textOpeningButtonStarted}</span>
-            <ArrowRight size={18} />
-          </a>
-          <a
-            href="/"
-            data-aos="zoom-out"
-            data-aos-duration="500"
             className="px-8 py-4 bg-white/10 text-lg cursor-pointer hover:scale-105 flex items-center gap-2 rounded-lg backdrop-blur-md border border-white/30 text-white transition-transform shadow-lg"
           >
-            <span>{t?.textOpeningButtonLearn}</span>
+            <img src="/icon-playstore.png" className="w-6 h-6 object-cover" />
+            <span>{t?.semiNavbar.buttonInstall}</span>
           </a>
         </div>
       </div>

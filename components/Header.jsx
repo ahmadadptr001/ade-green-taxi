@@ -38,7 +38,7 @@ export default function Header() {
             src="/text-2.png"
             alt=""
             loading="lazy"
-            className="object-contain w-30 sm:w-40 sm:w-50"
+            className="object-contain w-32 sm:w-40 sm:w-50"
           />
         </div>
 
@@ -99,7 +99,7 @@ export default function Header() {
           <a href="/faq" className="hover:text-green-600">
             {t?.mainNavbar.faq}
           </a>
-          <Button className="flex mt-4 items-center gap-1 w-full bg-green-600 text-white hover:bg-green-700 text-sm">
+          <Button className="flex mt-4 items-center gap-1 p-6 w-full bg-green-600 text-white hover:bg-green-700 text-sm">
             <img
               src="/icon-playstore.png"
               className="w-4 h-4 object-cover"

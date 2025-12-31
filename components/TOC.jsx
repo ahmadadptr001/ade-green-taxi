@@ -23,7 +23,7 @@ export default function TOC({ sections }) {
   }, [sections]);
 
   return (
-    <nav className="sticky top-24 space-y-2">
+    <nav className="sticky bg-white h-fit top-2 shadow-md  p-3 rounded-md space-y-2">
       <div className="text-sm uppercase tracking-wide text-gray-400 mb-2">Contents</div>
       <ul className="space-y-2">
         {sections.map((s) => (
