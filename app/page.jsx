@@ -14,7 +14,7 @@ export default function LoadingScreen() {
       setProgress(value);
       if (value >= 100) {
         clearInterval(interval);
-        router.push('/landing'); // ⬅️ setelah selesai, ke landing page
+        router.push('/beranda'); // ⬅️ setelah selesai, ke landing page
       }
     }, 300); // 300ms per step → total ~3 detik
     return () => clearInterval(interval);
