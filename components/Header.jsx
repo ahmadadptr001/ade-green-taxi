@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, LifeBuoy } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
@@ -11,7 +11,6 @@ export default function Header() {
   const { language, setLanguage } = useLanguageStore();
   const t = language === 'id' ? ID : EN;
 
-  // lock scroll when menu open
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : 'auto';
   }, [open]);
@@ -43,7 +42,8 @@ export default function Header() {
         style={{ height: '70vh' }}
       >
         <div className="h-full flex flex-col items-center justify-center gap-10">
-          {/* NAV */}
+
+          {/* MAIN NAV */}
           <nav className="flex flex-col items-center gap-6 text-2xl font-semibold">
             <a onClick={() => setOpen(false)} href="#layanan">
               {t.mainNavbar.service}
@@ -58,6 +58,26 @@ export default function Header() {
               {t.mainNavbar.faq}
             </a>
           </nav>
+
+          {/* DIVIDER */}
+          <div className="w-24 h-px bg-black/10" />
+
+          {/* SUPPORT / HELP (SEPARATE) */}
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xs uppercase tracking-wider text-gray-400">
+              {language === 'id' ? 'Butuh Bantuan?' : 'Need Help?'}
+            </span>
+
+            <a
+              href="/bantuan"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 text-base font-medium text-gray-700
+              hover:text-green-600 transition"
+            >
+              <LifeBuoy size={18} />
+              {language === 'id' ? 'Pusat Bantuan' : 'Help Center'}
+            </a>
+          </div>
 
           {/* ACTION */}
           <div className="flex flex-col gap-4 w-full max-w-xs">
