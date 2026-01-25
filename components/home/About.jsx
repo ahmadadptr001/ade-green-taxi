@@ -44,7 +44,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-28 bg-white text-gray-900">
+    <section id="tentang" className="py-28 bg-white text-gray-900">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Image */}
         <div className="relative">

@@ -133,7 +133,7 @@ export default function Features() {
   }, []);
 
   return (
-    <section ref={containerRef} id="features" className="relative">
+    <section ref={containerRef} id="fitur" className="relative">
       {/* each section is a sticky full-screen panel; panels stack and cover each other */}
       {SECTIONS.map((s, i) => {
         const Icon = s.Icon;

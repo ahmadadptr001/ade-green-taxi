@@ -52,7 +52,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="py-28 bg-white text-gray-900">
+    <section id="layanan" className="py-28 bg-white text-gray-900">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-20" data-aos="fade-down">
