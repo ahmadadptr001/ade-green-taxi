@@ -121,7 +121,7 @@ export default function TutorialSection() {
 
         {/* RIGHT */}
         <div className="relative flex justify-center">
-          <div className="relative w-[240px] sm:w-[300px] md:w-[340px] lg:w-[360px] xl:w-[400px]">
+          <div className="relative w-[290px] md:w-[340px] lg:w-[360px] xl:w-[400px]">
             {/* Soft glow */}
             <div className="absolute inset-0 rounded-3xl bg-green-400/10 blur-2xl scale-105" />
 
