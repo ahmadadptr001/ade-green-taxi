@@ -19,7 +19,7 @@ export const metadata = {
     siteName: 'AdeGreenTaxi',
     images: [
       {
-        url: 'https://raw.githubusercontent.com/USERNAME/REPO_NAME/BRANCH/public/default.png',
+        url: '/banner-about.png',
         width: 1200,
         height: 630,
         alt: 'AdeGreenTaxi Preview',
