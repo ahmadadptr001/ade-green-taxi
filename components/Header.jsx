@@ -1,104 +1,85 @@
 'use client';
-import { useState } from 'react';
-import { Menu, X, ChevronDown, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from './ui/dropdown-menu';
+
+import { useState, useEffect } from 'react';
+import { Menu, X, Globe } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { language, setLanguage } = useLanguageStore();
-
   const t = language === 'id' ? ID : EN;
 
+  // lock scroll when menu open
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : 'auto';
+  }, [open]);
+
   return (
-    <header className="fixed top-0 z-250 w-full bg-white  border-b border-white">
-      <div className="mx-auto flex max-w-screen-xl items-center justify-between px-6 py-4">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
+    <>
+      {/* HEADER BAR */}
+      <header className="fixed top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-black/5">
+        <div className="mx-auto max-w-screen-xl px-6 h-16 flex items-center justify-between">
+          <a href="/beranda">
+            <img src="/text-2.png" alt="Ade Green Taxi" className="h-7" />
+          </a>
+
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-gray-700"
+            onClick={() => setOpen((v) => !v)}
+            className="p-2 rounded-full hover:bg-black/5 transition"
+            aria-label="Toggle Menu"
           >
-            {isOpen ? <X /> : <Menu />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
-          <img
-            src="/text-2.png"
-            alt="Ade Green Taxi"
-            className="h-8 w-auto object-contain"
-          />
         </div>
+      </header>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
-          <a href="#services" className="hover:text-green-600 transition">
-            {t?.mainNavbar.service}
-          </a>
-          <a href="#about" className="hover:text-green-600 transition">
-            {t?.mainNavbar.about}
-          </a>
-          <a href="#features" className="hover:text-green-600 transition">
-            {t?.mainNavbar.feature}
-          </a>
-          <a href="/faq" className="hover:text-green-600 transition">
-            {t?.mainNavbar.faq}
-          </a>
-        </nav>
+      {/* SLIDE DOWN MENU */}
+      <div
+        className={`fixed top-16 left-0 right-0 z-40 bg-white border-b
+        transition-transform duration-300 ease-out
+        ${open ? 'translate-y-0' : '-translate-y-full'}`}
+        style={{ height: '70vh' }}
+      >
+        <div className="h-full flex flex-col items-center justify-center gap-10">
+          {/* NAV */}
+          <nav className="flex flex-col items-center gap-6 text-2xl font-semibold">
+            <a onClick={() => setOpen(false)} href="#layanan">
+              {t.mainNavbar.service}
+            </a>
+            <a onClick={() => setOpen(false)} href="#tentang">
+              {t.mainNavbar.about}
+            </a>
+            <a onClick={() => setOpen(false)} href="#fitur">
+              {t.mainNavbar.feature}
+            </a>
+            <a onClick={() => setOpen(false)} href="#faq">
+              {t.mainNavbar.faq}
+            </a>
+          </nav>
 
-        {/* Actions */}
-        <div className="flex items-center gap-4">
-          <Button className="hidden md:flex items-center gap-2 rounded-full bg-green-600 px-5 py-2 text-sm font-semibold text-white hover:bg-green-700">
-            <img src="/icon-playstore.png" className="h-5 w-5" />
-            {t?.semiNavbar.buttonInstall}
-          </Button>
+          {/* ACTION */}
+          <div className="flex flex-col gap-4 w-full max-w-xs">
+            <a
+              href="/beranda"
+              className="flex items-center justify-center gap-2 py-3 rounded-xl
+              bg-green-600 text-white font-semibold"
+            >
+              <img src="/icon-playstore.png" className="h-5 w-5" />
+              {t.semiNavbar.buttonInstall}
+            </a>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-gray-700 hover:text-green-600">
-              <Globe className="h-4 w-4" />
-              {t?.semiNavbar.languageChoice}
-              <ChevronDown className="h-4 w-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-                className="cursor-pointer"
-              >
-                {language === 'id' ? 'English' : 'Indonesia'}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            <button
+              onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+              className="flex items-center justify-center gap-2 py-3 rounded-xl border"
+            >
+              <Globe size={18} />
+              {language === 'id' ? 'English' : 'Indonesia'}
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden border-t bg-white px-6 py-6 space-y-4 text-gray-700">
-          <a href="#services" className="block hover:text-green-600">
-            {t?.mainNavbar.service}
-          </a>
-          <a href="#about" className="block hover:text-green-600">
-            {t?.mainNavbar.about}
-          </a>
-          <a href="#features" className="block hover:text-green-600">
-            {t?.mainNavbar.feature}
-          </a>
-          <a href="/faq" className="block hover:text-green-600">
-            {t?.mainNavbar.faq}
-          </a>
-
-          <Button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-green-600 py-3 text-white hover:bg-green-700">
-            <img src="/icon-playstore.png" className="h-5 w-5" />
-            {t?.semiNavbar.buttonInstall}
-          </Button>
-        </div>
-      )}
-    </header>
+    </>
   );
 }

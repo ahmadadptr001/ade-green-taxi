@@ -1,30 +1,46 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { Progress } from "@/components/ui/progress";
+import { useEffect } from 'react';
+import { Loader2, Leaf } from 'lucide-react';
 
 export default function LoadingScreen() {
   const router = useRouter();
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let value = 0;
-    const interval = setInterval(() => {
-      value += 10;
-      setProgress(value);
-      if (value >= 100) {
-        clearInterval(interval);
-        router.push('/beranda'); // ⬅️ setelah selesai, ke landing page
-      }
-    }, 300); // 300ms per step → total ~3 detik
-    return () => clearInterval(interval);
+    const timeout = setTimeout(() => {
+      router.replace('/beranda');
+    }, 2000);
+
+    return () => clearTimeout(timeout);
   }, [router]);
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800">
-      <div className="flex flex-col items-center space-y-6 w-72">
-        <img src="/text-2.png" alt="" className='w-50 object-cover'/>
-        <Progress value={progress} className="w-full" />
+    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-green-50 via-white to-green-100">
+      <div className="flex flex-col items-center gap-6 text-center">
+
+        {/* Logo */}
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-600 shadow-xl shadow-green-200">
+          <Leaf className="h-8 w-8 text-white" />
+        </div>
+
+        {/* Brand */}
+        <h1 className="text-2xl font-semibold text-green-700">
+          Green App
+        </h1>
+
+        {/* Description */}
+        <p className="text-sm text-green-600">
+          Preparing your experience
+        </p>
+
+        {/* Spinner */}
+        <Loader2 className="h-7 w-7 animate-spin text-green-500" />
+
+        {/* Micro UX */}
+        <span className="text-xs text-green-500/70">
+          Please wait a moment
+        </span>
       </div>
     </div>
   );

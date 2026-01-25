@@ -10,6 +10,7 @@ import Features from '@/components/home/Features';
 import About from '@/components/home/About';
 import FAQ from '@/components/home/FAQ';
 import Footer from '@/components/home/Footer';
+import TutorialSection from '@/components/home/TutorialSection';
 
 export default function HomePage() {
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function HomePage() {
 
       <Header />
       <Hero />
+      <TutorialSection />
       <Services />
       <About />
       <Features />
