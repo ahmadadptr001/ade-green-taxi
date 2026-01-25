@@ -9,6 +9,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export default function Footer() {
@@ -16,97 +17,105 @@ export default function Footer() {
   const t = language === 'en' ? EN : ID;
 
   return (
-    <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-gray-100">
-      <div className="max-w-7xl mx-auto px-8 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Brand Section */}
-        <div>
-          <img
-            src="/text-2.png"
-            alt=""
-            loading="lazy"
-            className="object-contain mb-4 w-60"
-          />
-          <p className="text-lg leading-relaxed text-gray-300">
-            {language === 'en'
-              ? 'Eco‑friendly rides with electric taxis. Affordable, safe, and always available for your urban journey.'
-              : 'Perjalanan ramah lingkungan dengan taksi listrik. Hemat biaya, aman, dan selalu tersedia untuk mobilitas Anda.'}
-          </p>
-        </div>
+    <footer className="relative bg-gray-100 text-gray-800">
+      {/* subtle background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-200 opacity-70" />
 
-        {/* Quick Links */}
-        <div>
-          <h4 className="text-xl font-semibold mb-4">
-            {language === 'en' ? 'Quick Links' : 'Tautan Cepat'}
-          </h4>
-          <ul className="space-y-2 text-lg">
-            <li>
-              <a href="#features" className="hover:text-green-400 transition">
-                {language === 'en' ? 'Features' : 'Fitur'}
-              </a>
-            </li>
-            <li>
-              <a href="#faq" className="hover:text-green-400 transition">
-                {language === 'en' ? 'FAQ' : 'FAQ'}
-              </a>
-            </li>
-            <li>
-              <a href="#download" className="hover:text-green-400 transition">
-                {language === 'en' ? 'Download App' : 'Unduh Aplikasi'}
-              </a>
-            </li>
-            <li>
-              <a href="#support" className="hover:text-green-400 transition">
-                {language === 'en' ? 'Support' : 'Dukungan'}
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div className="relative max-w-7xl mx-auto px-8 pt-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
+          {/* Brand */}
+          <div className="lg:col-span-1">
+            <img
+              src="/text-2.png"
+              alt="Ade Green Taxi"
+              className="w-56 mb-6"
+            />
 
-        {/* Contact & Social */}
-        <div>
-          <h4 className="text-xl font-semibold mb-4">
-            {language === 'en' ? 'Contact Us' : 'Hubungi Kami'}
-          </h4>
-          <ul className="space-y-3 text-lg">
-            <li className="flex items-center gap-2">
-              <Phone className="w-5 h-5 text-green-400" /> +62 812‑3456‑7890
-            </li>
-            <li className="flex items-center gap-2">
-              <Mail className="w-5 h-5 text-green-400" />{' '}
-              support@adegreentaxi.com
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-green-400" /> Kendari, Sulawesi
-              Tenggara
-            </li>
-          </ul>
-          <div className="flex gap-4 mt-6">
-            <a href="#" className="hover:text-green-400 transition">
-              <Facebook className="w-6 h-6" />
-            </a>
-            <a href="#" className="hover:text-green-400 transition">
-              <Instagram className="w-6 h-6" />
-            </a>
-            <a href="#" className="hover:text-green-400 transition">
-              <Twitter className="w-6 h-6" />
+            <p className="text-xl text-gray-600 leading-relaxed">
+              {language === 'en'
+                ? 'Electric taxi service crafted for modern cities. Quiet rides, fair pricing, and cleaner streets.'
+                : 'Layanan taksi listrik untuk kota modern. Perjalanan senyap, harga adil, dan jalanan lebih bersih.'}
+            </p>
+
+            <a
+              href="#download"
+              className="inline-flex items-center gap-2 mt-8 text-green-700 font-semibold hover:gap-4 transition-all"
+            >
+              {language === 'en' ? 'Get the App' : 'Unduh Aplikasi'}
+              <ArrowUpRight className="w-5 h-5" />
             </a>
           </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-xs font-semibold tracking-widest text-gray-400 mb-6 uppercase">
+              {language === 'en' ? 'Contact' : 'Kontak'}
+            </h4>
+
+            <ul className="space-y-5 text-lg text-gray-600">
+              <li className="flex gap-3 items-start">
+                <Phone className="w-5 h-5 text-green-600 mt-1" />
+                +62 812-3456-7890
+              </li>
+              <li className="flex gap-3 items-start">
+                <Mail className="w-5 h-5 text-green-600 mt-1" />
+                support@adegreentaxi.com
+              </li>
+              <li className="flex gap-3 items-start">
+                <MapPin className="w-5 h-5 text-green-600 mt-1" />
+                Kendari, Sulawesi Tenggara
+              </li>
+            </ul>
+
+            <div className="flex gap-6 mt-8 text-gray-400">
+              <a href="#" className="hover:text-green-600 transition">
+                <Facebook />
+              </a>
+              <a href="#" className="hover:text-green-600 transition">
+                <Instagram />
+              </a>
+              <a href="#" className="hover:text-green-600 transition">
+                <Twitter />
+              </a>
+            </div>
+          </div>
+
+          {/* Map */}
+          <div className="w-full">
+            <h4 className="text-xs font-semibold tracking-widest text-gray-400 mb-6 uppercase">
+              {language === 'en' ? 'Office Location' : 'Lokasi Kantor'}
+            </h4>
+
+            <div className="relative w-full h-[320px] rounded-2xl overflow-hidden shadow-lg bg-gray-200">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1990.0006407518533!2d122.50281949575488!3d-4.020132934697751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d988d7b9541caef%3A0x2cf821d07be9aef4!2sPT.%20ADE%20SULA%20KENDARI!5e0!3m2!1sid!2sid!4v1769315637039!5m2!1sid!2sid"
+                className="w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+          </div>
         </div>
+
+        {/* Divider */}
+        <div className="mt-24 h-px bg-gray-300/60" />
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-700 text-center py-6 pb-0 text-gray-400 text-sm">
-        © {new Date().getFullYear()} AdeGreenTaxi.{' '}
-        {language === 'en' ? 'All rights reserved.' : 'Hak cipta dilindungi.'}
-      </div>
-      <div className="flex mt-1 items-center gap-2 justify-center pb-6 text-sm text-blue-500">
-        <a href="/terms" className="hover:text-green-400 transition">
-          {language === 'en' ? 'Terms & Conditions' : 'Syarat dan Ketentuan'}
-        </a>
-        <span className='text-gray-400'>|</span>
-        <a href="/privacy" className="hover:text-green-400 transition">
-          {language === 'en' ? 'Privacy Policy' : 'Kebijakan Privasi'}
-        </a>
+      {/* Bottom */}
+      <div className="relative max-w-7xl mx-auto px-8 py-10 text-sm text-gray-500 flex flex-col md:flex-row gap-4 justify-between items-center">
+        <span>
+          © {new Date().getFullYear()} Ade Green Taxi. All rights reserved.
+        </span>
+
+        <div className="flex gap-6">
+          <a href="/terms" className="hover:text-green-600 transition">
+            {language === 'en' ? 'Terms' : 'Syarat'}
+          </a>
+          <a href="/privacy" className="hover:text-green-600 transition">
+            {language === 'en' ? 'Privacy' : 'Privasi'}
+          </a>
+        </div>
       </div>
     </footer>
   );

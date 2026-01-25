@@ -10,84 +10,81 @@ export default function About() {
 
   const features = [
     {
-      icon: <Leaf className="w-12 h-12 text-green-600" />,
-      title: language === 'en' ? 'Eco-Friendly' : 'Ramah Lingkungan',
+      icon: <Leaf className="w-6 h-6 text-green-600" />,
+      title: language === 'en' ? 'Eco Friendly' : 'Ramah Lingkungan',
       desc:
         language === 'en'
-          ? 'All rides use electric cars to reduce emissions and protect the environment.'
-          : 'Semua perjalanan menggunakan mobil listrik untuk mengurangi emisi dan menjaga lingkungan.',
+          ? '100% electric vehicles to reduce emissions.'
+          : '100% kendaraan listrik untuk mengurangi emisi.',
     },
     {
-      icon: <Car className="w-12 h-12 text-green-600" />,
-      title: language === 'en' ? 'Affordable Mobility' : 'Mobilitas Hemat',
+      icon: <Car className="w-6 h-6 text-green-600" />,
+      title: language === 'en' ? 'Comfortable Ride' : 'Perjalanan Nyaman',
       desc:
         language === 'en'
-          ? 'Enjoy cost-efficient taxi rides without hidden fees.'
-          : 'Nikmati perjalanan taksi hemat biaya tanpa biaya tersembunyi.',
+          ? 'Clean, quiet, and modern vehicles.'
+          : 'Kendaraan bersih, senyap, dan modern.',
     },
     {
-      icon: <CreditCard className="w-12 h-12 text-green-600" />,
-      title:
-        language === 'en' ? 'Easy Digital Payment' : 'Pembayaran Digital Mudah',
+      icon: <CreditCard className="w-6 h-6 text-green-600" />,
+      title: language === 'en' ? 'Digital Payment' : 'Pembayaran Digital',
       desc:
         language === 'en'
-          ? 'Pay securely and flexibly through the app.'
-          : 'Bayar dengan aman dan fleksibel langsung dari aplikasi.',
+          ? 'Easy and secure cashless payment.'
+          : 'Pembayaran non-tunai yang mudah dan aman.',
     },
     {
-      icon: <ShieldCheck className="w-12 h-12 text-green-600" />,
+      icon: <ShieldCheck className="w-6 h-6 text-green-600" />,
       title: language === 'en' ? 'Safe & Reliable' : 'Aman & Terpercaya',
       desc:
         language === 'en'
-          ? 'High safety standards ensure every ride is comfortable and secure.'
-          : 'Standar keselamatan tinggi memastikan setiap perjalanan nyaman dan aman.',
+          ? 'Professional drivers and safety standards.'
+          : 'Pengemudi profesional dan standar keselamatan tinggi.',
     },
   ];
 
-  const rotations = ['-2deg', '1deg', '-3deg', '2deg'];
-
   return (
-    <section id='about' className="py-32 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900">
-      <div className="max-w-7xl mx-auto px-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <div data-aos="fade-right" data-aos-duration="1200">
-          <h2 className="text-5xl font-extrabold mb-8 leading-tight">
-            {language === 'en' ? 'About AdeGreenTaxi' : 'Tentang AdeGreenTaxi'}
-          </h2>
-          <p className="text-xl text-gray-700 mb-12 leading-relaxed max-w-2xl">
-            {language === 'en'
-              ? 'AdeGreenTaxi is an online taxi application powered by electric cars. We provide eco-friendly, affordable, and safe rides for your daily mobility. Travel smarter while saving costs and helping the planet.'
-              : 'AdeGreenTaxi adalah aplikasi taksi online berbasis mobil listrik. Kami menyediakan perjalanan ramah lingkungan, hemat biaya, dan aman untuk mobilitas harian Anda. Bepergian lebih cerdas sambil menghemat biaya dan menjaga bumi.'}
-          </p>
-          <a
-            href="/"
-            data-aos="zoom-in"
-            data-aos-duration="1000"
-            className="inline-block px-8 py-4 rounded-xl bg-green-600 text-white text-lg font-semibold hover:bg-green-700 transition"
-          >
-            {language === 'en' ? 'Download App' : 'Unduh Aplikasi'}
-          </a>
+    <section id="about" className="py-28 bg-white text-gray-900">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Image */}
+        <div className="relative">
+          <img
+            src="/banner-about.png"
+            alt="Ade Green Taxi Electric Vehicle"
+            className="rounded-3xl shadow-xl w-full object-cover"
+          />
+          <div className="absolute inset-0 rounded-3xl ring-1 ring-black/5"></div>
         </div>
+        {/* Text */}
+        <div>
+          <span className="inline-block mb-4 px-4 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium">
+            About Ade Green Taxi
+          </span>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {features.map((f, i) => (
-            <div
-              key={i}
-              data-aos="fade-up"
-              data-aos-duration="1200"
-              data-aos-delay={i * 200}
-              className={"relative group bg-white rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 clip-hexagon flex flex-col items-center text-center"}
-              style={{
-                transform: `rotate(${rotations[i % rotations.length]})`,
-              }}
-            >
-              <div className="mb-6 transform group-hover:scale-110 transition">
-                {f.icon}
+          <h2 className="text-4xl font-bold leading-tight mb-6">
+            {language === 'en'
+              ? 'Driving the Future of Green Transportation'
+              : 'Menggerakkan Masa Depan Transportasi Hijau'}
+          </h2>
+
+          <p className="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl">
+            {language === 'en'
+              ? 'Ade Green Taxi is an electric-based ride-hailing service designed to deliver clean, affordable, and reliable mobility for urban life.'
+              : 'Ade Green Taxi adalah layanan transportasi berbasis kendaraan listrik yang menghadirkan mobilitas bersih, hemat, dan terpercaya.'}
+          </p>
+
+          {/* Features */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {features.map((item, i) => (
+              <div key={i} className="flex gap-4 items-start">
+                <div className="p-3 rounded-xl bg-green-50">{item.icon}</div>
+                <div>
+                  <h4 className="font-semibold mb-1">{item.title}</h4>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3">{f.title}</h3>
-              <p className="text-gray-600 text-sm">{f.desc}</p>
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-green-100 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

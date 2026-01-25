@@ -1,6 +1,6 @@
 import './globals.css';
 import 'aos/dist/aos.css';
-import './app.css'
+import './app.css';
 
 export const metadata = {
   title: {
@@ -33,13 +33,19 @@ export const metadata = {
     title: 'AdeGreenTaxi',
     description:
       'AdeGreenTaxi adalah layanan transportasi hijau yang ramah lingkungan dan informatif.',
-    images: ['https://raw.githubusercontent.com/USERNAME/REPO_NAME/BRANCH/public/default.png'],
+    images: [
+      'https://raw.githubusercontent.com/USERNAME/REPO_NAME/BRANCH/public/default.png',
+    ],
   },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
+      <meta
+        name="google-site-verification"
+        content="FLaXMLYMU2j_mxzMak239JwzFYR7h3OmPoeU0d_K2mE"
+      />
       <body>{children}</body>
     </html>
   );
