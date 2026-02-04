@@ -25,11 +25,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <img
-              src="/text-2.png"
-              alt="Ade Green Taxi"
-              className="w-56 mb-6"
-            />
+            <p className="text-4xl mb-5 font-semibold">
+              ADE<span className="text-emerald-500">GREEN</span>
+              <sub className="text-sm">TX</sub>
+            </p>
 
             <p className="text-xl text-gray-600 leading-relaxed">
               {language === 'en'

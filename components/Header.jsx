@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Globe, LifeBuoy } from 'lucide-react';
+import { Menu, X, Globe, LifeBuoy, Kanban } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
@@ -18,10 +18,10 @@ export default function Header() {
   return (
     <>
       {/* HEADER BAR */}
-      <header className="fixed top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-black/5">
+      <header className="fixed top-0 z-100 w-full bg-white/90 backdrop-blur-md border-b border-black/5">
         <div className="mx-auto max-w-screen-xl px-6 h-16 flex items-center justify-between">
           <a href="/beranda">
-            <img src="/text-2.png" alt="Ade Green Taxi" className="h-7" />
+            <p className='text-2xl font-semibold'>ADE<span className='text-emerald-500'>GREEN</span><sub className='text-sm'>TX</sub></p>
           </a>
 
           <button
@@ -29,7 +29,7 @@ export default function Header() {
             className="p-2 rounded-full hover:bg-black/5 transition"
             aria-label="Toggle Menu"
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? <X size={22} /> : <Kanban size={22} className='transform -rotate-90 rotate-x-180' />}
           </button>
         </div>
       </header>
