@@ -55,8 +55,8 @@ export default function Page() {
         </h1>
         <p className="text-lg text-gray-700 leading-relaxed mb-10">
           {isEN
-            ? 'This page outlines legal notices for AdeGreenTaxi, an electric-vehicle ride-hailing service focused on sustainability and cost efficiency. Please review each section carefully.'
-            : 'Halaman ini memuat pemberitahuan hukum untuk AdeGreenTaxi, layanan taksi online berbasis kendaraan listrik yang berfokus pada keberlanjutan dan efisiensi biaya. Harap tinjau setiap bagian dengan saksama.'}
+            ? 'This page outlines legal notices for Ade Green TX, an electric-vehicle ride-hailing service focused on sustainability and cost efficiency. Please review each section carefully.'
+            : 'Halaman ini memuat pemberitahuan hukum untuk Ade Green TX, layanan taksi online berbasis kendaraan listrik yang berfokus pada keberlanjutan dan efisiensi biaya. Harap tinjau setiap bagian dengan saksama.'}
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
@@ -69,8 +69,8 @@ export default function Page() {
               </h2>
               <p className="text-lg leading-relaxed text-gray-700">
                 {isEN
-                  ? 'AdeGreenTaxi (“we”, “our”, “service”) provides urban mobility using electric vehicles. Users agree to comply with local regulations, these notices, and app-specific terms.'
-                  : 'AdeGreenTaxi (“kami”, “layanan”) menyediakan mobilitas perkotaan dengan kendaraan listrik. Pengguna setuju mematuhi regulasi setempat, pemberitahuan ini, dan ketentuan khusus aplikasi.'}
+                  ? 'Ade Green TX (“we”, “our”, “service”) provides urban mobility using electric vehicles. Users agree to comply with local regulations, these notices, and app-specific terms.'
+                  : 'Ade Green TX (“kami”, “layanan”) menyediakan mobilitas perkotaan dengan kendaraan listrik. Pengguna setuju mematuhi regulasi setempat, pemberitahuan ini, dan ketentuan khusus aplikasi.'}
               </p>
               <Highlight title={isEN ? 'Key points' : 'Poin utama'}>
                 {isEN

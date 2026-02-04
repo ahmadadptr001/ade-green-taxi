@@ -17,8 +17,8 @@ export default function TermsPage() {
         </h1>
         <p className="text-lg text-gray-700 leading-relaxed mb-10">
           {isEN
-            ? 'Welcome to AdeGreenTaxi. By accessing or using our app and services, you agree to the following Terms & Conditions. Please read carefully, especially regarding our electric vehicle fleet, cost efficiency, availability, and cash-only payment method.'
-            : 'Selamat datang di AdeGreenTaxi. Dengan mengakses atau menggunakan aplikasi dan layanan kami, Anda menyetujui Syarat dan Ketentuan berikut. Harap membaca dengan saksama, terutama terkait armada kendaraan listrik, efisiensi biaya, ketersediaan layanan, dan metode pembayaran tunai.'}
+            ? 'Welcome to Ade Green TX. By accessing or using our app and services, you agree to the following Terms & Conditions. Please read carefully, especially regarding our electric vehicle fleet, cost efficiency, availability, and cash-only payment method.'
+            : 'Selamat datang di Ade Green TX. Dengan mengakses atau menggunakan aplikasi dan layanan kami, Anda menyetujui Syarat dan Ketentuan berikut. Harap membaca dengan saksama, terutama terkait armada kendaraan listrik, efisiensi biaya, ketersediaan layanan, dan metode pembayaran tunai.'}
         </p>
 
         {/* 1. Definitions & scope */}
@@ -30,13 +30,13 @@ export default function TermsPage() {
           </h2>
           <p className="text-lg text-gray-700 leading-relaxed">
             {isEN
-              ? 'AdeGreenTaxi (“we”, “our”, “service”) is a ride-hailing platform using electric vehicles. The “User” refers to riders who create accounts, request trips, and use features within the app.'
-              : 'AdeGreenTaxi (“kami”, “layanan”) adalah platform taksi online yang menggunakan kendaraan listrik. “Pengguna” merujuk pada penumpang yang membuat akun, memesan perjalanan, dan menggunakan fitur dalam aplikasi.'}
+              ? 'Ade Green TX (“we”, “our”, “service”) is a ride-hailing platform using electric vehicles. The “User” refers to riders who create accounts, request trips, and use features within the app.'
+              : 'Ade Green TX (“kami”, “layanan”) adalah platform taksi online yang menggunakan kendaraan listrik. “Pengguna” merujuk pada penumpang yang membuat akun, memesan perjalanan, dan menggunakan fitur dalam aplikasi.'}
           </p>
           <p className="text-lg text-gray-700 leading-relaxed">
             {isEN
-              ? 'The service includes booking, trip management, and support features provided through the AdeGreenTaxi app. This document governs your use of the app and associated services.'
-              : 'Layanan mencakup pemesanan, pengelolaan perjalanan, dan fitur dukungan yang disediakan melalui aplikasi AdeGreenTaxi. Dokumen ini mengatur penggunaan aplikasi dan layanan terkait oleh Anda.'}
+              ? 'The service includes booking, trip management, and support features provided through the Ade Green TX app. This document governs your use of the app and associated services.'
+              : 'Layanan mencakup pemesanan, pengelolaan perjalanan, dan fitur dukungan yang disediakan melalui aplikasi Ade Green TX. Dokumen ini mengatur penggunaan aplikasi dan layanan terkait oleh Anda.'}
           </p>
         </section>
 
@@ -87,8 +87,8 @@ export default function TermsPage() {
           </h2>
           <p className="text-lg text-gray-700 leading-relaxed">
             {isEN
-              ? 'AdeGreenTaxi uses electric vehicles to reduce emissions and operating costs. Lower energy and maintenance costs can translate into competitive fares without compromising safety or comfort.'
-              : 'AdeGreenTaxi menggunakan kendaraan listrik untuk menurunkan emisi dan biaya operasional. Biaya energi dan perawatan yang lebih rendah memungkinkan tarif kompetitif tanpa mengurangi keamanan atau kenyamanan.'}
+              ? 'Ade Green TX uses electric vehicles to reduce emissions and operating costs. Lower energy and maintenance costs can translate into competitive fares without compromising safety or comfort.'
+              : 'Ade Green TX menggunakan kendaraan listrik untuk menurunkan emisi dan biaya operasional. Biaya energi dan perawatan yang lebih rendah memungkinkan tarif kompetitif tanpa mengurangi keamanan atau kenyamanan.'}
           </p>
           <p className="text-lg text-gray-700 leading-relaxed">
             {isEN

@@ -58,7 +58,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-3 items-start">
                 <Mail className="w-5 h-5 text-green-600 mt-1" />
-                support@adegreentaxi.com
+                support@adegreentx.id
               </li>
               <li className="flex gap-3 items-start">
                 <MapPin className="w-5 h-5 text-green-600 mt-1" />

@@ -11,12 +11,12 @@ export default function FAQ() {
 
   const faqs = [
     {
-      qEN: 'What is AdeGreenTaxi?',
-      qID: 'Apa itu AdeGreenTaxi?',
+      qEN: 'What is Ade Green TX?',
+      qID: 'Apa itu Ade Green TX?',
       aEN:
-        'AdeGreenTaxi is an electric taxi service designed for daily urban mobility with lower emissions and efficient operations.',
+        'Ade Green TX is an electric taxi service designed for daily urban mobility with lower emissions and efficient operations.',
       aID:
-        'AdeGreenTaxi adalah layanan taksi listrik untuk mobilitas harian kota dengan emisi rendah dan operasional efisien.',
+        'Ade Green TX adalah layanan taksi listrik untuk mobilitas harian kota dengan emisi rendah dan operasional efisien.',
     },
     {
       qEN: 'How does booking work?',
@@ -30,9 +30,9 @@ export default function FAQ() {
       qEN: 'Is the service available all day?',
       qID: 'Apakah layanan tersedia sepanjang hari?',
       aEN:
-        'Yes. AdeGreenTaxi operates continuously to support daily city movement.',
+        'Yes. Ade Green TX operates continuously to support daily city movement.',
       aID:
-        'Ya. AdeGreenTaxi beroperasi terus untuk mendukung pergerakan kota setiap hari.',
+        'Ya. Ade Green TX beroperasi terus untuk mendukung pergerakan kota setiap hari.',
     },
     {
       qEN: 'How do payments work?',

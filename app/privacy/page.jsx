@@ -203,8 +203,8 @@ export default function PrivacyPage() {
               </div>
               <Highlight title={isEN ? 'Important' : 'Penting'}>
                 {isEN
-                  ? 'AdeGreenTaxi currently supports cash-only payments and aims for 24/7 service, subject to availability.'
-                  : 'AdeGreenTaxi saat ini mendukung pembayaran tunai dan menargetkan layanan 24/7, bergantung pada ketersediaan.'}
+                  ? 'Ade Green TX currently supports cash-only payments and aims for 24/7 service, subject to availability.'
+                  : 'Ade Green TX saat ini mendukung pembayaran tunai dan menargetkan layanan 24/7, bergantung pada ketersediaan.'}
               </Highlight>
             </section>
           </div>

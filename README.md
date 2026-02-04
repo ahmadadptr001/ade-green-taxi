@@ -1,10 +1,10 @@
-# ⚡ AdeGreenTaxi
+# ⚡ AdeGreenTX
 
-**AdeGreenTaxi** is a modern, eco‑friendly ride‑hailing platform powered entirely by electric vehicles. Designed for sustainable urban mobility, it combines clean energy, cost efficiency, and a premium user experience.
+**ADE GREEN TX** is a modern, eco‑friendly ride‑hailing platform powered entirely by electric vehicles. Designed for sustainable urban mobility, it combines clean energy, cost efficiency, and a premium user experience.
 
 ---
 
-## 🌱 Why AdeGreenTaxi?
+## 🌱 Why AdeGreenTX?
 
 - 🚗 **Electric Fleet** — 100% electric vehicles for zero emissions and quiet rides.
 - 💸 **Cost‑Efficient** — Lower operational costs mean affordable fares for everyone.
@@ -87,10 +87,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 💬 Feedback & Support
 
 For feature requests, bug reports, or partnership inquiries, contact:  
-📧 support@adegreentaxi.com  
+📧 support@adegreentx.id  
 📍 Kendari, Sulawesi Tenggara
 
 ---
 
 > “Clean rides. Smart design. Electric future.”  
-> — AdeGreenTaxi
+> — AdeGreenTX
