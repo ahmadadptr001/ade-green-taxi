@@ -7,19 +7,18 @@ export const metadata = {
     default: 'Ade Green TX',
     template: '%s | Ade Green TX',
   },
-  description: {
-    default:
-      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
-  },
+  description:
+    'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
+
   openGraph: {
     title: 'Ade Green TX',
     description:
-      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
-    url: 'https://www.adegreentx.id/',
-    siteName: 'AdeGreenTaxi',
+      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
+    url: 'https://adegreentx.id',
+    siteName: 'Ade Green TX',
     images: [
       {
-        url: '/banner-about.png',
+        url: 'https://adegreentx.id/banner-about.png',
         width: 1200,
         height: 630,
         alt: 'Ade Green TX Preview',
@@ -28,12 +27,13 @@ export const metadata = {
     locale: 'id_ID',
     type: 'website',
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'Ade Green TX',
     description:
-      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
-    images: ['/banner-about.png'],
+      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
+    images: ['https://adegreentx.id/banner-about.png'],
   },
 };
 
