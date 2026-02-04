@@ -18,7 +18,7 @@ export const metadata = {
     siteName: 'Ade Green TX',
     images: [
       {
-        url: 'https://adegreentx.id/banner-about.png',
+        url: 'https://adegreentx.id/odgr.png',
         width: 1200,
         height: 630,
         alt: 'Ade Green TX Preview',
@@ -33,7 +33,7 @@ export const metadata = {
     title: 'Ade Green TX',
     description:
       'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
-    images: ['https://adegreentx.id/banner-about.png'],
+    images: ['https://adegreentx.id/odgr.png'],
   },
 };
 
