@@ -1,6 +1,7 @@
 import './globals.css';
 import 'aos/dist/aos.css';
 import './app.css';
+import Script from 'next/script';
 
 export const metadata = {
   title: {
@@ -35,16 +36,36 @@ export const metadata = {
       'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
     images: ['https://adegreentx.id/odgr.png'],
   },
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-
-      <meta
-        name="google-site-verification"
-        content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
-      />
+      <head>
+        <meta
+          name="google-site-verification"
+          content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
+        />
+        <Script
+          id="schema-website"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Ade Green TX',
+              url: 'https://adegreentx.id',
+              image: 'https://adegreentx.id/odgr.png',
+            }),
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
