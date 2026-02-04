@@ -4,25 +4,25 @@ import './app.css';
 
 export const metadata = {
   title: {
-    default: 'AdeGreenTaxi',
-    template: '%s | AdeGreenTaxi',
+    default: 'Ade Green TX',
+    template: '%s | Ade Green TX',
   },
   description: {
     default:
-      'AdeGreenTaxi adalah layanan transportasi hijau yang ramah lingkungan dan informatif.',
+      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
   },
   openGraph: {
-    title: 'AdeGreenTaxi',
+    title: 'Ade Green TX',
     description:
-      'AdeGreenTaxi adalah layanan transportasi hijau yang ramah lingkungan dan informatif.',
-    url: 'https://www.adebgs.com/ade-green-taxi/',
+      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
+    url: 'https://www.adegreentx.id/',
     siteName: 'AdeGreenTaxi',
     images: [
       {
         url: '/banner-about.png',
         width: 1200,
         height: 630,
-        alt: 'AdeGreenTaxi Preview',
+        alt: 'Ade Green TX Preview',
       },
     ],
     locale: 'id_ID',
@@ -30,12 +30,10 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AdeGreenTaxi',
+    title: 'Ade Green TX',
     description:
-      'AdeGreenTaxi adalah layanan transportasi hijau yang ramah lingkungan dan informatif.',
-    images: [
-      'https://raw.githubusercontent.com/USERNAME/REPO_NAME/BRANCH/public/default.png',
-    ],
+      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari. Nikmati perjalanan yang nyaman, aman dan ramah',
+    images: ['/banner-about.png'],
   },
 };
 
@@ -45,6 +43,10 @@ export default function RootLayout({ children }) {
       <meta
         name="google-site-verification"
         content="FLaXMLYMU2j_mxzMak239JwzFYR7h3OmPoeU0d_K2mE"
+      />
+      <meta
+        name="google-site-verification"
+        content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
       />
       <body>{children}</body>
     </html>
