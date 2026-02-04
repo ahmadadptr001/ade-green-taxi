@@ -31,7 +31,7 @@ export default function IklanModal() {
         ">
           <img
             src="/banner.png"
-            alt="Ade Green Taxi"
+            alt="Ade Green TX"
             className="absolute inset-0 w-full h-full object-cover"
           />
 
@@ -56,7 +56,7 @@ export default function IklanModal() {
               <Leaf className="text-white" />
             </div>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-              Ade Green Taxi
+              Ade Green TX
             </h1>
           </div>
 

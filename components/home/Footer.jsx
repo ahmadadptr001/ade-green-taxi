@@ -104,7 +104,7 @@ export default function Footer() {
       {/* Bottom */}
       <div className="relative max-w-7xl mx-auto px-8 py-10 text-sm text-gray-500 flex flex-col md:flex-row gap-4 justify-between items-center">
         <span>
-          © {new Date().getFullYear()} Ade Green Taxi. All rights reserved.
+          © {new Date().getFullYear()} Ade Green TX. All rights reserved.
         </span>
 
         <div className="flex gap-6">

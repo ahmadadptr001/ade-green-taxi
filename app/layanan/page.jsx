@@ -57,7 +57,7 @@ export default function LayananPage() {
         <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] bg-green-50">
           <img
             src="/services/hero-layanan.png"
-            alt="Ade Green Taxi Electric Service"
+            alt="Ade Green Tx Electric Service"
             className="absolute inset-0 w-full h-full object-cover"
           />
 
@@ -68,7 +68,7 @@ export default function LayananPage() {
         {/* CONTENT */}
         <div className="max-w-4xl mx-auto px-6 pt-16 pb-24 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-6">
-            🌱 Ade Green Taxi
+            🌱 Ade Green TX
           </span>
 
           <h1 className="text-4xl sm:text-5xl xl:text-6xl font-semibold leading-tight mb-6">
@@ -120,8 +120,8 @@ export default function LayananPage() {
 
             <p className="text-gray-600 text-lg leading-relaxed">
               {language === 'en'
-                ? 'Ade Green Taxi provides integrated electric transportation services that prioritize comfort, safety, and sustainability in every journey.'
-                : 'Ade Green Taxi menghadirkan layanan transportasi listrik terintegrasi yang mengutamakan kenyamanan, keamanan, dan keberlanjutan di setiap perjalanan.'}
+                ? 'Ade Green TX provides integrated electric transportation services that prioritize comfort, safety, and sustainability in every journey.'
+                : 'Ade Green TX menghadirkan layanan transportasi listrik terintegrasi yang mengutamakan kenyamanan, keamanan, dan keberlanjutan di setiap perjalanan.'}
             </p>
           </div>
 

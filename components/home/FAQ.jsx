@@ -73,8 +73,8 @@ export default function FAQ() {
           </h2>
           <p className="mt-6 text-lg text-gray-600 max-w-md">
             {language === 'en'
-              ? 'Straightforward answers about how Ade Green Taxi operates in the city.'
-              : 'Jawaban singkat dan jelas tentang bagaimana Ade Green Taxi beroperasi di kota.'}
+              ? 'Straightforward answers about how Ade Green TX operates in the city.'
+              : 'Jawaban singkat dan jelas tentang bagaimana Ade Green TX beroperasi di kota.'}
           </p>
         </div>
 

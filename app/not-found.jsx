@@ -47,7 +47,7 @@ export default function NotFoundPage() {
 
         {/* brand hint */}
         <span className="mt-10 text-xs text-gray-400">
-          © ADE Green Taxi
+          © ADE GREEN TX
         </span>
       </div>
     </div>

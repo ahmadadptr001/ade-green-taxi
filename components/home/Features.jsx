@@ -219,7 +219,7 @@ export default function Features() {
                     <Icon style={{ width: 36, height: 36, color: textIsDark ? '#064E3B' : '#10B981' }} />
                   </div>
                   <div style={{ color: textIsDark ? '#064E3B' : '#E6FFEF', fontWeight: 700 }}>
-                    ADE GREEN TAXI
+                    ADE GREEN TX
                   </div>
                 </div>
 

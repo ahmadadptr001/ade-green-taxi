@@ -8,6 +8,8 @@ export default function About() {
   const { language } = useLanguageStore();
   const t = language === 'en' ? EN : ID;
 
+  const tentang = language === 'en' ? 'About' : 'Tentang'
+
   const features = [
     {
       icon: <Leaf className="w-6 h-6 text-green-600" />,
@@ -50,7 +52,7 @@ export default function About() {
         <div className="relative">
           <img
             src="/banner-about.png"
-            alt="Ade Green Taxi Electric Vehicle"
+            alt="Ade Green TX Electric Vehicle"
             className="rounded-3xl shadow-xl w-full object-cover"
           />
           <div className="absolute inset-0 rounded-3xl ring-1 ring-black/5"></div>
@@ -58,7 +60,7 @@ export default function About() {
         {/* Text */}
         <div>
           <span className="inline-block mb-4 px-4 py-1 rounded-full bg-green-50 text-green-700 text-sm font-medium">
-            About Ade Green Taxi
+            {tentang} Ade Green TX
           </span>
 
           <h2 className="text-4xl font-bold leading-tight mb-6">
@@ -69,8 +71,8 @@ export default function About() {
 
           <p className="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl">
             {language === 'en'
-              ? 'Ade Green Taxi is an electric-based ride-hailing service designed to deliver clean, affordable, and reliable mobility for urban life.'
-              : 'Ade Green Taxi adalah layanan transportasi berbasis kendaraan listrik yang menghadirkan mobilitas bersih, hemat, dan terpercaya.'}
+              ? 'Ade Green TX is an electric-based ride-hailing service designed to deliver clean, affordable, and reliable mobility for urban life.'
+              : 'Ade Green TX adalah layanan transportasi berbasis kendaraan listrik yang menghadirkan mobilitas bersih, hemat, dan terpercaya.'}
           </p>
 
           {/* Features */}
