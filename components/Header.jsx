@@ -45,16 +45,16 @@ export default function Header() {
 
           {/* MAIN NAV */}
           <nav className="flex flex-col items-center gap-6 text-2xl font-semibold">
-            <a onClick={() => setOpen(false)} href="#layanan">
+            <a onClick={() => setOpen(false)} href="/beranda#layanan">
               {t.mainNavbar.service}
             </a>
-            <a onClick={() => setOpen(false)} href="#tentang">
+            <a onClick={() => setOpen(false)} href="/beranda#tentang">
               {t.mainNavbar.about}
             </a>
-            <a onClick={() => setOpen(false)} href="#fitur">
+            <a onClick={() => setOpen(false)} href="/beranda#fitur">
               {t.mainNavbar.feature}
             </a>
-            <a onClick={() => setOpen(false)} href="#faq">
+            <a onClick={() => setOpen(false)} href="/beranda#faq">
               {t.mainNavbar.faq}
             </a>
           </nav>
