@@ -52,6 +52,10 @@ export default function RootLayout({ children }) {
           name="google-site-verification"
           content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
         />
+        <meta
+          property="og:image"
+          content="https://adegreentx.id/odgr.png"
+        ></meta>
         <Script
           id="schema-website"
           type="application/ld+json"
