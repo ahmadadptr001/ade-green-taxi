@@ -13,14 +13,16 @@ export default function Hero() {
   return (
     <main className="relative w-full h-screen p-5">
       <video
-        src="/bg.mp4"
+        poster="/bg.png"
         autoPlay
         muted
         loop
         playsInline
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover brightness-90 contrast-105"
-      />
+      >
+        <source src='/bg.mp4' type='video/mp4'/>
+      </video>
       <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-black/30"></div>
 
       <div className="relative z-10 flex flex-col md:pt-25 items-center justify-center text-start gap-y-7 p-3 text-white h-full">
