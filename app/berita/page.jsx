@@ -134,7 +134,7 @@ export default function PremiumNewsPage() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between">
             
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setActiveNav("Beranda")}>
+            <a href='/beranda' className="flex items-center gap-3 cursor-pointer group" >
               <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white transition-transform group-hover:rotate-6">
                 <span className="text-xl font-black italic">A</span>
               </div>
@@ -142,7 +142,7 @@ export default function PremiumNewsPage() {
                 <span className="text-xl font-black tracking-tighter text-slate-950">ADE<span className="text-emerald-600">GREEN</span></span>
                 <span className="text-[10px] font-bold tracking-[0.3em] text-slate-400">BERITA</span>
               </div>
-            </div>
+            </a>
 
             {/* Main Nav - Functional */}
             <nav className="hidden lg:flex items-center gap-10">
@@ -442,7 +442,7 @@ export default function PremiumNewsPage() {
             </div>
           </div>
           <div className="flex flex-col md:row items-center justify-between pt-12 border-t border-slate-900 gap-8">
-            <p className="text-[10px] font-bold text-slate-600 tracking-widest uppercase">© 2024 ADE GREEN TX MEDIA. GLOBAL STANDARD JURNALISME.</p>
+            <p className="text-[10px] font-bold text-slate-600 tracking-widest uppercase">© {new Date().getFullYear()} ADE GREEN TX MEDIA. All Rights Reversed.</p>
             <div className="flex gap-8">
               {['FB', 'TW', 'IG', 'LN'].map(s => (
                 <span key={s} className="text-[10px] font-black text-slate-600 hover:text-white transition-colors cursor-pointer">{s}</span>
