@@ -24,6 +24,8 @@ export default function Header() {
             <p className='text-2xl font-semibold'>ADE<span className='text-emerald-500'>GREEN</span><sub className='text-sm'>TX</sub></p>
           </a>
 
+          <div className="flex items-center gap-2">
+            
           <button
             onClick={() => setOpen((v) => !v)}
             className="p-2 rounded-full hover:bg-black/5 transition"
@@ -31,6 +33,8 @@ export default function Header() {
           >
             {open ? <X size={22} /> : <Kanban size={22} className='transform -rotate-90 rotate-x-180' />}
           </button>
+          </div>
+
         </div>
       </header>
 
