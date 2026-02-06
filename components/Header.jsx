@@ -5,6 +5,7 @@ import { Menu, X, Globe, LifeBuoy, Kanban } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -21,20 +22,43 @@ export default function Header() {
       <header className="fixed top-0 z-100 w-full bg-white/90 backdrop-blur-md border-b border-black/5">
         <div className="mx-auto max-w-screen-xl px-6 h-16 flex items-center justify-between">
           <a href="/beranda">
-            <p className='text-2xl font-semibold'>ADE<span className='text-emerald-500'>GREEN</span><sub className='text-sm'>TX</sub></p>
+            <p className="text-2xl font-semibold">
+              ADE<span className="text-emerald-500">GREEN</span>
+              <sub className="text-sm">TX</sub>
+            </p>
           </a>
 
           <div className="flex items-center gap-2">
-            
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="p-2 rounded-full hover:bg-black/5 transition"
-            aria-label="Toggle Menu"
-          >
-            {open ? <X size={22} /> : <Kanban size={22} className='transform -rotate-90 rotate-x-180' />}
-          </button>
-          </div>
+            <Tooltip>
+              <TooltipTrigger>
+                <a href="/berita">
+                  <img
+                  className='w-7 h-7'
+                    src="https://img.icons8.com/?size=100&id=aTk3yd33wbL7&format=png&color=000000"
+                    alt="newspaper icon"
+                  />
 
+                </a>
+              </TooltipTrigger>
+              <TooltipContent className={'!z-100'}>
+                Berita
+              </TooltipContent>
+            </Tooltip>
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="p-2 rounded-full hover:bg-black/5 transition"
+              aria-label="Toggle Menu"
+            >
+              {open ? (
+                <X size={22} />
+              ) : (
+                <Kanban
+                  size={22}
+                  className="transform -rotate-90 rotate-x-180"
+                />
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -46,7 +70,6 @@ export default function Header() {
         style={{ height: '70vh' }}
       >
         <div className="h-full flex flex-col items-center justify-center gap-10">
-
           {/* MAIN NAV */}
           <nav className="flex flex-col items-center gap-6 text-2xl font-semibold">
             <a onClick={() => setOpen(false)} href="/beranda#layanan">

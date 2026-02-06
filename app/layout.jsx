@@ -2,6 +2,7 @@ import './globals.css';
 import 'aos/dist/aos.css';
 import './app.css';
 import Script from 'next/script';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export const metadata = {
   title: {
@@ -71,7 +72,9 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }
