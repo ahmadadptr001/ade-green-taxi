@@ -8,7 +8,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import Alert from '@/components/Alert';
 import { useLanguageStore } from '@/store/languageStore';
 import { LifeBuoy, Send, User, Mail, UserX, ChevronRight } from 'lucide-react'; // Added icons
-import { reportUser } from '@/services/users';
+import { reportUser } from '@/services/reports';
 
 export default function BantuanPage() {
   const { language } = useLanguageStore();
