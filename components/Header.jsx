@@ -33,16 +33,13 @@ export default function Header() {
               <TooltipTrigger>
                 <a href="/berita">
                   <img
-                  className='w-7 h-7'
+                    className="w-7 h-7"
                     src="https://img.icons8.com/?size=100&id=aTk3yd33wbL7&format=png&color=000000"
                     alt="newspaper icon"
                   />
-
                 </a>
               </TooltipTrigger>
-              <TooltipContent className={'!z-100'}>
-                Berita
-              </TooltipContent>
+              <TooltipContent className={'!z-100'}>Berita</TooltipContent>
             </Tooltip>
             <button
               onClick={() => setOpen((v) => !v)}
