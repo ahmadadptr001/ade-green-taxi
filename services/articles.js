@@ -49,3 +49,21 @@ export async function getArticlesByCategorySlug(slug) {
     throw err
   }
 }
+export async function getArticlesByTagSlug(slug) {
+  try {
+    const response = await axios.get('/api/articles/tag/'+slug);
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}
+export async function getArticlesByTopicSlug(slug) {
+  try {
+    const response = await axios.get('/api/articles/topic/'+slug);
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}

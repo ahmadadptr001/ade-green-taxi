@@ -549,7 +549,7 @@ export default function PremiumNewsPage() {
                       className="flex gap-6 group cursor-pointer"
                     >
                       {/* Ranking */}
-                      <span className="text-4xl font-black text-slate-100 group-hover:text-emerald-500 transition-colors duration-500">
+                      <span className="text-4xl font-black text-slate-200 group-hover:text-primary transition-colors duration-500">
                         {String(index + 1).padStart(2, '0')}
                       </span>
 

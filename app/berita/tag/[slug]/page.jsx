@@ -1,37 +1,12 @@
 'use client';
 import Footer from '@/components/berita/Footer';
-import { getArticlesByCategorySlug } from '@/services/articles';
+import { getArticlesByCategorySlug, getArticlesByTagSlug } from '@/services/articles';
 import { formatDate } from '@/utils/date';
 import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
-// simulasi fetch (ganti dengan API / DB lo)
-// async function getArticlesByCategory(slug) {
-//   // contoh dummy data
-//   return [
-//     {
-//       id: 1,
-//       title: 'Transformasi Energi Hijau di Indonesia',
-//       excerpt:
-//         'Bagaimana teknologi dan kebijakan mendorong percepatan energi terbarukan.',
-//       image: 'https://images.unsplash.com/photo-1509395176047-4a66953fd231',
-//       date: '3 Feb 2026',
-//       category: slug,
-//     },
-//     {
-//       id: 2,
-//       title: 'Startup Climate Tech Mulai Dilirik Investor',
-//       excerpt:
-//         'Pendanaan hijau meningkat seiring fokus global pada keberlanjutan.',
-//       image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a',
-//       date: '2 Feb 2026',
-//       category: slug,
-//     },
-//   ];
-// }
-
-export default function BeritaKategori({ params }) {
+export default function BeritaTag({ params }) {
   const [slug, setSlug] = useState('');
   const [query, setQuery] = useState('');
   const [articles, setArticles] = useState(null);
@@ -39,7 +14,7 @@ export default function BeritaKategori({ params }) {
   useEffect(() => {
     const fetchData = async () => {
       const { slug: slug_ } = await params;
-      const articles_ = await getArticlesByCategorySlug(slug_);
+      const articles_ = await getArticlesByTagSlug(slug_);
       setSlug(slug_);
       setArticles(articles_.articles);
     };
