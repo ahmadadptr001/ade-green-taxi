@@ -462,7 +462,6 @@ export default function PremiumNewsPage() {
               {filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
                   <article key={news.id}>
-                    {console.log(news)}
                     <Link href={'/berita/' + news.slug}>
                       <div className="group grid grid-cols-1 md:grid-cols-12 gap-8 items-start cursor-pointer">
                         <div className="md:col-span-5 relative overflow-hidden rounded-[24px] aspect-[4/3]">
