@@ -384,7 +384,8 @@ export default function PremiumNewsPage() {
                 {hasNews
                   ? // original side items when data exists
                     sideItems.map((item) => (
-                      <div
+                      <Link
+                        href={`/berita/${item.slug}`}
                         key={item.id}
                         className="group relative flex-1 rounded-[32px] bg-white border border-slate-100 p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/50 flex flex-col justify-between overflow-hidden"
                       >
@@ -407,7 +408,7 @@ export default function PremiumNewsPage() {
                             <ChevronRight className="h-4 w-4" />
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))
                   : // two small placeholder cards to preserve layout
                     [0, 1].map((i) => (
@@ -548,7 +549,8 @@ export default function PremiumNewsPage() {
               <div className="space-y-8">
                 {popularArticles?.length > 0 ? (
                   popularArticles.slice(0, 3).map((item, index) => (
-                    <div
+                    <Link
+                    href={`/berita/${item.slug}`}
                       key={item.id}
                       className="flex gap-6 group cursor-pointer"
                     >
@@ -565,7 +567,7 @@ export default function PremiumNewsPage() {
                           {item.category} • {item.views.toLocaleString()} Views
                         </p>
                       </div>
-                    </div>
+                    </Link>
                   ))
                 ) : (
                   <div className="text-center py-10 text-slate-400 text-sm">
