@@ -11,6 +11,9 @@ export async function GET(req, { params }) {
         id,
         title,
         img,
+        content,
+        slug,
+        views,
         published_at,
         description,
         article_topics!inner (

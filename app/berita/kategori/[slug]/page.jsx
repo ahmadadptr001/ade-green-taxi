@@ -6,31 +6,6 @@ import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
-// simulasi fetch (ganti dengan API / DB lo)
-// async function getArticlesByCategory(slug) {
-//   // contoh dummy data
-//   return [
-//     {
-//       id: 1,
-//       title: 'Transformasi Energi Hijau di Indonesia',
-//       excerpt:
-//         'Bagaimana teknologi dan kebijakan mendorong percepatan energi terbarukan.',
-//       image: 'https://images.unsplash.com/photo-1509395176047-4a66953fd231',
-//       date: '3 Feb 2026',
-//       category: slug,
-//     },
-//     {
-//       id: 2,
-//       title: 'Startup Climate Tech Mulai Dilirik Investor',
-//       excerpt:
-//         'Pendanaan hijau meningkat seiring fokus global pada keberlanjutan.',
-//       image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a',
-//       date: '2 Feb 2026',
-//       category: slug,
-//     },
-//   ];
-// }
-
 export default function BeritaKategori({ params }) {
   const [slug, setSlug] = useState('');
   const [query, setQuery] = useState('');
@@ -165,7 +140,7 @@ export default function BeritaKategori({ params }) {
                   </p>
 
                   <Link
-                    href={`/berita/${article.id}`}
+                    href={`/berita/${article.slug}`}
                     className="inline-block mt-4 text-sm font-medium text-green-600 hover:underline"
                   >
                     Baca selengkapnya →

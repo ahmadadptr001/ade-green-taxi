@@ -140,7 +140,7 @@ export default function BeritaTag({ params }) {
                   </p>
 
                   <Link
-                    href={`/berita/${article.id}`}
+                    href={`/berita/${article.slug}`}
                     className="inline-block mt-4 text-sm font-medium text-green-600 hover:underline"
                   >
                     Baca selengkapnya →

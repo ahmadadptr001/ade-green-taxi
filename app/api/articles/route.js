@@ -6,6 +6,8 @@ export async function GET() {
     const { data, error } = await supabase_coolify.from('articles').select(`
       id,
       title,
+      slug,
+      content,
       description,
       published_at,
       views,

@@ -29,6 +29,7 @@ import {
 } from '@/services/articles';
 import Footer from '@/components/berita/Footer';
 import { formatDate } from '@/utils/date';
+import Link from 'next/link';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
 const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
@@ -38,6 +39,7 @@ const mapArticlesToNews = (articles = []) => {
 
   return articles.map((a) => ({
     id: a.id,
+    slug: a.slug,
     title: a.title,
     excerpt: a.description,
     category: a?.article_categories?.[0]?.categories?.name ?? 'Umum',
@@ -329,9 +331,7 @@ export default function PremiumNewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Primary Feature */}
               {hasNews ? (
-                <div
-                  className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]"
-                >
+                <div className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]">
                   <img
                     src={primary.image}
                     onError={handleImgError}
@@ -442,7 +442,7 @@ export default function PremiumNewsPage() {
                     <button
                       key={cat.id}
                       onClick={() => {
-                        setActiveCategory(cat.name)
+                        setActiveCategory(cat.name);
                       }}
                       className={`whitespace-nowrap px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                         activeCategory === cat.name
@@ -460,39 +460,41 @@ export default function PremiumNewsPage() {
             <div className="space-y-16">
               {filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
-                  <article
-                    key={news.id}
-                    className="group grid grid-cols-1 md:grid-cols-12 gap-8 items-start cursor-pointer"
-                  >
-                    <div className="md:col-span-5 relative overflow-hidden rounded-[24px] aspect-[4/3]">
-                      <img
-                        src={news.image}
-                        onError={handleImgError}
-                        className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                        alt={news.title}
-                      />
-                    </div>
-                    <div className="md:col-span-7 pt-2">
-                      <div className="flex items-center gap-3 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">
-                          {news.category}
-                        </span>
-                        <span className="h-1 w-1 rounded-full bg-slate-200"></span>
-                        <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">
-                          {news.date}
-                        </span>
+                  <article key={news.id}>
+                    {console.log(news)}
+                    <Link href={'/berita/' + news.slug}>
+                      <div className="group grid grid-cols-1 md:grid-cols-12 gap-8 items-start cursor-pointer">
+                        <div className="md:col-span-5 relative overflow-hidden rounded-[24px] aspect-[4/3]">
+                          <img
+                            src={news.image}
+                            onError={handleImgError}
+                            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                            alt={news.title}
+                          />
+                        </div>
+                        <div className="md:col-span-7 pt-2">
+                          <div className="flex items-center gap-3 mb-4">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">
+                              {news.category}
+                            </span>
+                            <span className="h-1 w-1 rounded-full bg-slate-200"></span>
+                            <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">
+                              {news.date}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl lg:text-3xl font-bold tracking-tighter text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors">
+                            {news.title}
+                          </h3>
+                          <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">
+                            {news.excerpt ||
+                              'Ketahui lebih dalam mengenai analisis mendalam dan rangkuman editorial terbaik kami hari ini.'}
+                          </p>
+                          <div className="flex items-center gap-2 text-xs font-bold text-slate-900 group-hover:gap-4 transition-all uppercase tracking-widest">
+                            Selengkapnya <ChevronRight className="h-3 w-3" />
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="text-2xl lg:text-3xl font-bold tracking-tighter text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors">
-                        {news.title}
-                      </h3>
-                      <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">
-                        {news.excerpt ||
-                          'Ketahui lebih dalam mengenai analisis mendalam dan rangkuman editorial terbaik kami hari ini.'}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-900 group-hover:gap-4 transition-all uppercase tracking-widest">
-                        Selengkapnya <ChevronRight className="h-3 w-3" />
-                      </div>
-                    </div>
+                    </Link>
                   </article>
                 ))
               ) : (
