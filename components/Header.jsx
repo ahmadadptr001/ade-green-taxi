@@ -34,7 +34,7 @@ export default function Header() {
                 <a href="/berita">
                   <img
                     className="w-7 h-7"
-                    src="https://img.icons8.com/?size=100&id=aTk3yd33wbL7&format=png&color=000000"
+                    src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
                     alt="newspaper icon"
                   />
                 </a>
