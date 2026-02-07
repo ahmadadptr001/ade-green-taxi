@@ -33,7 +33,7 @@ export default function Footer({ tags, categories, topics }) {
                         key={idx}
                         className="hover:text-emerald-500 transition-colors"
                       >
-                        <a href={`/berita/${items.title.toLowerCase()}/${item.name}`}>{item.name}</a>
+                        <a href={`/berita/${items.title.toLowerCase()}/${item.slug}`}>{item.name}</a>
                       </li>
                     ))}
                 </ul>
