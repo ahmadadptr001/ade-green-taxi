@@ -331,7 +331,7 @@ export default function PremiumNewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Primary Feature */}
               {hasNews ? (
-                <div className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]">
+                <Link href={`/berita/${primary.slug}`} className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]">
                   <img
                     src={primary.image}
                     onError={handleImgError}
@@ -360,7 +360,7 @@ export default function PremiumNewsPage() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link>
               ) : (
                 // Placeholder / Empty state that preserves layout & design
                 <div className="lg:col-span-8 relative overflow-hidden rounded-[32px] bg-white border border-dashed border-slate-200 aspect-[16/10] lg:aspect-auto flex items-center justify-center">
