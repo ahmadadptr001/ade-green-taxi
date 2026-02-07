@@ -40,3 +40,12 @@ export async function getTopics() {
   }
 }
 
+export async function getArticlesByCategorySlug(slug) {
+  try {
+    const response = await axios.get('/api/articles/category/'+slug);
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}

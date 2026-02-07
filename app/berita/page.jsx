@@ -28,6 +28,7 @@ import {
   getTopics,
 } from '@/services/articles';
 import Footer from '@/components/berita/Footer';
+import { formatDate } from '@/utils/date';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
 const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
@@ -35,13 +36,7 @@ const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg
 const mapArticlesToNews = (articles = []) => {
   if (!Array.isArray(articles)) return [];
 
-  const formatDate = (iso) => {
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return '';
-    return `${d.getDate()} ${d.toLocaleString('en-US', {
-      month: 'short',
-    })} ${d.getFullYear()}`;
-  };
+
 
   return articles.map((a) => ({
     id: a.id,

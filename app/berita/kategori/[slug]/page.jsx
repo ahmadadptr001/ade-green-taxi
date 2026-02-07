@@ -1,34 +1,65 @@
+'use client';
 import Footer from '@/components/berita/Footer';
+import { getArticlesByCategorySlug } from '@/services/articles';
+import { formatDate } from '@/utils/date';
+import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // simulasi fetch (ganti dengan API / DB lo)
-async function getArticlesByCategory(slug) {
-  // contoh dummy data
-  return [
-    {
-      id: 1,
-      title: 'Transformasi Energi Hijau di Indonesia',
-      excerpt:
-        'Bagaimana teknologi dan kebijakan mendorong percepatan energi terbarukan.',
-      image: 'https://images.unsplash.com/photo-1509395176047-4a66953fd231',
-      date: '3 Feb 2026',
-      category: slug,
-    },
-    {
-      id: 2,
-      title: 'Startup Climate Tech Mulai Dilirik Investor',
-      excerpt:
-        'Pendanaan hijau meningkat seiring fokus global pada keberlanjutan.',
-      image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a',
-      date: '2 Feb 2026',
-      category: slug,
-    },
-  ];
-}
+// async function getArticlesByCategory(slug) {
+//   // contoh dummy data
+//   return [
+//     {
+//       id: 1,
+//       title: 'Transformasi Energi Hijau di Indonesia',
+//       excerpt:
+//         'Bagaimana teknologi dan kebijakan mendorong percepatan energi terbarukan.',
+//       image: 'https://images.unsplash.com/photo-1509395176047-4a66953fd231',
+//       date: '3 Feb 2026',
+//       category: slug,
+//     },
+//     {
+//       id: 2,
+//       title: 'Startup Climate Tech Mulai Dilirik Investor',
+//       excerpt:
+//         'Pendanaan hijau meningkat seiring fokus global pada keberlanjutan.',
+//       image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a',
+//       date: '2 Feb 2026',
+//       category: slug,
+//     },
+//   ];
+// }
 
-export default async function BeritaKategori({ params }) {
-  const { slug } = await params;
-  const articles = await getArticlesByCategory(slug);
+export default function BeritaKategori({ params }) {
+  const [slug, setSlug] = useState('');
+  const [query, setQuery] = useState('');
+  const [articles, setArticles] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { slug: slug_ } = await params;
+      const articles_ = await getArticlesByCategorySlug(slug_);
+      console.log('ARTICLES MENTAH LOG: ', articles_);
+      setSlug(slug_);
+      setArticles(articles_.articles);
+    };
+    fetchData();
+  }, []);
+
+  // filter berdasarkan pencarian
+  const filteredArticles = useMemo(() => {
+    if (!articles) return [];
+    if (query.length === 0) return articles;
+
+    const q = query.toLowerCase();
+
+    return articles.filter(
+      (article) =>
+        article.title.toLowerCase().includes(q) ||
+        article.description?.toLowerCase().includes(q)
+    );
+  }, [articles, query]);
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -66,45 +97,44 @@ export default async function BeritaKategori({ params }) {
             </div>
 
             {/* Search */}
-            <form
-              action={`/berita/kategori/${slug}`}
-              method="GET"
+            <div
               className="w-full md:w-[360px]"
             >
               <div className="relative">
                 <input
                   type="search"
                   name="q"
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
                   placeholder={`Cari di ${slug.replace('-', ' ')}...`}
                   className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 pr-12 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700"
-                >
-                  Cari
-                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ===== Konten Artikel ===== */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        {articles.length === 0 ? (
-          // Empty State
-          <div className="text-center py-24">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Belum ada artikel
-            </h3>
-            <p className="text-gray-500 mt-2">
-              Artikel untuk kategori ini akan segera hadir.
-            </p>
+        {filteredArticles?.length === 0 ? (
+          <div className="flex items-center justify-center py-40">
+            <div className="text-center max-w-md">
+              <h3 className="text-xl font-semibold text-gray-900">
+                Belum ada artikel
+              </h3>
+              <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+                Saat ini belum tersedia artikel untuk kategori{' '}
+                <span className="capitalize text-gray-700">
+                  {slug.replace('-', ' ')}
+                </span>
+                .
+              </p>
+            </div>
           </div>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article) => (
+            {filteredArticles?.map((article) => (
               <article
                 key={article.id}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
@@ -112,7 +142,7 @@ export default async function BeritaKategori({ params }) {
                 {/* Thumbnail */}
                 <div className="h-48 bg-gray-200">
                   <img
-                    src={article.image}
+                    src={article.img}
                     alt={article.title}
                     className="h-full w-full object-cover"
                   />
@@ -121,12 +151,15 @@ export default async function BeritaKategori({ params }) {
                 {/* Content */}
                 <div className="p-6">
                   <div className="text-xs text-gray-500 mb-2">
-                    {article.date}
+                    {formatDate(article.published_at)}
                   </div>
 
                   <h2 className="text-lg font-bold text-gray-900 leading-snug mb-2">
                     {article.title}
                   </h2>
+                  <small className="text-sm line-clamp-2 text-slate-500">
+                    {article.description}
+                  </small>
 
                   <p className="text-gray-600 text-sm line-clamp-3">
                     {article.excerpt}
@@ -149,7 +182,9 @@ export default async function BeritaKategori({ params }) {
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             {/* Brand */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900">AdeGreen</h3>
+              <h3 className="text-lg font-bold text-gray-900">
+                Ade<span className="text-primary">Green</span>Berita
+              </h3>
               <p className="text-sm text-gray-500 mt-1">
                 Media berita & insight seputar teknologi, bisnis, dan
                 keberlanjutan.
