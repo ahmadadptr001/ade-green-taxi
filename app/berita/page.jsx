@@ -21,6 +21,7 @@ import {
   Globe,
 } from 'lucide-react';
 import { getArticles } from '@/services/articles';
+import Footer from '@/components/berita/Footer';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
 const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
@@ -601,7 +602,7 @@ export default function PremiumNewsPage() {
       </main>
 
       {/* --- FOOTER --- */}
-      
+      <Footer />
 
       {/* Global CSS for marquee and scrollbar */}
       <style jsx global>{`
