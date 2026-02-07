@@ -22,7 +22,40 @@ import {
 } from 'lucide-react';
 import { getArticles } from '@/services/articles';
 
-// --- MOCK DATA ---
+const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
+const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
+
+const mapArticlesToNews = (articles = []) => {
+  if (!Array.isArray(articles)) return [];
+
+  const formatDate = (iso) => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    return `${d.getDate()} ${d.toLocaleString('en-US', {
+      month: 'short',
+    })} ${d.getFullYear()}`;
+  };
+
+  return articles.map((a) => ({
+    id: a.id,
+    title: a.title,
+    excerpt: a.description,
+    category: a?.article_categories?.[0]?.categories?.name ?? 'Umum',
+    date: formatDate(a.published_at),
+    image: a.img,
+    views: a.views ?? 0,
+    raw: a,
+  }));
+};
+
+const getPopularArticles = (articles = [], minViews = 100) => {
+  if (!Array.isArray(articles)) return [];
+
+  return articles
+    .filter((a) => (a.views ?? 0) >= minViews)
+    .sort((a, b) => (b.views ?? 0) - (a.views ?? 0));
+};
+
 const CATEGORIES = [
   'Semua',
   'Teknologi',
@@ -30,59 +63,6 @@ const CATEGORIES = [
   'Green Energy',
   'Desain',
   'Life',
-];
-
-const ALL_NEWS = [
-  {
-    id: 1,
-    title: 'Masa Depan Energi Hijau: Transformasi Kota Pintar di Indonesia',
-    excerpt:
-      'Bagaimana integrasi panel surya dan AI mengubah lanskap arsitektur perkotaan Jakarta menuju net-zero emission.',
-    category: 'Green Energy',
-    author: 'Sarah Wijaya',
-    date: '12 Feb 2024',
-    image:
-      'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?q=80&w=1000&auto=format&fit=crop',
-    featured: true,
-  },
-  {
-    id: 2,
-    title: 'Startup Unicorn Baru Muncul di Sektor Agritech',
-    category: 'Bisnis',
-    date: '11 Feb 2024',
-    image:
-      'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=500&auto=format&fit=crop',
-  },
-  {
-    id: 3,
-    title: 'Revolusi Desain Minimalis dalam Aplikasi Finansial',
-    category: 'Desain',
-    date: '10 Feb 2024',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=500&auto=format&fit=crop',
-  },
-  {
-    id: 4,
-    title: 'AI Generatif: Ancaman atau Peluang bagi Kreator?',
-    excerpt:
-      'Diskusi mendalam mengenai dampak kecerdasan buatan terhadap industri kreatif lokal.',
-    category: 'Teknologi',
-    author: 'Budi Santoso',
-    date: '10 Feb 2024',
-    image:
-      'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=500&auto=format&fit=crop',
-  },
-  {
-    id: 5,
-    title: 'Tips Mengelola Keuangan untuk Gen Z',
-    excerpt:
-      'Panduan praktis investasi dan menabung di era ketidakpastian ekonomi.',
-    category: 'Life',
-    author: 'Rina A.',
-    date: '09 Feb 2024',
-    image:
-      'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=500&auto=format&fit=crop',
-  },
 ];
 
 const NOTIFICATIONS = [
@@ -113,6 +93,8 @@ export default function PremiumNewsPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotifyOpen, setIsNotifyOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [articles, setArticles] = useState(null);
+  const [popularArticles, setPopularArticles] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -122,23 +104,46 @@ export default function PremiumNewsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getArticles();
-      console.log('DEBUG DATA ARTIKEL:', data)
-    } 
+      try {
+        const data = await getArticles();
+        const mappedArticles = mapArticlesToNews(data?.articles);
+        setArticles(mappedArticles);
+
+        const popularRaw = getPopularArticles(data?.articles, 100);
+        const mappedPopular = mapArticlesToNews(popularRaw);
+        setPopularArticles(mappedPopular);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
     fetchData();
-  })
+  }, []);
 
   const filteredNews = useMemo(() => {
-    return ALL_NEWS.filter((item) => {
+    // if (!articles) return;
+    return articles?.filter((item) => {
       const matchesCategory =
         activeCategory === 'Semua' || item.category === activeCategory;
+      const q = searchQuery.toLowerCase();
       const matchesSearch =
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchQuery.toLowerCase());
+        item.title.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q);
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, articles]);
+
+  // safety flags and safe references for hero items
+  const hasNews = Array.isArray(articles) && articles?.length > 0;
+  const primary = hasNews ? articles[0] : null;
+  const sideItems = hasNews ? [articles[1], articles[2]].filter(Boolean) : [];
+
+  // small helper for img onError (keeps consistent fallback)
+  const handleImgError = (e) => {
+    if (!e?.currentTarget) return;
+    if (e.currentTarget.src === PLACEHOLDER) return;
+    e.currentTarget.src = PLACEHOLDER;
+  };
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
@@ -352,64 +357,102 @@ export default function PremiumNewsPage() {
           <section className="mb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Primary Feature */}
-              <div className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[16/10] lg:aspect-auto">
-                <img
-                  src={ALL_NEWS[0].image}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-110 group-hover:rotate-1"
-                  alt="Main"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent" />
-                <div className="absolute bottom-0 p-10 lg:p-14 w-full">
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg">
-                      {ALL_NEWS[0].category}
-                    </span>
-                    <span className="text-white/60 text-xs font-medium">
-                      12 Feb 2024
-                    </span>
-                  </div>
-                  <h2 className="text-4xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
-                    {ALL_NEWS[0].title}
-                  </h2>
-                  <div className="flex items-center justify-between">
-                    <p className="text-slate-300 text-sm max-w-md line-clamp-2 hidden sm:block">
-                      {ALL_NEWS[0].excerpt}
-                    </p>
-                    <button className="h-14 w-14 rounded-full bg-white flex items-center justify-center text-slate-900 transition-transform group-hover:scale-110 shadow-xl">
-                      <ArrowUpRight className="h-6 w-6" />
-                    </button>
+              {hasNews ? (
+                <div className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[16/10] lg:aspect-auto">
+                  <img
+                    src={primary.image}
+                    onError={handleImgError}
+                    className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-110 group-hover:rotate-1"
+                    alt="Main"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent" />
+                  <div className="absolute bottom-0 p-10 lg:p-14 w-full">
+                    <div className="flex items-center gap-3 mb-6">
+                      <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg">
+                        {primary.category}
+                      </span>
+                      <span className="text-white/60 text-xs font-medium">
+                        {primary.date}
+                      </span>
+                    </div>
+                    <h2 className="text-4xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
+                      {primary.title}
+                    </h2>
+                    <div className="flex items-center justify-between">
+                      <p className="text-slate-300 text-sm max-w-md line-clamp-2 hidden sm:block">
+                        {primary.excerpt}
+                      </p>
+                      <button className="h-14 w-14 rounded-full bg-white flex items-center justify-center text-slate-900 transition-transform group-hover:scale-110 shadow-xl">
+                        <ArrowUpRight className="h-6 w-6" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                // Placeholder / Empty state that preserves layout & design
+                <div className="lg:col-span-8 relative overflow-hidden rounded-[32px] bg-white border border-dashed border-slate-200 aspect-[16/10] lg:aspect-auto flex items-center justify-center">
+                  <div className="text-center p-10">
+                    <div className="h-28 w-28 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Search className="h-10 w-10 text-slate-300" />
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 mb-2">
+                      Belum ada berita terbaru
+                    </h3>
+                    <p className="text-sm text-slate-400 max-w-md mx-auto">
+                      Tim redaksi sedang menyiapkan konten. Coba lagi nanti atau
+                      gunakan fitur pencarian untuk menemukan topik lain.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Side Features */}
               <div className="lg:col-span-4 flex flex-col gap-8">
-                {[ALL_NEWS[1], ALL_NEWS[2]].map((item) => (
-                  <div
-                    key={item.id}
-                    className="group relative flex-1 rounded-[32px] bg-white border border-slate-100 p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/50 flex flex-col justify-between overflow-hidden"
-                  >
-                    <div className="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-100">
-                      <TrendingUp className="h-20 w-20 text-emerald-600 -mr-4 -mt-4" />
-                    </div>
-                    <div className="relative">
-                      <span className="text-emerald-600 text-[10px] font-black uppercase tracking-widest">
-                        {item.category}
-                      </span>
-                      <h3 className="text-2xl font-bold tracking-tight text-slate-900 mt-3 leading-snug group-hover:text-emerald-700 transition-colors">
-                        {item.title}
-                      </h3>
-                    </div>
-                    <div className="mt-8 flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-slate-400">
-                        {item.date}
-                      </span>
-                      <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                        <ChevronRight className="h-4 w-4" />
+                {hasNews
+                  ? // original side items when data exists
+                    sideItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="group relative flex-1 rounded-[32px] bg-white border border-slate-100 p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/50 flex flex-col justify-between overflow-hidden"
+                      >
+                        <div className="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-100">
+                          <TrendingUp className="h-20 w-20 text-emerald-600 -mr-4 -mt-4" />
+                        </div>
+                        <div className="relative">
+                          <span className="text-emerald-600 text-[10px] font-black uppercase tracking-widest">
+                            {item.category}
+                          </span>
+                          <h3 className="text-2xl font-bold tracking-tight text-slate-900 mt-3 leading-snug group-hover:text-emerald-700 transition-colors">
+                            {item.title}
+                          </h3>
+                        </div>
+                        <div className="mt-8 flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-slate-400">
+                            {item.date}
+                          </span>
+                          <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                            <ChevronRight className="h-4 w-4" />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    ))
+                  : // two small placeholder cards to preserve layout
+                    [0, 1].map((i) => (
+                      <div
+                        key={i}
+                        className="relative flex-1 rounded-[32px] bg-white border border-dashed border-slate-200 p-6 flex flex-col justify-center items-center text-center"
+                      >
+                        <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-4">
+                          <PlayCircle className="h-6 w-6 text-slate-300" />
+                        </div>
+                        <h4 className="font-bold text-slate-900 mb-2">
+                          Konten segera
+                        </h4>
+                        <p className="text-[12px] text-slate-400">
+                          Kami sedang menyiapkan artikel terbaru
+                        </p>
+                      </div>
+                    ))}
               </div>
             </div>
           </section>
@@ -439,7 +482,7 @@ export default function PremiumNewsPage() {
 
             {/* List Berita */}
             <div className="space-y-16">
-              {filteredNews.length > 0 ? (
+              {filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
                   <article
                     key={news.id}
@@ -448,6 +491,7 @@ export default function PremiumNewsPage() {
                     <div className="md:col-span-5 relative overflow-hidden rounded-[24px] aspect-[4/3]">
                       <img
                         src={news.image}
+                        onError={handleImgError}
                         className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                         alt={news.title}
                       />
@@ -524,22 +568,32 @@ export default function PremiumNewsPage() {
                 <div className="h-px bg-slate-100 flex-1 ml-6"></div>
               </div>
               <div className="space-y-8">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex gap-6 group cursor-pointer">
-                    <span className="text-4xl font-black text-slate-100 group-hover:text-emerald-500 transition-colors duration-500">
-                      0{i}
-                    </span>
-                    <div>
-                      <h5 className="font-bold text-slate-900 leading-tight group-hover:underline">
-                        Tren Investasi Properti di Tahun 2024 Bagi Kaum
-                        Millenial
-                      </h5>
-                      <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">
-                        Bisnis • 2.4k Views
-                      </p>
+                {popularArticles?.length > 0 ? (
+                  popularArticles.slice(0, 3).map((item, index) => (
+                    <div
+                      key={item.id}
+                      className="flex gap-6 group cursor-pointer"
+                    >
+                      {/* Ranking */}
+                      <span className="text-4xl font-black text-slate-100 group-hover:text-emerald-500 transition-colors duration-500">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+
+                      <div>
+                        <h5 className="font-bold text-slate-900 leading-tight group-hover:underline">
+                          {item.title}
+                        </h5>
+                        <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">
+                          {item.category} • {item.views.toLocaleString()} Views
+                        </p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10 text-slate-400 text-sm">
+                    Belum ada berita populer
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </aside>

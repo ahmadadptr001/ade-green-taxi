@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function getArticles() {
   try {
     const response = await axios.get('/api/articles');
-    if (!response.ok) throw response;
+    if (!response.statusText) throw response;
     return response.data;
   } catch (err) {
     throw err;
