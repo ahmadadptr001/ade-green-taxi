@@ -4,7 +4,7 @@ import { getArticlesByCategorySlug } from '@/services/articles';
 import { formatDate } from '@/utils/date';
 import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // simulasi fetch (ganti dengan API / DB lo)
 // async function getArticlesByCategory(slug) {

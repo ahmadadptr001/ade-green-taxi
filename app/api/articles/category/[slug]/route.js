@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET({ params }) {
   const  slug = await params;
+  console.log(slug)
   try {
     const { data, error } = await supabase_coolify
       .from('articles')
