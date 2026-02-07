@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <>
       {/* HEADER BAR */}
-      <header className="fixed top-0 z-100 w-full bg-white/90 backdrop-blur-md border-b border-black/5">
+      <header className="fixed top-0 z-100 w-full bg-white/100  border-b border-black/5">
         <div className="mx-auto max-w-screen-xl px-6 h-16 flex items-center justify-between">
           <a href="/beranda">
             <p className="text-2xl font-semibold">
@@ -29,18 +29,27 @@ export default function Header() {
           </a>
 
           <div className="flex items-center gap-2">
-            <Tooltip>
-              <TooltipTrigger>
-                <a href="/berita">
-                  <img
-                    className="w-7 h-7"
-                    src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
-                    alt="newspaper icon"
-                  />
-                </a>
-              </TooltipTrigger>
-              <TooltipContent className={'!z-100'}>Berita</TooltipContent>
-            </Tooltip>
+            {/* Baca Berita – HIDDEN di mobile */}
+            <div className="hidden md:block">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="/berita"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <img
+                      className="h-5 w-5"
+                      src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
+                      alt="newspaper"
+                    />
+                    <span>Baca Berita</span>
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent className="!z-150">Berita</TooltipContent>
+              </Tooltip>
+            </div>
+
+            {/* Hamburger */}
             <button
               onClick={() => setOpen((v) => !v)}
               className="p-2 rounded-full hover:bg-black/5 transition"
@@ -49,10 +58,7 @@ export default function Header() {
               {open ? (
                 <X size={22} />
               ) : (
-                <Kanban
-                  size={22}
-                  className="transform -rotate-90 rotate-x-180"
-                />
+                <Kanban size={22} className="-rotate-90" />
               )}
             </button>
           </div>
@@ -62,16 +68,23 @@ export default function Header() {
       {/* SLIDE DOWN MENU */}
       <div
         className={`fixed top-16 left-0 right-0 z-40 bg-white border-b
-        transition-transform duration-300 ease-out
-        ${open ? 'translate-y-0' : '-translate-y-full'}`}
-        style={{ height: '70vh' }}
+      transition-transform h-[70vh] md:h-[90vh] py-6 duration-300 ease-out
+        ${open ? 'translate-y-0' : '-translate-y-[150%]'}`}
       >
-        <div className="h-full flex flex-col items-center justify-center gap-10">
+        <div className="h-full overflow-auto flex flex-col items-center md:justify-center  gap-5 md:gap-10">
           {/* MAIN NAV */}
           <nav className="flex flex-col items-center gap-6 text-2xl font-semibold">
             <a onClick={() => setOpen(false)} href="/beranda#layanan">
               {t.mainNavbar.service}
             </a>
+
+            <a
+              onClick={() => setOpen(false)}
+              href="/berita"
+            >
+              Baca Berita
+            </a>
+
             <a onClick={() => setOpen(false)} href="/beranda#tentang">
               {t.mainNavbar.about}
             </a>
