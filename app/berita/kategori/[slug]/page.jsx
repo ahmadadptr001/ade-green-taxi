@@ -121,10 +121,10 @@ export default function BeritaKategori({ params }) {
           <div className="flex items-center justify-center py-40">
             <div className="text-center max-w-md">
               <h3 className="text-xl font-semibold text-gray-900">
-                Belum ada artikel
+                Belum ada berita
               </h3>
               <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-                Saat ini belum tersedia artikel untuk kategori{' '}
+                Saat ini belum tersedia berita untuk kategori{' '}
                 <span className="capitalize text-gray-700">
                   {slug.replace('-', ' ')}
                 </span>

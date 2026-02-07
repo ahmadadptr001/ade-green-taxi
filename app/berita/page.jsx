@@ -301,14 +301,16 @@ export default function PremiumNewsPage() {
             <div className="flex flex-col gap-6 text-center">
               {topics &&
                 topics.map((item) => (
-                  <a
+                  <button
                     key={item.id}
-                    href="#"
                     className="text-2xl font-black text-slate-900 tracking-tighter"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => {
+                      setActiveNav(item.name)
+                      setIsMobileMenuOpen(false)
+                    }}
                   >
                     {item.name}
-                  </a>
+                  </button>
                 ))}
               <hr className="border-slate-100" />
               <div className="flex justify-center gap-8">
