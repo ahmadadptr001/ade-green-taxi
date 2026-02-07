@@ -1,9 +1,9 @@
 import { supabase_coolify } from '@/config/supabase';
 import { NextResponse } from 'next/server';
 
-export async function GET({ params }) {
-  const  slug = await params;
-  console.log(slug)
+export async function GET(req, { params }) {
+  const { slug } = await params;
+  console.log('slug log:', slug);
   try {
     const { data, error } = await supabase_coolify
       .from('articles')
@@ -14,8 +14,8 @@ export async function GET({ params }) {
         img,
         published_at,
         description,
-        article_categories (
-          categories (
+        article_categories!inner (
+          categories!inner (
             id,
             name,
             slug
@@ -30,9 +30,9 @@ export async function GET({ params }) {
     return NextResponse.json(
       {
         message:
-          'Berhasil mendapatkan data artikel berdasarkan slug kategori ->' +
+          'Berhasil mendapatkan data artikel berdasarkan slug kategori -> ' +
           slug,
-          articles: data
+        articles: data,
       },
       { status: 200 }
     );
