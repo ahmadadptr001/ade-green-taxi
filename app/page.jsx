@@ -27,7 +27,7 @@ export default function LoadingScreen() {
       </h1>
 
       {/* Description */}
-      <p className="mt-2 text-base text-gray-600">
+      <p className="mt-2 text-base text-gray-600 text-center">
         Aplikasi pemesanan lokasi dengan pengemudi ramah lingkungan 
         untuk mobilitas harian di Kota Kendari.
       </p>
