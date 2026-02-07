@@ -23,6 +23,13 @@ export async function GET() {
         name,
         slug
         )
+      ),
+      article_topics (
+        topics (
+          id,
+          name,
+          slug
+        )
       )
       `);
     if (error) {

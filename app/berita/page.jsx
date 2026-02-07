@@ -19,8 +19,14 @@ import {
   User,
   ChevronDown,
   Globe,
+  MenuIcon,
 } from 'lucide-react';
-import { getArticles } from '@/services/articles';
+import {
+  getArticles,
+  getCategories,
+  getTags,
+  getTopics,
+} from '@/services/articles';
 import Footer from '@/components/berita/Footer';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
@@ -42,6 +48,7 @@ const mapArticlesToNews = (articles = []) => {
     title: a.title,
     excerpt: a.description,
     category: a?.article_categories?.[0]?.categories?.name ?? 'Umum',
+    topics: a?.article_topics,
     date: formatDate(a.published_at),
     image: a.img,
     views: a.views ?? 0,
@@ -90,11 +97,13 @@ const NOTIFICATIONS = [
 export default function PremiumNewsPage() {
   const [activeCategory, setActiveCategory] = useState('Semua');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeNav, setActiveNav] = useState('Beranda');
+  const [activeNav, setActiveNav] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [articles, setArticles] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [tags, setTags] = useState(null);
+  const [topics, setTopics] = useState(null);
   const [popularArticles, setPopularArticles] = useState(null);
 
   useEffect(() => {
@@ -107,12 +116,23 @@ export default function PremiumNewsPage() {
     const fetchData = async () => {
       try {
         const data = await getArticles();
-        const mappedArticles = mapArticlesToNews(data?.articles);
-        setArticles(mappedArticles);
+        const categories_resp = await getCategories();
+        const tags_resp = await getTags();
+        const topics_resp = await getTopics();
 
+        // filter artikel jadi data yang lebih simpel
+        const mappedArticles = mapArticlesToNews(data?.articles);
+
+        // filter artikel yang paling populer
         const popularRaw = getPopularArticles(data?.articles, 100);
         const mappedPopular = mapArticlesToNews(popularRaw);
+
+        setArticles(mappedArticles);
         setPopularArticles(mappedPopular);
+
+        setTags(tags_resp.tags);
+        setTopics(topics_resp.topics);
+        setCategories(categories_resp.categories);
       } catch (err) {
         console.log(err);
       }
@@ -123,16 +143,35 @@ export default function PremiumNewsPage() {
 
   const filteredNews = useMemo(() => {
     // if (!articles) return;
-    return articles?.filter((item) => {
-      const matchesCategory =
-        activeCategory === 'Semua' || item.category === activeCategory;
-      const q = searchQuery.toLowerCase();
-      const matchesSearch =
-        item.title.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q);
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, searchQuery, articles]);
+
+    if (activeNav.length !== 0) {
+      const filter_by_topics = articles?.filter((item) => {
+        return item.topics?.some(
+          (item_article) => item_article.topics.name === activeNav
+        );
+      });
+      
+      return filter_by_topics?.filter((item) => {
+        const matchesCategory =
+          activeCategory === 'Semua' || item.category === activeCategory;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+          item.title.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q);
+        return matchesCategory && matchesSearch;
+      });
+    } else {
+      return articles?.filter((item) => {
+        const matchesCategory =
+          activeCategory === 'Semua' || item.category === activeCategory;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+          item.title.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q);
+        return matchesCategory && matchesSearch;
+      });
+    }
+  }, [activeCategory, searchQuery, articles, activeNav]);
 
   // safety flags and safe references for hero items
   const hasNews = Array.isArray(articles) && articles?.length > 0;
@@ -206,20 +245,23 @@ export default function PremiumNewsPage() {
 
             {/* Main Nav - Functional */}
             <nav className="hidden lg:flex items-center gap-10">
-              {['Beranda', 'Nasional', 'Internasional', 'Opini'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setActiveNav(item)}
-                  className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 ${
-                    activeNav === item ? 'text-emerald-600' : 'text-slate-500'
-                  }`}
-                >
-                  {item}
-                  {activeNav === item && (
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-emerald-600 rounded-full" />
-                  )}
-                </button>
-              ))}
+              {topics &&
+                topics.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveNav(item.name)}
+                    className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 ${
+                      activeNav === item.name
+                        ? 'text-emerald-600'
+                        : 'text-slate-500'
+                    }`}
+                  >
+                    {item.name}
+                    {activeNav === item.name && (
+                      <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-emerald-600 rounded-full" />
+                    )}
+                  </button>
+                ))}
             </nav>
 
             {/* Header Actions */}
@@ -230,7 +272,7 @@ export default function PremiumNewsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari perspektif..."
+                  placeholder="Cari berita..."
                   className="h-10 w-40 rounded-full border border-slate-100 bg-slate-50/50 px-10 text-xs font-medium transition-all focus:w-64 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/5 group-hover:bg-slate-50"
                 />
                 <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400 group-focus-within:text-emerald-600" />
@@ -242,73 +284,12 @@ export default function PremiumNewsPage() {
                 )}
               </div>
 
-              {/* Notification & Profile */}
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <button
-                    onClick={() => setIsNotifyOpen(!isNotifyOpen)}
-                    className={`rounded-full p-2.5 transition-all ${isNotifyOpen ? 'bg-slate-100 text-emerald-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
-                  >
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute right-2.5 top-2.5 flex h-2 w-2 rounded-full bg-red-500 border-2 border-white"></span>
-                  </button>
-
-                  {/* Notification Dropdown */}
-                  {isNotifyOpen && (
-                    <>
-                      <button
-                        className="fixed h-screen inset-0"
-                        onClick={() => setIsNotifyOpen(false)}
-                      ></button>
-                      <div className="absolute right-0 mt-3 w-80 rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl animate-in fade-in zoom-in duration-200">
-                        <div className="px-4 py-3 border-b border-slate-50 flex justify-between items-center">
-                          <span className="text-sm font-bold text-slate-900">
-                            Notifikasi
-                          </span>
-                          <span className="text-[10px] text-emerald-600 font-bold cursor-pointer hover:underline">
-                            Tandai dibaca
-                          </span>
-                        </div>
-                        <div className="max-h-[300px] overflow-y-auto">
-                          {NOTIFICATIONS.map((n) => (
-                            <div
-                              key={n.id}
-                              className="p-4 hover:bg-slate-50 rounded-xl transition-colors cursor-pointer group"
-                            >
-                              <p
-                                className={`text-xs ${n.unread ? 'font-bold text-slate-900' : 'text-slate-500'}`}
-                              >
-                                {n.text}
-                              </p>
-                              <span className="text-[10px] text-slate-400 mt-1 block">
-                                {n.time}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                <div className="h-8 w-[1px] bg-slate-100 mx-1 hidden sm:block"></div>
-
-                <button className="hidden sm:flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-slate-200">
-                  <User className="h-3.5 w-3.5" />
-                  <span>MASUK</span>
-                </button>
-
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="lg:hidden rounded-xl bg-slate-50 p-2.5 text-slate-900"
-                >
-                  {isMobileMenuOpen ? (
-                    <X className="h-5 w-5" />
-                  ) : (
-                    <Menu className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
+              <button
+                className="flex items-center justify-center lg:hidden"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <MenuIcon />
+              </button>
             </div>
           </div>
         </div>
@@ -323,23 +304,17 @@ export default function PremiumNewsPage() {
           ></div>
           <div className="absolute top-0 w-full bg-white p-8 rounded-b-[40px] shadow-2xl">
             <div className="flex flex-col gap-6 text-center">
-              {[
-                'Beranda',
-                'Nasional',
-                'Internasional',
-                'Opini',
-                'Teknologi',
-                'Bisnis',
-              ].map((item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="text-2xl font-black text-slate-900 tracking-tighter"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item}
-                </a>
-              ))}
+              {topics &&
+                topics.map((item) => (
+                  <a
+                    key={item.id}
+                    href="#"
+                    className="text-2xl font-black text-slate-900 tracking-tighter"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                ))}
               <hr className="border-slate-100" />
               <div className="flex justify-center gap-8">
                 <Facebook className="text-slate-400" />
@@ -465,19 +440,20 @@ export default function PremiumNewsPage() {
             {/* Category Filter */}
             <div className="flex items-center justify-between mb-12 overflow-x-auto no-scrollbar pb-2">
               <div className="flex gap-4">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`whitespace-nowrap px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                      activeCategory === cat
-                        ? 'bg-slate-950 text-white shadow-xl shadow-slate-200 scale-105'
-                        : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                {categories &&
+                  categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.name)}
+                      className={`whitespace-nowrap px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                        activeCategory === cat.name
+                          ? 'bg-slate-950 text-white shadow-xl shadow-slate-200 scale-105'
+                          : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
               </div>
             </div>
 
@@ -602,7 +578,7 @@ export default function PremiumNewsPage() {
       </main>
 
       {/* --- FOOTER --- */}
-      <Footer />
+      <Footer topics={topics} categories={categories} tags={tags}/>
 
       {/* Global CSS for marquee and scrollbar */}
       <style jsx global>{`

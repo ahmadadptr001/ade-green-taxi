@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function Footer({ tags, categories, topics }) {
   return (
     <footer className="bg-slate-950 text-white pt-24 pb-12 rounded-t-[60px] mt-20">
       <div className="container mx-auto px-8">
@@ -17,24 +17,25 @@ export default function Footer() {
             </div>
           </div>
           <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
-            {['Kategori', 'Perusahaan', 'Bantuan'].map((col) => (
-              <div key={col}>
+            {[
+              { categories, title: 'Kategori', name: 'categories' },
+              { tags, title: 'Tag', name: 'tags' },
+              { topics, title: 'Topik', name: 'topics' },
+            ].map((items, i) => (
+              <div key={i}>
                 <h6 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">
-                  {col}
+                  {items.title}
                 </h6>
                 <ul className="space-y-4 text-sm font-bold text-slate-300">
-                  <li className="hover:text-emerald-500 transition-colors">
-                    <a href="#">Nasional</a>
-                  </li>
-                  <li className="hover:text-emerald-500 transition-colors">
-                    <a href="#">Teknologi</a>
-                  </li>
-                  <li className="hover:text-emerald-500 transition-colors">
-                    <a href="#">Tentang</a>
-                  </li>
-                  <li className="hover:text-emerald-500 transition-colors">
-                    <a href="#">Karir</a>
-                  </li>
+                  {items[items.name] &&
+                    items[items.name].map((item, idx) => (
+                      <li
+                        key={idx}
+                        className="hover:text-emerald-500 transition-colors"
+                      >
+                        <a href={`/berita/${items.title.toLowerCase()}/${item.name}`}>{item.name}</a>
+                      </li>
+                    ))}
                 </ul>
               </div>
             ))}
@@ -42,7 +43,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col md:row items-center justify-between pt-12 border-t border-slate-900 gap-8">
           <p className="text-[10px] font-bold text-slate-600 tracking-widest uppercase">
-            © {new Date().getFullYear()} ADE GREEN TX MEDIA. All Rights
+            © {new Date().getFullYear()} ADE GREEN BERITA. All Rights
             Reversed.
           </p>
           <div className="flex gap-8">

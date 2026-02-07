@@ -9,3 +9,34 @@ export async function getArticles() {
     throw err;
   }
 }
+
+export async function getCategories() {
+  try {
+    const response = await axios.get('/api/articles/categories')
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function getTags() {
+  try {
+    const response = await axios.get('/api/articles/tags')
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function getTopics() {
+  try {
+    const response = await axios.get('/api/articles/topics')
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err
+  }
+}
+
