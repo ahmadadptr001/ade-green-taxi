@@ -20,6 +20,7 @@ import {
   ChevronDown,
   Globe,
   MenuIcon,
+  LogIn,
 } from 'lucide-react';
 import {
   getArticles,
@@ -28,8 +29,18 @@ import {
   getTopics,
 } from '@/services/articles';
 import Footer from '@/components/berita/Footer';
+import animationData from '@/public/lottie/success.json';
 import { formatDate } from '@/utils/date';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogHeader,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { DialogContent } from '@radix-ui/react-dialog';
+import Lottie from 'lottie-react';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
 const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
@@ -91,6 +102,7 @@ const NOTIFICATIONS = [
 
 export default function PremiumNewsPage() {
   const [activeCategory, setActiveCategory] = useState('Semua');
+  const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeNav, setActiveNav] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -280,6 +292,49 @@ export default function PremiumNewsPage() {
               </div>
 
               <button
+                onClick={() => setShowModal(true)}
+                className="cursor-pointer hover:scale-102 p-3 rounded-md bg-blue-500 text-white text-xs font-semibold"
+              >
+                Daftar
+              </button>
+
+              {/* modal auth */}
+              <div
+                className={`${showModal ? 'block' : 'hidden'} grid place-items-center fixed inset-0 w-full h-screen z-100`}
+              >
+                <div className="z-10 relative shadow-md/20 p-10 rounded-md bg-white w-full h-full md:max-h-[700px] md:max-w-3xl grid place-items-center">
+                  {/* button close */}
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="p-2 absolute group top-2 right-2 rounded-full hover:bg-red-300 grid place-items-center bg-gray-100"
+                  >
+                    <X size={17} className="group-hover:text-red-500" />
+                  </button>
+
+                  <div className="mx-auto  w-[300px]" id='container-lottie'>
+                    <Lottie height={30} animationData={animationData} loop />
+                  </div>
+                  <div className="mt-15 gap-3 flex flex-col items-center">
+                    <Link href={'/daftar'} className="text-center sm:p-4 p-3 bg-sky-600 max-w-lg cursor-pointer duration-500 transition-all text-white font-semibold w-full text-lg sm:text-2xl hover:bg-black">
+                      Buat Akun
+                    </Link>
+                    <Link href={'/masuk'} className="text-center sm:p-4 p-3 w-full max-w-lg text-lg sm:text-2xl cursor-pointer transition-all duration-500 font-semibold ring-1 ring-sky-400 hover:ring-0 hover:bg-black hover:text-white">
+                      Masuk
+                    </Link>
+                    <p className="text-center max-w-lg text-md sm:text-lg text-slate-500">
+                      Untuk bantuan pendaftaran maupun akses masuk, silakan
+                      hubungi kami melalui email di{' '}
+                      <Link href={'mailto:support@adegreentx.id'} className='text-sky-500'>suport@adegreentx.id.</Link>
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="absolute w-full h-full bg-black/30"
+                  onClick={() => setShowModal(false)}
+                ></div>
+              </div>
+
+              <button
                 className="flex items-center justify-center lg:hidden"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
@@ -331,7 +386,10 @@ export default function PremiumNewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Primary Feature */}
               {hasNews ? (
-                <Link href={`/berita/${primary.slug}`} className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]">
+                <Link
+                  href={`/berita/${primary.slug}`}
+                  className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]"
+                >
                   <img
                     src={primary.image}
                     onError={handleImgError}
@@ -549,7 +607,7 @@ export default function PremiumNewsPage() {
                 {popularArticles?.length > 0 ? (
                   popularArticles.slice(0, 3).map((item, index) => (
                     <Link
-                    href={`/berita/${item.slug}`}
+                      href={`/berita/${item.slug}`}
                       key={item.id}
                       className="flex gap-6 group cursor-pointer"
                     >
