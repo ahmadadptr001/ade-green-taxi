@@ -36,8 +36,6 @@ const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg
 const mapArticlesToNews = (articles = []) => {
   if (!Array.isArray(articles)) return [];
 
-
-
   return articles.map((a) => ({
     id: a.id,
     title: a.title,
@@ -145,7 +143,7 @@ export default function PremiumNewsPage() {
           (item_article) => item_article.topics.name === activeNav
         );
       });
-      
+
       return filter_by_topics?.filter((item) => {
         const matchesCategory =
           activeCategory === 'Semua' || item.category === activeCategory;
@@ -305,8 +303,8 @@ export default function PremiumNewsPage() {
                     key={item.id}
                     className="text-2xl font-black text-slate-900 tracking-tighter"
                     onClick={() => {
-                      setActiveNav(item.name)
-                      setIsMobileMenuOpen(false)
+                      setActiveNav(item.name);
+                      setIsMobileMenuOpen(false);
                     }}
                   >
                     {item.name}
@@ -331,7 +329,9 @@ export default function PremiumNewsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* Primary Feature */}
               {hasNews ? (
-                <div className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[16/10] lg:aspect-auto">
+                <div
+                  className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]"
+                >
                   <img
                     src={primary.image}
                     onError={handleImgError}
@@ -348,7 +348,7 @@ export default function PremiumNewsPage() {
                         {primary.date}
                       </span>
                     </div>
-                    <h2 className="line-clamp-3 text-4xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
+                    <h2 className="line-clamp-3 text-2xl lg:text-4xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
                       {primary.title}
                     </h2>
                     <div className="flex items-center justify-between">
@@ -441,7 +441,9 @@ export default function PremiumNewsPage() {
                   categories.map((cat) => (
                     <button
                       key={cat.id}
-                      onClick={() => setActiveCategory(cat.name)}
+                      onClick={() => {
+                        setActiveCategory(cat.name)
+                      }}
                       className={`whitespace-nowrap px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                         activeCategory === cat.name
                           ? 'bg-slate-950 text-white shadow-xl shadow-slate-200 scale-105'
@@ -575,7 +577,7 @@ export default function PremiumNewsPage() {
       </main>
 
       {/* --- FOOTER --- */}
-      <Footer topics={topics} categories={categories} tags={tags}/>
+      <Footer topics={topics} categories={categories} tags={tags} />
 
       {/* Global CSS for marquee and scrollbar */}
       <style jsx global>{`

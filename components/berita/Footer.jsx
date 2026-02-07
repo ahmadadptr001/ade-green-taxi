@@ -1,6 +1,6 @@
 export default function Footer({ tags, categories, topics }) {
   return (
-    <footer className="bg-slate-950 text-white pt-24 pb-12 rounded-t-[60px] mt-20">
+    <footer className="bg-slate-950 text-white pt-24 pb-12 rounded-t-[30px] mt-20">
       <div className="container mx-auto px-8">
         <div className="grid grid-cols-1 items-center md:grid-cols-12 gap-12 mb-20">
           <div className="md:col-span-5">
