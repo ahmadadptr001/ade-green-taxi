@@ -336,7 +336,7 @@ export default function PremiumNewsPage() {
                     className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-110 group-hover:rotate-1"
                     alt="Main"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-green-600/50" />
                   <div className="absolute bottom-0 p-10 lg:p-14 w-full">
                     <div className="flex items-center gap-3 mb-6">
                       <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg">
@@ -346,7 +346,7 @@ export default function PremiumNewsPage() {
                         {primary.date}
                       </span>
                     </div>
-                    <h2 className="text-4xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
+                    <h2 className="line-clamp-3 text-4xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
                       {primary.title}
                     </h2>
                     <div className="flex items-center justify-between">
