@@ -7,37 +7,28 @@ import {
   Loader2,
   Lock,
   Mail,
-  User,
   Eye,
   EyeOff,
+  ChevronLeft
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function App() {
-  const [view, setView] = useState('login');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    whatsapp: '',
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [isValid, setIsValid] = useState(false);
 
+  // Validasi Login: Email valid & Password minimal 6 karakter
   useEffect(() => {
-    const isEmailValid =
-      formData.email.includes('@') && formData.email.includes('.');
+    const isEmailValid = formData.email.includes('@') && formData.email.includes('.');
     const isPasswordValid = formData.password.length >= 6;
-
-    if (view === 'login') {
-      setIsValid(isEmailValid && isPasswordValid);
-    } else {
-      const isNameValid = formData.name.length > 2;
-      const isWaValid = formData.whatsapp.length >= 9;
-      setIsValid(isNameValid && isEmailValid && isWaValid && isPasswordValid);
-    }
-  }, [formData, view]);
+    setIsValid(isEmailValid && isPasswordValid);
+  }, [formData]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -50,80 +41,61 @@ export default function App() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      const message =
-        view === 'login'
-          ? 'Login berhasil.'
-          : `Pendaftaran berhasil. Selamat bergabung, ${formData.name}.`;
-      alert(message);
+      alert('Login berhasil. Selamat datang kembali!');
     }, 1500);
   };
 
   return (
     <div className="fixed inset-0 bg-white flex flex-col md:flex-row font-sans text-slate-900">
-      {/* Sisi Visual (Desktop Only) */}
-      <div className="hidden relative md:flex md:w-1/2 bg-slate-50 items-center justify-center p-12 border-r border-slate-100">
-        <div className="absolute w-full h-full">
-          <img
-            src={'/bg-auth.jpg'}
-            alt="background desktop"
-            className="w-full h-full object-cover"
-          />
+      
+      {/* Sisi Visual: Menampilkan gambar penuh di desktop */}
+      <div className="hidden relative md:flex md:w-1/2 bg-slate-100 items-center justify-center overflow-hidden border-r border-slate-100">
+        <img
+        src='/bg-auth.jpg'
+          alt="Environmental Background"
+          className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-10000 hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
+        <div className="relative z-10 text-center p-12">
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 mx-auto border border-white/30">
+            <Leaf className="w-8 h-8 text-white fill-white" />
+          </div>
+          <h2 className="text-3xl font-bold text-white tracking-tight">ADE<span className='text-emerald-500'>GREEN</span>TX</h2>
+          <p className="text-emerald-50 mt-2 max-w-xs mx-auto opacity-90">Masuk untuk mendapatkan pembaruan eksklusif tentang ekosistem lingkungan.</p>
         </div>
       </div>
 
       {/* Sisi Form */}
-      <div className="flex-1 flex items-center justify-center md:p-6 md:p-12 overflow-y-auto">
-        <div className="w-full h-full md:h-auto bg-white md:bg-transparent rounded-md md:shadow-none md:p-0 shadow-md/20 p-10 z-2 md:max-w-[360px] space-y-8">
+      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 bg-white overflow-y-auto">
+        
+        <div className="w-full max-w-[360px] space-y-8">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-slate-900">
-              {view === 'login' ? 'Selamat Datang' : 'Buat Akun'}
-            </h3>
-            <p className="text-sm text-slate-500 mt-1.5">
-              {view === 'login'
-                ? 'Silakan masuk untuk melanjutkan akses.'
-                : 'Daftar sekarang untuk menjadi bagian dari komunitas.'}
+            <h3 className="text-3xl font-black tracking-tight text-slate-900">Selamat Datang</h3>
+            <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+              Silakan masukkan email dan kata sandi Anda untuk melanjutkan akses.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {view === 'register' && (
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-0.5">
-                  Nama Lengkap
-                </label>
-                <div
-                  className={`flex items-center border rounded-xl px-4 py-3 transition-all ${focusedField === 'name' ? 'border-emerald-500 ring-2 ring-emerald-50' : 'border-slate-200 bg-slate-50/50'}`}
-                >
-                  <User
-                    className={`w-4 h-4 mr-3 ${focusedField === 'name' ? 'text-emerald-500' : 'text-slate-400'}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Nama Lengkap"
-                    className="flex-1 bg-transparent outline-none text-sm font-medium"
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                    onFocus={() => setFocusedField('name')}
-                    onBlur={() => setFocusedField(null)}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-1">
-              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-0.5">
-                Email
+            {/* Input Email */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
+                Alamat Email
               </label>
               <div
-                className={`flex items-center border rounded-xl px-4 py-3 transition-all ${focusedField === 'email' ? 'border-emerald-500 ring-2 ring-emerald-50' : 'border-slate-200 bg-slate-50/50'}`}
+                className={`flex items-center border rounded-2xl px-4 py-4 transition-all duration-300 ${
+                  focusedField === 'email' 
+                  ? 'border-emerald-500 ring-4 ring-emerald-50 bg-white' 
+                  : 'border-slate-100 bg-slate-50'
+                }`}
               >
                 <Mail
-                  className={`w-4 h-4 mr-3 ${focusedField === 'email' ? 'text-emerald-500' : 'text-slate-400'}`}
+                  className={`w-5 h-5 mr-3 transition-colors ${focusedField === 'email' ? 'text-emerald-500' : 'text-slate-300'}`}
                 />
                 <input
                   type="email"
-                  placeholder="name@example.com"
-                  className="flex-1 bg-transparent outline-none text-sm font-medium"
+                  placeholder="nama@email.com"
+                  className="flex-1 bg-transparent outline-none text-sm font-bold text-slate-800 placeholder-slate-300"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   onFocus={() => setFocusedField('email')}
@@ -132,60 +104,33 @@ export default function App() {
               </div>
             </div>
 
-            {view === 'register' && (
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-0.5">
-                  WhatsApp
+            {/* Input Password */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center px-1">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                  Kata Sandi
                 </label>
-                <div
-                  className={`flex items-center border rounded-xl px-4 py-3 transition-all ${focusedField === 'whatsapp' ? 'border-emerald-500 ring-2 ring-emerald-50' : 'border-slate-200 bg-slate-50/50'}`}
+                <Link href={'/lupa'}
+                  type="button"
+                  className="text-[10px] font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-widest"
                 >
-                  <span className="text-xs font-bold text-slate-500 mr-3 border-r pr-3">
-                    +62
-                  </span>
-                  <input
-                    type="tel"
-                    placeholder="8123456789"
-                    className="flex-1 bg-transparent outline-none text-sm font-medium"
-                    value={formData.whatsapp}
-                    onChange={(e) =>
-                      handleChange(
-                        'whatsapp',
-                        e.target.value.replace(/\D/g, '')
-                      )
-                    }
-                    onFocus={() => setFocusedField('whatsapp')}
-                    onBlur={() => setFocusedField(null)}
-                  />
-                  <Smartphone className="w-4 h-4 text-slate-400" />
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-1">
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 ml-0.5">
-                  Password
-                </label>
-                {view === 'login' && (
-                  <button
-                    type="button"
-                    className="text-[11px] font-bold text-emerald-600 hover:text-emerald-700"
-                  >
-                    Lupa Password?
-                  </button>
-                )}
+                  Lupa?
+                </Link>
               </div>
               <div
-                className={`flex items-center border rounded-xl px-4 py-3 transition-all ${focusedField === 'password' ? 'border-emerald-500 ring-2 ring-emerald-50' : 'border-slate-200 bg-slate-50/50'}`}
+                className={`flex items-center border rounded-2xl px-4 py-4 transition-all duration-300 ${
+                  focusedField === 'password' 
+                  ? 'border-emerald-500 ring-4 ring-emerald-50 bg-white' 
+                  : 'border-slate-100 bg-slate-50'
+                }`}
               >
                 <Lock
-                  className={`w-4 h-4 mr-3 ${focusedField === 'password' ? 'text-emerald-500' : 'text-slate-400'}`}
+                  className={`w-5 h-5 mr-3 transition-colors ${focusedField === 'password' ? 'text-emerald-500' : 'text-slate-300'}`}
                 />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="flex-1 bg-transparent outline-none text-sm font-medium"
+                  className="flex-1 bg-transparent outline-none text-sm font-bold text-slate-800 placeholder-slate-300"
                   value={formData.password}
                   onChange={(e) => handleChange('password', e.target.value)}
                   onFocus={() => setFocusedField('password')}
@@ -194,56 +139,45 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-slate-300 hover:text-slate-500 p-1"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 mt-4
+              className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-4
                 ${
                   isValid && !isLoading
-                    ? 'bg-slate-900 text-white hover:bg-slate-800'
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                    ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-xl shadow-slate-200 active:scale-95'
+                    : 'bg-slate-100 text-slate-300 cursor-not-allowed'
                 }
               `}
             >
               {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  <span>{view === 'login' ? 'Masuk' : 'Daftar Sekarang'}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Masuk Sekarang</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="text-center">
-            <p className="text-sm text-slate-500 font-medium">
-              {view === 'login' ? 'Baru di sini?' : 'Sudah punya akun?'}{' '}
-              <button
-                onClick={() => {
-                  setView(view === 'login' ? 'register' : 'login');
-                  setFormData({
-                    name: '',
-                    email: '',
-                    whatsapp: '',
-                    password: '',
-                  });
-                }}
-                className="text-emerald-600 font-bold hover:text-emerald-700 underline underline-offset-4"
+          {/* Footer Form */}
+          <div className="pt-8 border-t border-slate-50 text-center">
+            <p className="text-sm text-slate-400 font-medium">
+              Belum memiliki akun?{' '}
+              <Link href={'/daftar'}
+                className="text-emerald-600 font-bold hover:text-emerald-700 underline underline-offset-8 decoration-2 decoration-emerald-100 transition-all"
               >
-                {view === 'login' ? 'Buat Akun' : 'Masuk Akun'}
-              </button>
+                Daftar Akun Baru
+              </Link>
             </p>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   Loader2,
   CheckCircle2
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function App() {
   const [formData, setFormData] = useState({
@@ -78,20 +79,6 @@ export default function App() {
       {/* Sisi Kanan: Formulir */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 overflow-y-auto bg-white">
         
-        {/* Tombol Kembali & Mobile Logo */}
-        <div className="w-full max-w-md absolute top-8 px-6 flex items-center justify-between md:justify-start">
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-all font-semibold text-sm group"
-          >
-            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Kembali
-          </button>
-          <div className="md:hidden">
-            <Leaf className="w-6 h-6 text-emerald-600 fill-emerald-600" />
-          </div>
-        </div>
-
         <div className="w-full max-w-[400px] mt-12">
           <div className="mb-10 text-center md:text-left">
             <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-3">Daftar Akun</h2>
@@ -196,9 +183,9 @@ export default function App() {
           <div className="mt-12 text-center">
             <p className="text-slate-400 text-sm font-medium">
               Sudah memiliki akun?{' '}
-              <button className="text-emerald-600 font-bold hover:text-emerald-700 underline decoration-emerald-200 underline-offset-8 decoration-2 transition-all">
+              <Link href={'/masuk'} className="text-emerald-600 font-bold hover:text-emerald-700 underline decoration-emerald-200 underline-offset-8 decoration-2 transition-all">
                 Masuk ke Akun
-              </button>
+              </Link>
             </p>
           </div>
         </div>
