@@ -1,17 +1,17 @@
-'use client'
+'use client';
 import AppSidebar from '@/components/dashboard/AppSidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomSidebarTrigger from './CustomSidebarTrigger';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-
+import { UserProvider } from '@/context/UserContext';
 
 export default function LayoutSidebar({ children }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
 
-  useEffect(()=> {
+  useEffect(() => {
     const dataLocalUser = localStorage.getItem('user');
     if (!dataLocalUser) {
       Swal.fire({
@@ -19,25 +19,27 @@ export default function LayoutSidebar({ children }) {
         text: 'Silahkan login ke akun Anda terlebih dahulu',
         confirmButtonText: 'Login',
         cancelButtonText: 'Kembali',
-        showCancelButton: true
-      }).then(result => {
+        showCancelButton: true,
+      }).then((result) => {
         if (result.isConfirmed) {
           router.replace('/masuk');
         } else {
-          router.replace('/berita')
+          router.replace('/berita');
         }
-        return
-      })
+        return;
+      });
     }
-    setUser(dataLocalUser);
-  }, [])
+    setUser(JSON.parse(dataLocalUser));
+  }, []);
   return (
-    <SidebarProvider>
-      <AppSidebar/>
-      <main className='w-full'>
-        <CustomSidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
+    <UserProvider user={user}>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full">
+          <CustomSidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
+    </UserProvider>
   );
 }

@@ -1,7 +1,12 @@
-html, body {
+html,
+body {
   scroll-behavior: smooth;
 }
 
 hh {
   color: #126bb0;
+}
+
+div[data-state='collapsed'] span.line-clamp-1 {
+  width: 0 !important;
 }

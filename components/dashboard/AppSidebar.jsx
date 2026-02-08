@@ -17,6 +17,7 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -35,34 +36,49 @@ import {
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Tooltip, TooltipTrigger } from '../ui/tooltip';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
 const itemsFeatures = [
-  { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+  { title: 'Dashboard Utama', url: '/dashboard', icon: LayoutDashboard },
   {
-    title: 'Berita',
+    title: 'Feed Berita',
     url: '/dashboard/berita',
     icon: Newspaper,
   },
   {
-    title: 'Tulis',
+    title: 'Tulis Berita',
     url: '/dashboard/berita/tulis',
     icon: PenLine,
   },
 ];
 
-export default function AppSidebar({openSidebar, setOpenSidebar}) {
+export default function AppSidebar() {
+  const user = useUser();
+  const router = useRouter();
   const [width, setWidth] = useState(0);
   const [pathname, setPathname] = useState('/dashboard');
+
   useEffect(() => {
-    // fungsi untuk update width
     const handleResize = () => setWidth(window.innerWidth);
-    // set awal
     handleResize();
-    // pasang event listener
     window.addEventListener('resize', handleResize);
-    // bersihkan listener
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleLogout = () => {
+    Swal.fire({
+      icon: 'question',
+      text: 'Anda yakin ingin keluar?',
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed){
+        localStorage.removeItem('user')
+        router.replace('/berita');
+      }
+    })
+  }
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className={'pe-2'}>
@@ -90,7 +106,7 @@ export default function AppSidebar({openSidebar, setOpenSidebar}) {
       </SidebarHeader>
       <SidebarContent className={'pe-2'}>
         <SidebarGroup>
-          <SidebarSeparator className={'mb-6'}/>
+          <SidebarSeparator className={'mb-6'} />
           <SidebarGroupContent>
             <SidebarMenu className="gap-3">
               {itemsFeatures.map((item) => (
@@ -134,6 +150,62 @@ export default function AppSidebar({openSidebar, setOpenSidebar}) {
           </SidebarGroupLabel>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="rounded-md border bg-gray-100 p-3">
+              <div className="flex items-center mb-3">
+                <img
+                  className="w-10 h-10 rounded-full border border-slate-200 bg-white"
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.fullname.replace(' ', '+')}`}
+                  alt={`avatar-${user?.fullname}`}
+                />
+                <div className="ml-3 overflow-hidden">
+                  <p className="text-sm font-bold truncate">{user?.fullname}</p>
+                  <p className="text-xs text-blue-600 font-medium capitalize flex items-center gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-shield"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                    </svg>
+                    {user?.role}
+                  </p>
+                </div>
+              </div>
+              <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-200 py-2 rounded-lg transition-all text-sm font-medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-log-out"
+                  aria-hidden="true"
+                >
+                  <path d="m16 17 5-5-5-5"></path>
+                  <path d="M21 12H9"></path>
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                </svg>
+                <span>Keluar</span>
+              </button>
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
