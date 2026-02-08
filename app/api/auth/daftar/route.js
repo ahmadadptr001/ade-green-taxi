@@ -6,15 +6,13 @@ export async function POST(req) {
   try {
     const { data: dataPorfile, error } = await supabase_coolify
       .from('profiles')
-      .select()
-      .eq('password', data.password)
-      .eq('email', data.email)
-      .maybeSingle();
+      .insert(data)
+      .select();
 
     if (error)
       return NextResponse.json({ message: error.message }, { status: 500 });
     return NextResponse.json(
-      { message: 'Berhasil masuk ke akun anda', data: dataPorfile },
+      { message: 'Berhasil melakukan registrasi akun', data: dataPorfile },
       { status: 200 }
     );
   } catch (err) {

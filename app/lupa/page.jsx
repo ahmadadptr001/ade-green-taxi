@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Leaf, Loader2, Mail, CheckCircle2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
+import { emailCheck } from '@/services/auth';
 
 export default function LupaPage() {
   const router = useRouter();
@@ -21,18 +23,36 @@ export default function LupaPage() {
     setIsValid(isEmailValid);
   }, [email]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValid) return;
-
-    
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      // setIsSubmitted(true);
+
+    Swal.fire({
+      icon: 'info',
+      title: 'Mohon tunggu...',
+      didOpen: () => Swal.showLoading(),
+    });
+    try {
+      const result = await emailCheck(email);
+      Swal.fire({
+        icon: 'success',
+        title: 'Email Anda ditemukan!',
+        didOpen: () => Swal.hideLoading(),
+      });
       localStorage.setItem('email', email);
+      setIsLoading(false);
+
       router.push('/lupa/otp');
-    }, 1500);
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Email tidak ditemukan!',
+        text: 'Tolong gunakan email yang lain',
+        didOpen: () => Swal.hideLoading(),
+      });
+      setIsLoading(false)
+    }
   };
 
   return (

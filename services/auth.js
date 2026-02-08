@@ -19,8 +19,35 @@ export async function login(email, password) {
   };
   try {
     const resp = await axios.post('/api/auth/login', payload);
-    if (!resp.statusText === 200) throw err;
+    if (!resp.statusText === 200) throw resp.data.message;
+    return resp.data
   } catch (err) {
     throw err;
+  }
+}
+export async function daftar(payload) {
+  const newPayload = {
+    fullname: payload.name,
+    email: payload.email,
+    password: payload.password,
+    role: payload.role,
+    phone: payload.whatsapp,
+  }
+  try {
+    const resp = await axios.post('/api/auth/daftar', newPayload);
+    if (!resp.statusText === 200) throw resp.data.message;
+    return resp.data
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function emailCheck(email) {
+  try {
+    const resp = await axios.post('/api/auth/emails/check', { email });
+    if (!resp.statusText === 200) return resp.data.message;
+    return resp.data;
+  } catch (err) {
+    throw err
   }
 }
