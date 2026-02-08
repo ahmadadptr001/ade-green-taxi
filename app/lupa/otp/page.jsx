@@ -7,15 +7,74 @@ import {
   ChevronLeft,
   CheckCircle2,
   ShieldCheck,
+  SendToBack,
 } from 'lucide-react';
 import Link from 'next/link';
+import { sendOTP } from '@/services/auth';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
-export default function App() {
+export default function OTP() {
+  const router = useRouter();
+
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [timer, setTimer] = useState(59);
   const inputRefs = useRef([]);
+  const [email, setEmail] = useState(null);
+
+  // cek ketersediaan email
+  let mount = 0;
+  useEffect(() => {
+    const email_ = localStorage.getItem('email');
+    if (!email_) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Credential tidak valid!',
+        text: 'Anda akan diarahkan ke halaman form email',
+        confirmButtonText: 'Saya mengerti',
+      }).then((action) => {
+        if (action.isConfirmed) {
+          router.replace('/lupa');
+        }
+      });
+    }
+    setEmail(email_);
+    if (mount > 0) return;
+    // kirim otp pada saat awal masuk halaman
+    Swal.fire({
+      title: 'Mohon tunggu..',
+      text: 'Kami sedang mengirim kode otp ke email Anda',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    (async () => {
+      try {
+        await sendOTP(email_);
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil mengirim kode OTP!',
+          text: 'Silahkan cek email Anda untuk melihat kode OTP yang kami kirimkan',
+          didOpen: () => {
+            Swal.hideLoading();
+          }
+        })
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal menerima kode OTP',
+          text: err.message,
+          didOpen: () => {
+            Swal.hideLoading();
+          }
+        });
+      }
+    })();
+    mount++;
+  }, []);
 
   // Countdown timer untuk kirim ulang OTP
   useEffect(() => {
@@ -60,8 +119,17 @@ export default function App() {
     }, 2000);
   };
 
-  const handleResend = () => {
-    setTimer(59);
+  const handleResend = async () => {
+    try {
+      setTimer(59);
+      await sendOTP(email);
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal menerima kode OTP',
+        text: err.message,
+      });
+    }
     // Logika kirim ulang kode di sini
   };
 
@@ -180,7 +248,10 @@ export default function App() {
                   dashboard dalam beberapa saat.
                 </p>
               </div>
-              <Link href={'/dashboard'} className="w-full py-5 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-xl">
+              <Link
+                href={'/dashboard'}
+                className="w-full py-5 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-xl"
+              >
                 Masuk ke Dashboard
               </Link>
             </div>
