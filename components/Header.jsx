@@ -6,6 +6,7 @@ import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import Link from 'next/link';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -33,17 +34,17 @@ export default function Header() {
             <div className="hidden md:block">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <a
+                  <Link
                     href="/berita"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 bg-gray-100"
                   >
                     <img
                       className="h-5 w-5"
                       src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
                       alt="newspaper"
                     />
-                    <span>Baca Berita</span>
-                  </a>
+                    <span className='font-bold'>Baca Berita</span>
+                  </Link>
                 </TooltipTrigger>
                 <TooltipContent className="!z-150">Berita</TooltipContent>
               </Tooltip>
