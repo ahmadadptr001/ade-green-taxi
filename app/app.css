@@ -5,14 +5,3 @@ html, body {
 hh {
   color: #126bb0;
 }
-
-@media (max-width: 360px) {
-  #container-lottie {
-    width: 280px ;
-  }
-}
-@media (max-width: 320px) {
-  #container-lottie {
-    width: 180px ;
-  }
-}

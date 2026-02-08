@@ -15,25 +15,27 @@ export default function IklanModal() {
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/60 px-4 sm:px-6">
-      
-      <div className="
+      <div
+        className="
         relative w-full 
         max-w-xl sm:max-w-2xl lg:max-w-5xl
         bg-white rounded-3xl shadow-2xl overflow-hidden
         flex flex-col lg:grid lg:grid-cols-2
-      ">
-
+      "
+      >
         {/* IMAGE */}
-        <div className="
+        <div
+          className="
           relative w-full 
           aspect-[4/3] sm:aspect-[16/9] 
           lg:aspect-auto lg:h-full
-        ">
+        "
+        >
           <img
             src="/banner.png"
             alt="Ade Green TX"
             className="absolute inset-0 w-full h-full object-cover"
-            loading='lazy'
+            loading="lazy"
           />
 
           {/* Close */}
@@ -46,11 +48,12 @@ export default function IklanModal() {
         </div>
 
         {/* CONTENT */}
-        <div className="
+        <div
+          className="
           flex flex-col justify-center gap-6
           p-5 sm:p-7 lg:p-10
-        ">
-
+        "
+        >
           {/* Brand */}
           <div className="flex items-center gap-3">
             <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-green-600 flex items-center justify-center">
@@ -63,8 +66,8 @@ export default function IklanModal() {
 
           {/* Desc */}
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            Transportasi ramah lingkungan dengan pemesanan cepat, aman,
-            dan transparan langsung dari aplikasi.
+            Transportasi ramah lingkungan dengan pemesanan cepat, aman, dan
+            transparan langsung dari aplikasi.
           </p>
 
           {/* Feature */}
@@ -81,7 +84,12 @@ export default function IklanModal() {
                          bg-green-600 text-white font-semibold 
                          hover:bg-green-700 active:scale-[0.98] transition"
             >
-              <img src="/icon-playstore.png" alt='playstore icon' className="h-5 w-5" loading='lazy'/>
+              <img
+                src="/icon-playstore.png"
+                alt="playstore icon"
+                className="h-5 w-5"
+                loading="lazy"
+              />
               Download App
             </a>
 
@@ -95,7 +103,6 @@ export default function IklanModal() {
               Lihat Cara Daftar
             </a>
           </div>
-
         </div>
       </div>
     </div>
