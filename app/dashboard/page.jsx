@@ -12,21 +12,21 @@ export default function DashboardPage() {
       name: 'Total Views',
       icon: Eye,
       iconColor: 'text-sky-600',
-      backgroundColor: 'bg-sky-600/20',
+      backgroundColor: 'bg-sky-100', // Sedikit penyesuaian opacity untuk kontras
       total: 0,
     },
     {
-      name: 'Total Aritkel',
+      name: 'Total Artikel', // Typo fix: Aritkel -> Artikel
       icon: FileText,
       iconColor: 'text-purple-600',
-      backgroundColor: 'bg-purple-600/20',
+      backgroundColor: 'bg-purple-100',
       total: 0,
     },
     {
       name: 'User Aktif',
-      icon: FileText,
+      icon: SplinePointer, // UX fix: Menggunakan icon SplinePointer yang sudah diimport agar beda dengan artikel
       iconColor: 'text-emerald-600',
-      backgroundColor: 'bg-emerald-600/20',
+      backgroundColor: 'bg-emerald-100',
       total: 0,
     },
   ]);
@@ -53,33 +53,64 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main className="p-12 w-full h-full z-30 bg-sky-50/50">
-      <h1 className="text-3xl mb-2 font-bold">Ringkasan Dashboard</h1>
-      <p className="text-slate-600">
-        Selamat datang kembali,{' '}
-        <span className="text-sky-600 font-semibold">{user?.fullname}</span>.
-        Berikut adalah data statistik hari ini
-      </p>
+    <main className="relative min-h-screen w-full p-6 md:p-10 lg:p-12 font-sans text-slate-800">
+      <img
+        src={
+          'https://plus.unsplash.com/premium_photo-1702217998652-b9b795f52d5f?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        }
+        alt="gambar background dashboard"
+        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-50"
+      />
+      {/* Header Section */}
+      <div className="mb-10 flex flex-col gap-3">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+          Ringkasan Dashboard
+        </h1>
+        <p className="text-base text-slate-600 max-w-2xl leading-relaxed">
+          Selamat datang kembali,{' '}
+          <span className="font-semibold text-sky-600">{user?.fullname}</span>.
+          Berikut adalah pantauan statistik performa konten Anda hari ini.
+        </p>
+      </div>
 
-      {/* card grid informasi statistik */}
-      <div className="grid grid-cols-3 gap-5 w-full mt-5">
+      {/* Card Grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {dashboardItems.map((item, i) => (
           <section
             key={i}
-            className="p-4 bg-white rounded-md hover:shadow-md/20 shadow-md/5 hover:scale-103 transition-all duration-400"
+            className={`group relative overflow-hidden rounded-2xl border ${item.borderColor} bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/50`}
           >
-            <div className="flex flex-nowrap gap-3 p-4">
-              <div
-                className={`p-2 rounded-md ${item.backgroundColor} w-20 h-15 grid place-items-center`}
-              >
-                <item.icon size={26} className={`${item.iconColor}`} />
+            <div className="flex items-start justify-between relative z-10">
+              {/* Text & Stats */}
+              <div className="flex flex-col gap-2">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  {item.name}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <h2 className="text-4xl font-extrabold text-slate-800 tracking-tight">
+                    {item.total.toLocaleString('id-ID')}
+                  </h2>
+                  {/* Indikator kenaikan dummy untuk visualisasi tambahan */}
+                </div>
               </div>
-              <div>
-                <p className="font-semibold text-slate-600">{item.name}</p>
-                <p className="mt-2">{item?.total}</p>
-                {console.log(item)}
+
+              {/* Icon Container */}
+              <div
+                className={`flex h-14 w-14 items-center justify-center rounded-2xl ${item.backgroundColor} ${item.iconColor} transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-6 shadow-sm`}
+              >
+                <item.icon size={26} strokeWidth={2} />
               </div>
             </div>
+
+            {/* Decorative Bottom Line Animation */}
+            <div
+              className={`absolute bottom-0 left-0 h-1 w-full origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100 ${item.decorativeColor}`}
+            />
+
+            {/* Subtle Gradient Blob for Depth */}
+            <div
+              className={`absolute -right-6 -bottom-6 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20 ${item.decorativeColor}`}
+            />
           </section>
         ))}
       </div>
