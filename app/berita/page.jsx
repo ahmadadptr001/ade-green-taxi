@@ -193,71 +193,69 @@ export default function PremiumNewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
-      <div className="hidden lg:block bg-slate-950 py-2.5 text-[11px] font-medium tracking-widest text-slate-400 uppercase">
-        <div className="container mx-auto flex items-center justify-between px-8">
+    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
+      {/* Top Bar - Lebih Minimalis */}
+      <div className="hidden lg:block border-b border-slate-100 bg-white py-2 text-[10px] font-medium tracking-wide text-slate-500 uppercase">
+        <div className="container mx-auto flex items-center justify-between px-6 lg:px-8">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5">
+            <div className="flex items-center gap-2 text-emerald-700">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
               </span>
-              <span className="text-slate-200">Live</span>
+              <span>Trending</span>
             </div>
-            <div className="overflow-hidden whitespace-nowrap">
-              <div className="animate-marquee inline-block">
+            <div className="overflow-hidden whitespace-nowrap max-w-lg">
+              <div className="animate-marquee inline-block text-slate-900">
                 Laporan Khusus: Transisi Energi Terbarukan di Asia Tenggara •
                 Indeks Saham Gabungan Menguat 0.5% •
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-5">
-            <span className="flex items-center gap-1.5">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-600 transition-colors">
               <Globe className="h-3 w-3" /> ID / EN
             </span>
-            <div className="flex gap-4">
-              <Facebook className="h-3.5 w-3.5 cursor-pointer hover:text-white transition-colors" />
-              <Twitter className="h-3.5 w-3.5 cursor-pointer hover:text-white transition-colors" />
-              <Instagram className="h-3.5 w-3.5 cursor-pointer hover:text-white transition-colors" />
+            <div className="h-3 w-px bg-slate-200"></div>
+            <div className="flex gap-4 text-slate-400">
+              <Facebook className="h-3.5 w-3.5 cursor-pointer hover:text-blue-600 transition-colors" />
+              <Twitter className="h-3.5 w-3.5 cursor-pointer hover:text-sky-500 transition-colors" />
+              <Instagram className="h-3.5 w-3.5 cursor-pointer hover:text-pink-600 transition-colors" />
             </div>
           </div>
         </div>
       </div>
 
+      {/* Header Utama */}
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-500 ${
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl py-3'
-            : 'bg-white border-b border-slate-100 py-5'
+            ? 'bg-white/95 backdrop-blur-md shadow-sm py-3'
+            : 'bg-white py-5'
         }`}
       >
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between">
-            <a
-              href="/beranda"
-              className="flex items-center gap-3 cursor-pointer group"
-            >
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white transition-transform group-hover:rotate-6">
-                <span className="text-xl font-black italic">A</span>
+            {/* Logo - Lebih Clean */}
+            <a href="/beranda" className="flex items-center gap-2 group">
+              <div className="flex items-center justify-center h-9 w-9 bg-slate-900 rounded-lg text-white group-hover:bg-emerald-600 transition-colors duration-300">
+                <span className="font-serif font-black italic text-lg">A</span>
               </div>
               <div className="flex flex-col leading-none">
-                <span className="text-xl font-black tracking-tighter text-slate-950">
+                <span className="text-lg font-black tracking-tighter text-slate-900">
                   ADE<span className="text-emerald-600">GREEN</span>
-                </span>
-                <span className="text-[10px] font-bold tracking-[0.3em] text-slate-400">
-                  BERITA
                 </span>
               </div>
             </a>
 
-            {/* Main Nav - Functional */}
-            <nav className="hidden lg:flex items-center gap-10">
+            {/* Main Nav - Minimalist */}
+            <nav className="hidden lg:flex items-center gap-8">
               {topics &&
                 topics.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveNav(item.name)}
-                    className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 ${
+                    className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
                       activeNav === item.name
                         ? 'text-emerald-600'
                         : 'text-slate-500'
@@ -265,100 +263,132 @@ export default function PremiumNewsPage() {
                   >
                     {item.name}
                     {activeNav === item.name && (
-                      <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-emerald-600 rounded-full" />
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
                     )}
                   </button>
                 ))}
             </nav>
 
             {/* Header Actions */}
-            <div className="flex items-center gap-4">
-              {/* Search Bar */}
+            <div className="flex items-center gap-3">
+              {/* Search Bar - Expandable */}
               <div className="relative hidden md:block group">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari berita..."
-                  className="h-10 w-40 rounded-full border border-slate-100 bg-slate-50/50 px-10 text-xs font-medium transition-all focus:w-64 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/5 group-hover:bg-slate-50"
+                  placeholder="Search..."
+                  className="h-9 w-32 rounded-full border border-slate-200 bg-slate-50 px-9 text-xs font-medium transition-all focus:w-56 focus:border-emerald-500 focus:bg-white focus:outline-none group-hover:bg-white"
                 />
-                <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-400 group-focus-within:text-emerald-600" />
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                 {searchQuery && (
                   <X
-                    className="absolute right-3.5 top-3 h-4 w-4 text-slate-400 cursor-pointer hover:text-red-500"
+                    className="absolute right-3 top-2.5 h-4 w-4 text-slate-400 cursor-pointer hover:text-red-500"
                     onClick={() => setSearchQuery('')}
                   />
                 )}
               </div>
 
+              <div className="h-6 w-px bg-slate-200 mx-2 hidden md:block"></div>
+
               <button
                 onClick={() => setShowModal(true)}
-                className="cursor-pointer hover:scale-102 p-3 rounded-md bg-blue-500 text-white text-xs font-semibold"
+                className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                Daftar
+                Sign In
               </button>
 
-              {/* modal auth */}
-              <div
-                className={`${showModal ? 'block' : 'hidden'} grid place-items-center fixed inset-0 w-full h-screen z-100`}
-              >
-                <div className="z-10 relative shadow-md/20 p-10 rounded-md bg-white w-full h-full md:max-h-[700px] md:max-w-3xl grid place-items-center">
-                  {/* button close */}
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="p-2 absolute group top-2 right-2 rounded-full hover:bg-red-300 grid place-items-center bg-gray-100"
-                  >
-                    <X size={17} className="group-hover:text-red-500" />
-                  </button>
-
-                  <div className="mx-auto  w-[300px]" id='container-lottie'>
-                    <Lottie height={30} animationData={animationData} loop />
-                  </div>
-                  <div className="mt-15 gap-3 flex flex-col items-center">
-                    <Link href={'/daftar'} className="text-center sm:p-4 p-3 bg-sky-600 max-w-lg cursor-pointer duration-500 transition-all text-white font-semibold w-full text-lg sm:text-2xl hover:bg-black">
-                      Buat Akun
-                    </Link>
-                    <Link href={'/masuk'} className="text-center sm:p-4 p-3 w-full max-w-lg text-lg sm:text-2xl cursor-pointer transition-all duration-500 font-semibold ring-1 ring-sky-400 hover:ring-0 hover:bg-black hover:text-white">
-                      Masuk
-                    </Link>
-                    <p className="text-center max-w-lg text-md sm:text-lg text-slate-500">
-                      Untuk bantuan pendaftaran maupun akses masuk, silakan
-                      hubungi kami melalui email di{' '}
-                      <Link href={'mailto:support@adegreentx.id'} className='text-sky-500'>suport@adegreentx.id.</Link>
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className="absolute w-full h-full bg-black/30"
-                  onClick={() => setShowModal(false)}
-                ></div>
-              </div>
-
               <button
-                className="flex items-center justify-center lg:hidden"
+                className="flex items-center justify-center lg:hidden p-2 text-slate-900"
                 onClick={() => setIsMobileMenuOpen(true)}
               >
-                <MenuIcon />
+                <MenuIcon className="h-6 w-6" />
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
+      {/* Modal Auth */}
+      <div
+        className={`${showModal ? 'block' : 'hidden'} fixed inset-0 z-[100]`}
+      >
+        <div
+          className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+          onClick={() => setShowModal(false)}
+        ></div>
+        <div className="absolute inset-0 flex items-center justify-center p-4">
+          <div className="relative bg-white w-full h-full sm:max-h-[80%] md:max-h-[90%] max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 animate-in zoom-in-95 duration-200">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-900 transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="w-40 h-40 sm:h-60 sm:w-60  md:h-80 md:w-80 mb-6" id="container-lottie">
+                <Lottie animationData={animationData} />
+              </div>
+
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                Selamat Datang
+              </h3>
+              <p className="text-slate-500 text-sm mb-8 px-6">
+                Masuk untuk mengakses konten premium dan fitur personalisasi.
+              </p>
+
+              <div className="w-full space-y-3">
+                <Link
+                  href={'/daftar'}
+                  className="flex items-center justify-center w-full py-3.5 bg-slate-900 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-all duration-300"
+                >
+                  Buat Akun Baru
+                </Link>
+                <Link
+                  href={'/masuk'}
+                  className="flex items-center justify-center w-full py-3.5 bg-white border border-slate-200 hover:border-slate-900 text-slate-700 hover:text-slate-900 font-semibold rounded-xl transition-all duration-300"
+                >
+                  Masuk
+                </Link>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-slate-50 w-full">
+                <p className="text-xs text-slate-400">
+                  Butuh bantuan? Hubungi{' '}
+                  <Link
+                    href={'mailto:support@adegreentx.id'}
+                    className="text-emerald-600 hover:underline"
+                  >
+                    support@adegreentx.id
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden animate-in slide-in-from-top duration-300">
+        <div className="fixed inset-0 z-[60] lg:hidden">
           <div
-            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
-          <div className="absolute top-0 w-full bg-white p-8 rounded-b-[40px] shadow-2xl">
-            <div className="flex flex-col gap-6 text-center">
+          <div className="absolute right-0 top-0 bottom-0 w-3/4 max-w-sm bg-white p-8 shadow-2xl animate-in slide-in-from-right duration-300">
+            <div className="flex justify-between items-center mb-8">
+              <span className="font-black text-xl">MENU</span>
+              <button onClick={() => setIsMobileMenuOpen(false)}>
+                <X className="h-6 w-6 text-slate-400" />
+              </button>
+            </div>
+            <div className="flex flex-col gap-6">
               {topics &&
                 topics.map((item) => (
                   <button
                     key={item.id}
-                    className="text-2xl font-black text-slate-900 tracking-tighter"
+                    className={`text-left text-lg font-bold tracking-tight ${activeNav === item.name ? 'text-emerald-600' : 'text-slate-900'}`}
                     onClick={() => {
                       setActiveNav(item.name);
                       setIsMobileMenuOpen(false);
@@ -367,122 +397,107 @@ export default function PremiumNewsPage() {
                     {item.name}
                   </button>
                 ))}
-              <hr className="border-slate-100" />
-              <div className="flex justify-center gap-8">
-                <Facebook className="text-slate-400" />
-                <Twitter className="text-slate-400" />
-                <Instagram className="text-slate-400" />
-              </div>
+              <hr className="border-slate-100 my-2" />
+              <button
+                onClick={() => {
+                  setShowModal(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold"
+              >
+                Masuk / Daftar
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* --- MAIN LAYOUT --- */}
-      <main className="container mx-auto px-4 py-10 lg:px-8">
-        {/* Featured Hero Grid */}
+      <main className="container mx-auto px-4 py-8 lg:px-8">
+        {/* --- HERO SECTION: Clean & Modern --- */}
         {!searchQuery && activeCategory === 'Semua' && (
           <section className="mb-20">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {/* Primary Feature */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+              {/* Main Featured Article */}
               {hasNews ? (
                 <Link
                   href={`/berita/${primary.slug}`}
-                  className="lg:col-span-8 relative group overflow-hidden rounded-[32px] bg-slate-200 aspect-[4/3] md:aspect-[18/9]"
+                  className="lg:col-span-8 relative group overflow-hidden rounded-2xl bg-slate-100 aspect-[16/10] md:aspect-[2/1] lg:aspect-auto"
                 >
                   <img
                     src={primary.image}
                     onError={handleImgError}
-                    className="absolute inset-0 h-full w-full object-cover transition duration-1000 group-hover:scale-110 group-hover:rotate-1"
+                    className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     alt="Main"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-green-600/50" />
-                  <div className="absolute bottom-0 p-10 lg:p-14 w-full">
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-lg">
+                  {/* Modern Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90" />
+
+                  <div className="absolute bottom-0 left-0 p-6 lg:p-10 w-full max-w-4xl">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="bg-white/10 backdrop-blur-md text-white border border-white/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
                         {primary.category}
                       </span>
-                      <span className="text-white/60 text-xs font-medium">
+                      <span className="text-white/70 text-xs font-medium tracking-wide">
                         {primary.date}
                       </span>
                     </div>
-                    <h2 className="line-clamp-3 text-2xl lg:text-4xl font-black text-white leading-[1.1] tracking-tighter mb-6 transition-transform duration-500 group-hover:-translate-y-2">
+
+                    <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4 group-hover:text-emerald-400 transition-colors">
                       {primary.title}
                     </h2>
-                    <div className="flex items-center justify-between">
-                      <p className="text-slate-300 text-sm max-w-md line-clamp-2 hidden sm:block">
-                        {primary.excerpt}
-                      </p>
-                      <button className="h-14 w-14 rounded-full bg-white flex items-center justify-center text-slate-900 transition-transform group-hover:scale-110 shadow-xl">
-                        <ArrowUpRight className="h-6 w-6" />
-                      </button>
-                    </div>
+
+                    <p className="text-slate-300 text-sm md:text-base max-w-xl line-clamp-2 hidden sm:block leading-relaxed">
+                      {primary.excerpt}
+                    </p>
                   </div>
                 </Link>
               ) : (
-                // Placeholder / Empty state that preserves layout & design
-                <div className="lg:col-span-8 relative overflow-hidden rounded-[32px] bg-white border border-dashed border-slate-200 aspect-[16/10] lg:aspect-auto flex items-center justify-center">
-                  <div className="text-center p-10">
-                    <div className="h-28 w-28 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Search className="h-10 w-10 text-slate-300" />
-                    </div>
-                    <h3 className="text-2xl font-black text-slate-900 mb-2">
-                      Belum ada berita terbaru
-                    </h3>
-                    <p className="text-sm text-slate-400 max-w-md mx-auto">
-                      Tim redaksi sedang menyiapkan konten. Coba lagi nanti atau
-                      gunakan fitur pencarian untuk menemukan topik lain.
+                <div className="lg:col-span-8 relative rounded-2xl bg-slate-50 border border-slate-100 aspect-[2/1] flex items-center justify-center">
+                  <div className="text-center">
+                    <Search className="h-8 w-8 text-slate-300 mx-auto mb-2" />
+                    <p className="text-slate-400 font-medium">
+                      Belum ada berita utama
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* Side Features */}
-              <div className="lg:col-span-4 flex flex-col gap-8">
+              {/* Side Articles (Right Column) */}
+              <div className="lg:col-span-4 flex flex-col gap-6">
                 {hasNews
-                  ? // original side items when data exists
-                    sideItems.map((item) => (
+                  ? sideItems.map((item) => (
                       <Link
                         href={`/berita/${item.slug}`}
                         key={item.id}
-                        className="group relative flex-1 rounded-[32px] bg-white border border-slate-100 p-6 transition-all hover:shadow-2xl hover:shadow-slate-200/50 flex flex-col justify-between overflow-hidden"
+                        className="group relative flex-1 rounded-2xl bg-white border border-slate-100 p-6 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-slate-100 overflow-hidden flex flex-col justify-between"
                       >
-                        <div className="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-100">
-                          <TrendingUp className="h-20 w-20 text-emerald-600 -mr-4 -mt-4" />
-                        </div>
-                        <div className="relative">
-                          <span className="text-emerald-600 text-[10px] font-black uppercase tracking-widest">
-                            {item.category}
-                          </span>
-                          <h3 className="text-2xl font-bold tracking-tight text-slate-900 mt-3 leading-snug group-hover:text-emerald-700 transition-colors">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
+                              {item.category}
+                            </span>
+                            <span className="text-slate-400 text-[10px]">
+                              {item.date}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
                             {item.title}
                           </h3>
                         </div>
-                        <div className="mt-8 flex items-center justify-between">
-                          <span className="text-[10px] font-bold text-slate-400">
-                            {item.date}
-                          </span>
-                          <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                            <ChevronRight className="h-4 w-4" />
-                          </div>
+                        <div className="mt-4 flex items-center text-xs font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                          Baca Selengkapnya{' '}
+                          <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </Link>
                     ))
-                  : // two small placeholder cards to preserve layout
-                    [0, 1].map((i) => (
+                  : [0, 1].map((i) => (
                       <div
                         key={i}
-                        className="relative flex-1 rounded-[32px] bg-white border border-dashed border-slate-200 p-6 flex flex-col justify-center items-center text-center"
+                        className="flex-1 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center"
                       >
-                        <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-4">
-                          <PlayCircle className="h-6 w-6 text-slate-300" />
-                        </div>
-                        <h4 className="font-bold text-slate-900 mb-2">
-                          Konten segera
-                        </h4>
-                        <p className="text-[12px] text-slate-400">
-                          Kami sedang menyiapkan artikel terbaru
-                        </p>
+                        <span className="text-slate-300 text-xs">
+                          Konten segera hadir
+                        </span>
                       </div>
                     ))}
               </div>
@@ -490,65 +505,72 @@ export default function PremiumNewsPage() {
           </section>
         )}
 
-        {/* --- CATEGORY & CONTENT --- */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        {/* --- CONTENT AREA --- */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Main Feed */}
           <div className="lg:col-span-8">
-            {/* Category Filter */}
-            <div className="flex items-center justify-between mb-12 overflow-x-auto no-scrollbar pb-2">
-              <div className="flex gap-4">
-                {categories &&
-                  categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setActiveCategory(cat.name);
-                      }}
-                      className={`whitespace-nowrap px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                        activeCategory === cat.name
-                          ? 'bg-slate-950 text-white shadow-xl shadow-slate-200 scale-105'
-                          : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
-                      }`}
-                    >
-                      {cat.name}
-                    </button>
-                  ))}
-              </div>
+            {/* Filter Tabs - Clean Pill Style */}
+            <div className="flex items-center gap-2 mb-10 overflow-x-auto no-scrollbar pb-2">
+              {categories &&
+                categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.name)}
+                    className={`whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all border ${
+                      activeCategory === cat.name
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-900'
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
             </div>
 
-            {/* List Berita */}
-            <div className="space-y-16">
+            {/* List Artikel - Editorial Layout */}
+            <div className="space-y-12">
               {filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
-                  <article key={news.id}>
-                    <Link href={'/berita/' + news.slug}>
-                      <div className="group grid grid-cols-1 md:grid-cols-12 gap-8 items-start cursor-pointer">
-                        <div className="md:col-span-5 relative overflow-hidden rounded-[24px] aspect-[4/3]">
-                          <img
-                            src={news.image}
-                            onError={handleImgError}
-                            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                            alt={news.title}
-                          />
+                  <article
+                    key={news.id}
+                    className="group border-b border-slate-100 pb-12 last:border-0"
+                  >
+                    <Link
+                      href={'/berita/' + news.slug}
+                      className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start"
+                    >
+                      <div className="md:col-span-5 relative overflow-hidden rounded-xl aspect-[16/10] bg-slate-100">
+                        <img
+                          src={news.image}
+                          onError={handleImgError}
+                          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 opacity-95 group-hover:opacity-100"
+                          alt={news.title}
+                        />
+                      </div>
+
+                      <div className="md:col-span-7 flex flex-col h-full justify-center">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+                            {news.category}
+                          </span>
+                          <span className="text-[11px] font-medium text-slate-400">
+                            {news.date}
+                          </span>
                         </div>
-                        <div className="md:col-span-7 pt-2">
-                          <div className="flex items-center gap-3 mb-4">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">
-                              {news.category}
-                            </span>
-                            <span className="h-1 w-1 rounded-full bg-slate-200"></span>
-                            <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">
-                              {news.date}
-                            </span>
-                          </div>
-                          <h3 className="text-2xl lg:text-3xl font-bold tracking-tighter text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors">
-                            {news.title}
-                          </h3>
-                          <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">
-                            {news.excerpt ||
-                              'Ketahui lebih dalam mengenai analisis mendalam dan rangkuman editorial terbaik kami hari ini.'}
-                          </p>
-                          <div className="flex items-center gap-2 text-xs font-bold text-slate-900 group-hover:gap-4 transition-all uppercase tracking-widest">
-                            Selengkapnya <ChevronRight className="h-3 w-3" />
+
+                        <h3 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-emerald-700 transition-colors">
+                          {news.title}
+                        </h3>
+
+                        <p className="text-slate-500 text-sm leading-relaxed mb-5 line-clamp-2">
+                          {news.excerpt ||
+                            'Temukan analisis mendalam dan rangkuman terbaru mengenai topik ini.'}
+                        </p>
+
+                        <div className="flex items-center gap-4 mt-auto">
+                          <div className="flex items-center gap-1 text-slate-400 text-xs">
+                            <Clock className="h-3 w-3" />{' '}
+                            <span>3 min read</span>
                           </div>
                         </div>
                       </div>
@@ -556,91 +578,107 @@ export default function PremiumNewsPage() {
                   </article>
                 ))
               ) : (
-                <div className="text-center py-20 bg-white rounded-[32px] border border-dashed border-slate-200">
-                  <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Search className="h-8 w-8 text-slate-300" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2 tracking-tight">
+                <div className="text-center py-24 bg-slate-50 rounded-2xl border border-slate-100">
+                  <Search className="h-10 w-10 text-slate-300 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-slate-900 mb-1">
                     Tidak ada berita ditemukan
                   </h3>
                   <p className="text-slate-400 text-sm">
-                    Coba sesuaikan kata kunci atau kategori pencarian Anda.
+                    Silakan cari dengan kata kunci lain.
                   </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* --- SIDEBAR --- */}
-          <aside className="lg:col-span-4 space-y-12">
-            {/* Newsletter Premium */}
-            <div className="bg-emerald-600 rounded-[32px] p-8 text-white relative overflow-hidden group">
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-400/20 blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-              <Mail className="h-10 w-10 mb-6" />
-              <h3 className="text-2xl font-black tracking-tight mb-3 italic">
-                Insights di Inbox Anda.
-              </h3>
-              <p className="text-emerald-50 text-sm mb-8 leading-relaxed">
-                Berlangganan kurasi berita pilihan redaksi setiap pagi.
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 space-y-10 pl-0 lg:pl-4">
+            {/* Newsletter - Lebih Elegan */}
+            <div className="bg-slate-900 rounded-2xl p-8 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
+              <Mail className="h-6 w-6 text-emerald-400 mb-4" />
+              <h3 className="text-xl font-bold mb-2">Subscribe to Briefing</h3>
+              <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+                Dapatkan kurasi berita pilihan redaksi langsung di inbox Anda
+                setiap pagi.
               </p>
-              <div className="relative">
+              <div className="space-y-3">
                 <input
                   type="email"
-                  placeholder="Email"
-                  className="w-full bg-white/10 border border-white/20 rounded-2xl px-5 py-4 text-sm placeholder:text-white/50 focus:outline-none focus:bg-white focus:text-slate-900 transition-all"
+                  placeholder="Alamat Email"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-colors placeholder:text-slate-500"
                 />
-                <button className="absolute right-2 top-2 bottom-2 bg-white text-emerald-600 px-4 rounded-xl text-[10px] font-black tracking-widest hover:bg-emerald-50 transition-colors">
-                  DAFTAR
+                <button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 rounded-lg transition-colors">
+                  Langganan
                 </button>
               </div>
             </div>
 
-            {/* Trending Section */}
+            {/* Trending / Popular */}
             <div>
-              <div className="flex items-center justify-between mb-8">
-                <h4 className="text-sm font-black uppercase tracking-[0.3em] text-slate-400">
-                  Paling Populer
+              <div className="flex items-center gap-4 mb-6">
+                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">
+                  Terpopuler
                 </h4>
-                <div className="h-px bg-slate-100 flex-1 ml-6"></div>
+                <div className="h-px bg-slate-200 flex-1"></div>
               </div>
-              <div className="space-y-8">
+
+              <div className="flex flex-col gap-6">
                 {popularArticles?.length > 0 ? (
-                  popularArticles.slice(0, 3).map((item, index) => (
+                  popularArticles.slice(0, 4).map((item, index) => (
                     <Link
                       href={`/berita/${item.slug}`}
                       key={item.id}
-                      className="flex gap-6 group cursor-pointer"
+                      className="group flex gap-5 items-start"
                     >
-                      {/* Ranking */}
-                      <span className="text-4xl font-black text-slate-200 group-hover:text-primary transition-colors duration-500">
-                        {String(index + 1).padStart(2, '0')}
+                      <span className="text-3xl font-black text-slate-200 group-hover:text-emerald-500 transition-colors leading-none -mt-1 w-8">
+                        {index + 1}
                       </span>
-
-                      <div>
-                        <h5 className="font-bold text-slate-900 leading-tight group-hover:underline">
+                      <div className="flex-1">
+                        <h5 className="font-bold text-slate-900 leading-snug text-base mb-1 group-hover:text-emerald-700 transition-colors line-clamp-2">
                           {item.title}
                         </h5>
-                        <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">
-                          {item.category} • {item.views.toLocaleString()} Views
+                        <p className="text-[11px] text-slate-400 font-medium">
+                          {item.views.toLocaleString()} Pembaca
                         </p>
                       </div>
                     </Link>
                   ))
                 ) : (
-                  <div className="text-center py-10 text-slate-400 text-sm">
-                    Belum ada berita populer
+                  <div className="text-slate-400 text-sm text-center py-4">
+                    Memuat data populer...
                   </div>
                 )}
               </div>
             </div>
+
+            {/* Tags Cloud (Optional visual filler) */}
+            {tags && tags.length > 0 && (
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">
+                    Topik Hangat
+                  </h4>
+                  <div className="h-px bg-slate-200 flex-1"></div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {tags.slice(0, 8).map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
+                    >
+                      #{tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </aside>
         </section>
       </main>
 
-      {/* --- FOOTER --- */}
       <Footer topics={topics} categories={categories} tags={tags} />
 
-      {/* Global CSS for marquee and scrollbar */}
       <style jsx global>{`
         @keyframes marquee {
           0% {
@@ -651,7 +689,7 @@ export default function PremiumNewsPage() {
           }
         }
         .animate-marquee {
-          animation: marquee 25s linear infinite;
+          animation: marquee 30s linear infinite;
         }
         .no-scrollbar::-webkit-scrollbar {
           display: none;
