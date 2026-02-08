@@ -52,6 +52,7 @@ export default function About() {
         <div className="relative">
           <img
             src="/banner-about.png"
+            loading='lazy'
             alt="Ade Green TX Electric Vehicle"
             className="rounded-3xl shadow-xl w-full object-cover"
           />

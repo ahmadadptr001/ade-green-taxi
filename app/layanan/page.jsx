@@ -59,6 +59,7 @@ export default function LayananPage() {
             src="/services/hero-layanan.png"
             alt="Ade Green Tx Electric Service"
             className="absolute inset-0 w-full h-full object-cover"
+            loading='lazy'
           />
 
           {/* subtle overlay biar teks kebaca kalau perlu */}

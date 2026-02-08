@@ -116,6 +116,7 @@ export default function BeritaKategori({ params }) {
                     src={article.img}
                     alt={article.title}
                     className="h-full w-full object-cover"
+                    loading='lazy'
                   />
                 </div>
 

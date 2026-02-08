@@ -152,6 +152,7 @@ export default function BantuanPage() {
           <img
             src="/help/hero-support.png"
             alt="Help Center"
+            loading='lazy'
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/50" />

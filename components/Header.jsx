@@ -42,6 +42,7 @@ export default function Header() {
                       className="h-5 w-5"
                       src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
                       alt="newspaper"
+                      loading='lazy'
                     />
                     <span className='font-bold'>Baca Berita</span>
                   </Link>
@@ -124,7 +125,7 @@ export default function Header() {
               className="flex items-center justify-center gap-2 py-3 rounded-xl
               bg-green-600 text-white font-semibold"
             >
-              <img src="/icon-playstore.png" alt="playstore icon" className="h-5 w-5" />
+              <img src="/icon-playstore.png" alt="playstore icon" className="h-5 w-5" loading='lazy' />
               {t.semiNavbar.buttonInstall}
             </a>
 

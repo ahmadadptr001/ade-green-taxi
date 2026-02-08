@@ -33,6 +33,7 @@ export default function IklanModal() {
             src="/banner.png"
             alt="Ade Green TX"
             className="absolute inset-0 w-full h-full object-cover"
+            loading='lazy'
           />
 
           {/* Close */}
@@ -80,7 +81,7 @@ export default function IklanModal() {
                          bg-green-600 text-white font-semibold 
                          hover:bg-green-700 active:scale-[0.98] transition"
             >
-              <img src="/icon-playstore.png" alt='playstore icon' className="h-5 w-5" />
+              <img src="/icon-playstore.png" alt='playstore icon' className="h-5 w-5" loading='lazy'/>
               Download App
             </a>
 

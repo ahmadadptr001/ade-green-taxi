@@ -129,6 +129,7 @@ export default function TutorialSection() {
               key={activeStep}
               src={STEPS[activeStep].image}
               alt=""
+              loading='lazy'
               className="relative w-full rounded-3xl shadow-xl transition-all duration-500"
             />
 

@@ -16,6 +16,7 @@ export default function LandingPage() {
           src="/text-2.png"
           alt=""
           className="mx-auto w-90 mb-2 object-cover"
+          loading='lazy'
         />
         {/* Tagline */}
         <p className="text-xl text-gray-300 mb-10 max-w-xl text-center">

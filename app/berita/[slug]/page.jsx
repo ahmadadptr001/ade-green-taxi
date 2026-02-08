@@ -489,6 +489,7 @@ export default function BeritaContent({ params }) {
                             src={item.img}
                             alt={item.title}
                             className="w-full h-full object-cover"
+                            loading='lazy'
                           />
                         </div>
                         <div>

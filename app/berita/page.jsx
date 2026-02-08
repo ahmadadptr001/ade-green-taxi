@@ -428,6 +428,7 @@ export default function PremiumNewsPage() {
                     onError={handleImgError}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     alt="Main"
+                    loading='lazy'
                   />
                   {/* Modern Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90" />
@@ -545,6 +546,7 @@ export default function PremiumNewsPage() {
                           onError={handleImgError}
                           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 opacity-95 group-hover:opacity-100"
                           alt={news.title}
+                          loading='lazy'
                         />
                       </div>
 

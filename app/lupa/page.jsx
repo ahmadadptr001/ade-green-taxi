@@ -63,6 +63,7 @@ export default function LupaPage() {
           src="https://images.unsplash.com/photo-1473081556163-2a17de81fc97?q=80&w=1974&auto=format&fit=crop"
           alt="Nature Background"
           className="absolute inset-0 w-full h-full object-cover opacity-80"
+          loading='lazy'
         />
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/40 to-transparent"></div>
         <div className="relative z-10 text-center p-12">

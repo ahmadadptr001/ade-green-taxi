@@ -188,6 +188,7 @@ export default function App() {
                   <img
                     src="https://flagcdn.com/w20/id.png"
                     alt="ID"
+                    loading='lazy'
                     className="w-4 h-auto rounded-sm"
                   />
                   <span className="text-xs font-bold text-slate-600">+62</span>

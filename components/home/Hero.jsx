@@ -48,7 +48,7 @@ export default function Hero() {
             data-aos-duration="500"
             className="px-8 py-4 bg-white/10 text-lg cursor-pointer hover:scale-105 flex items-center gap-2 rounded-lg backdrop-blur-md border border-white/30 text-white transition-transform shadow-lg"
           >
-            <img src="/icon-playstore.png" alt='playstore icon' className="w-6 h-6 object-cover" />
+            <img src="/icon-playstore.png" alt='playstore icon' className="w-6 h-6 object-cover" loading='lazy'/>
             <span>{t?.semiNavbar.buttonInstall}</span>
           </a>
         </div>

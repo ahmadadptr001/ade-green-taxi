@@ -76,6 +76,7 @@ export default function Services() {
               <img
                 src={s.image}
                 alt={s.title}
+                loading='lazy'
                 className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700"
               />
 

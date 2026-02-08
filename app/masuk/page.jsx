@@ -85,6 +85,7 @@ export default function LoginPaeg() {
           src="/bg-auth.jpg"
           alt="Environmental Background"
           className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-10000 hover:scale-105"
+          loading='lazy'
         />
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
         <div className="relative z-10 text-center p-12">
