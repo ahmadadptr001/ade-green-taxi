@@ -623,9 +623,12 @@ export default function PremiumNewsPage() {
                       key={item.id}
                       className="group flex gap-5 items-start"
                     >
-                      <span className="text-3xl font-black text-slate-200 group-hover:text-emerald-500 transition-colors leading-none -mt-1 w-8">
-                        {index + 1}
-                      </span>
+                      <img
+                        src={item.image}
+                        alt={item.slug}
+                        className="w-10 h-10 rounded-md"
+                        loading="lazy"
+                      />
                       <div className="flex-1">
                         <h5 className="font-bold text-slate-900 leading-snug text-base mb-1 group-hover:text-emerald-700 transition-colors line-clamp-2">
                           {item.title}
