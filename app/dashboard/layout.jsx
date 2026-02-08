@@ -37,6 +37,6 @@ export const metadata = {
   },
 };
 
-export default function RootLayout() {
-  return <LayoutSidebar />;
+export default function RootLayout({children}) {
+  return <LayoutSidebar children={children}/>;
 }
