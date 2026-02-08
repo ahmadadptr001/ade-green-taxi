@@ -19,3 +19,23 @@ export async function getCountsAllUser() {
     throw err;
   }
 }
+
+export async function getCountsAllUserByActive() {
+  try {
+    const response = await axios.get('/api/users/counts/active');
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getCountsAllUserBySuspended() {
+  try {
+    const response = await axios.get('/api/users/counts/suspended');
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}

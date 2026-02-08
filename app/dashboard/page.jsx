@@ -1,7 +1,11 @@
 'use client';
 import { useUser } from '@/context/UserContext';
 import { getCountsAllArticle, getViewsAllArticle } from '@/services/articles';
-import { getCountsAllUser } from '@/services/users';
+import {
+  getCountsAllUser,
+  getCountsAllUserByActive,
+  getCountsAllUserBySuspended,
+} from '@/services/users';
 import {
   Eye,
   FileText,
@@ -44,6 +48,15 @@ export default function DashboardPage() {
       decorationColor: 'bg-emerald-500',
       total: 0,
     },
+    {
+      name: 'Ditangguhkan',
+      icon: Users,
+      iconColor: 'text-amber-600',
+      backgroundColor: 'bg-amber-50',
+      borderColor: 'border-amber-100',
+      decorationColor: 'bg-amber-500',
+      total: 0,
+    },
   ]);
 
   useEffect(() => {
@@ -51,7 +64,8 @@ export default function DashboardPage() {
       try {
         const dataViewsResp = await getViewsAllArticle();
         const dataCountsResp = await getCountsAllArticle();
-        const dataCountsUserResp = await getCountsAllUser();
+        const dataCountsUserActiveResp = await getCountsAllUserByActive();
+        const dataCountsUserSuspendedResp = await getCountsAllUserBySuspended();
 
         setDashboardItems((prev) =>
           prev.map((item) =>
@@ -60,8 +74,10 @@ export default function DashboardPage() {
               : item.name === 'Total Artikel'
                 ? { ...item, total: dataCountsResp.counts }
                 : item.name === 'User Aktif'
-                  ? { ...item, total: dataCountsUserResp.counts }
-                  : item
+                  ? { ...item, total: dataCountsUserActiveResp.counts }
+                  : item.nmae === 'User Ditangguhkan'
+                    ? { ...item, total: dataCountsUserSuspendedResp.counts }
+                    : item
           )
         );
       } catch (err) {
