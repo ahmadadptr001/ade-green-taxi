@@ -80,7 +80,7 @@ export default function IklanModal() {
                          bg-green-600 text-white font-semibold 
                          hover:bg-green-700 active:scale-[0.98] transition"
             >
-              <img src="/icon-playstore.png" className="h-5 w-5" />
+              <img src="/icon-playstore.png" alt='playstore icon' className="h-5 w-5" />
               Download App
             </a>
 

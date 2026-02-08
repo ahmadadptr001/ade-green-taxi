@@ -87,6 +87,7 @@ export default function Footer() {
 
             <div className="relative w-full h-[320px] rounded-2xl overflow-hidden shadow-lg bg-gray-200">
               <iframe
+              title='maps overview'
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1990.0006407518533!2d122.50281949575488!3d-4.020132934697751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2d988d7b9541caef%3A0x2cf821d07be9aef4!2sPT.%20ADE%20SULA%20KENDARI!5e0!3m2!1sid!2sid!4v1769315637039!5m2!1sid!2sid"
                 className="w-full h-full border-0"
                 loading="lazy"
