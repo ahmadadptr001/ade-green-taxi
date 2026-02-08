@@ -61,7 +61,7 @@ export default function LoginPaeg() {
         confirmButtonText: "Masuk ke dashboard",
       }).then((result) => {
         if (result.isConfirmed){
-          localStorage.setItem('user', dataUser)
+          localStorage.setItem('user', JSON.stringify(dataUser))
           router.replace('/dashboard')
         }
       })

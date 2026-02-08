@@ -62,7 +62,7 @@ export default function App() {
         title: 'Akun Berhasil ditambahkan!',
         didOpen: () => Swal.hideLoading(),
       });
-      localStorage.setItem('user', result);
+      localStorage.setItem('user', JSON.stringify(result));
       setIsLoading(false);
 
       router.push('/dashboard');
@@ -188,7 +188,7 @@ export default function App() {
                   <img
                     src="https://flagcdn.com/w20/id.png"
                     alt="ID"
-                    loading='lazy'
+                    loading="lazy"
                     className="w-4 h-auto rounded-sm"
                   />
                   <span className="text-xs font-bold text-slate-600">+62</span>
