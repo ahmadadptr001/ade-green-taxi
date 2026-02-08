@@ -35,7 +35,6 @@ export async function GET() {
       )
       `);
     if (error) {
-      console.log('[GET] ARTIKEL ERROR: ', error);
       return NextResponse.json({ message: error.message }, { status: 500 });
     }
 

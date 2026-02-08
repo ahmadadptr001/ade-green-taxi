@@ -242,7 +242,7 @@ export default function AppSidebar() {
                   <path d="M21 12H9"></path>
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 </svg>
-                <span>Keluar</span>
+                <span className='line-clamp-1'> Keluar</span>
               </button>
             </div>
           </SidebarMenuItem>
