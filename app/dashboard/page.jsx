@@ -1,4 +1,5 @@
 'use client';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useUser } from '@/context/UserContext';
 import { getCountsAllArticle, getViewsAllArticle } from '@/services/articles';
 import {
@@ -19,7 +20,7 @@ import Swal from 'sweetalert2';
 
 export default function DashboardPage() {
   const user = useUser();
-
+  const [loading, setLoading] = useState(true);
   const [dashboardItems, setDashboardItems] = useState([
     {
       name: 'Total Views',
@@ -80,6 +81,7 @@ export default function DashboardPage() {
                     : item
           )
         );
+        setLoading(false);
       } catch (err) {
         Swal.fire({
           icon: 'error',
@@ -88,6 +90,7 @@ export default function DashboardPage() {
             popup: 'rounded-2xl font-sans',
           },
         });
+        setLoading(false);
       }
     };
     fetchData();
@@ -148,9 +151,13 @@ export default function DashboardPage() {
                     {item.name}
                   </p>
                   <div className="mt-4 flex items-baseline gap-1">
-                    <h2 className="text-5xl font-extrabold tracking-tight text-slate-900">
-                      {item.total.toLocaleString('id-ID')}
-                    </h2>
+                    {loading ? (
+                      <Skeleton className={'w-full h-5'}/>
+                    ) : (
+                      <h2 className="text-5xl font-extrabold tracking-tight text-slate-900">
+                        {item.total.toLocaleString('id-ID')}
+                      </h2>
+                    )}
                   </div>
                 </div>
 
