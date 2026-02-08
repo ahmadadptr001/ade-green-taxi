@@ -62,7 +62,7 @@ export default function App() {
         title: 'Akun Berhasil ditambahkan!',
         didOpen: () => Swal.hideLoading(),
       });
-      localStorage.setItem('user', JSON.stringify(result));
+      localStorage.setItem('user', JSON.stringify(result.data));
       setIsLoading(false);
 
       router.push('/dashboard');
