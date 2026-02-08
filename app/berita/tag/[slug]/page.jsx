@@ -42,10 +42,7 @@ export default function BeritaTag({ params }) {
         <div className="max-w-7xl mx-auto px-6 py-10">
           {/* Breadcrumb */}
           <nav className="text-sm text-gray-500 mb-4">
-            <Link href="/beranda" className="hover:underline">
-              Beranda
-            </Link>
-            <span className="mx-2">/</span>
+            
             <Link href="/berita" className="hover:underline">
               Berita
             </Link>

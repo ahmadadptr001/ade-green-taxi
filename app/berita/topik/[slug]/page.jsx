@@ -1,6 +1,10 @@
 'use client';
 import Footer from '@/components/berita/Footer';
-import { getArticlesByCategorySlug, getArticlesByTagSlug, getArticlesByTopicSlug } from '@/services/articles';
+import {
+  getArticlesByCategorySlug,
+  getArticlesByTagSlug,
+  getArticlesByTopicSlug,
+} from '@/services/articles';
 import { formatDate } from '@/utils/date';
 import { SearchIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -42,10 +46,6 @@ export default function BeritaTag({ params }) {
         <div className="max-w-7xl mx-auto px-6 py-10">
           {/* Breadcrumb */}
           <nav className="text-sm text-gray-500 mb-4">
-            <Link href="/beranda" className="hover:underline">
-              Beranda
-            </Link>
-            <span className="mx-2">/</span>
             <Link href="/berita" className="hover:underline">
               Berita
             </Link>
@@ -71,15 +71,13 @@ export default function BeritaTag({ params }) {
             </div>
 
             {/* Search */}
-            <div
-              className="w-full md:w-[360px]"
-            >
+            <div className="w-full md:w-[360px]">
               <div className="relative">
                 <input
                   type="search"
                   name="q"
                   value={query}
-                  onChange={e => setQuery(e.target.value)}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder={`Cari di ${slug.replace('-', ' ')}...`}
                   className="w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 pr-12 text-sm text-gray-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                 />
