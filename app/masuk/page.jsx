@@ -24,8 +24,6 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [isValid, setIsValid] = useState(false);
-  const background_image =
-    'https://i.pinimg.com/1200x/8c/bb/43/8cbb43cc19d679f7935bd3a269da0af6.jpg ';
 
   useEffect(() => {
     const isEmailValid =
@@ -66,7 +64,7 @@ export default function App() {
       <div className="hidden relative md:flex md:w-1/2 bg-slate-50 items-center justify-center p-12 border-r border-slate-100">
         <div className="absolute w-full h-full">
           <img
-            src={background_image}
+            src={'/bg-auth.jpg'}
             alt="background desktop"
             className="w-full h-full object-cover"
           />
