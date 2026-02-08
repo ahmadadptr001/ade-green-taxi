@@ -11,7 +11,7 @@ export async function POST(req) {
       .eq('email', data.email)
       .maybeSingle();
 
-    if (error)
+    if (error || !dataPorfile)
       return NextResponse.json({ message: error.message }, { status: 500 });
     return NextResponse.json(
       { message: 'Berhasil masuk ke akun anda', data: dataPorfile },
