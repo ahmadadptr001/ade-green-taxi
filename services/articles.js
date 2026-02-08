@@ -10,6 +10,16 @@ export async function getArticles() {
   }
 }
 
+export async function updateViewArticle(view, slug) {
+  try {
+    const response = await axios.post('/api/article/update/view', {view, slug});
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getCategories() {
   try {
     const response = await axios.get('/api/articles/categories')

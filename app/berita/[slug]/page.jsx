@@ -10,7 +10,7 @@ import {
   Bookmark,
   TrendingUp,
 } from 'lucide-react';
-import { getArticles } from '@/services/articles';
+import { getArticles, updateViewArticle } from '@/services/articles';
 import { formatDate } from '@/utils/date';
 import parse from 'html-react-parser';
 import Link from 'next/link';
@@ -59,7 +59,11 @@ export default function BeritaContent({ params }) {
         if (slug) {
           const found = articles.find((a) => a.slug === slug) || null;
           setArticle(found);
-          setNotFound(!Boolean(found));
+          if (!Boolean(found)){
+            setNotFound(false);
+            return
+          }
+          await updateViewArticle(found.views, found.slug)
         } else {
           setArticle(null);
           setNotFound(true);
