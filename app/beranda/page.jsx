@@ -11,6 +11,7 @@ import About from '@/components/home/About';
 import FAQ from '@/components/home/FAQ';
 import Footer from '@/components/home/Footer';
 import TutorialSection from '@/components/home/TutorialSection';
+import 'aos/dist/aos.css';
 
 export default function HomePage() {
   useEffect(() => {

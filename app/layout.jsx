@@ -1,5 +1,4 @@
 import './globals.css';
-import 'aos/dist/aos.css';
 import './app.css';
 import Script from 'next/script';
 import { TooltipProvider } from '@/components/ui/tooltip';
