@@ -26,6 +26,7 @@ export default function App() {
     whatsapp: '',
     password: '',
     role: 'pengunjung',
+    status: 'aktif' // status nya hanya dua yaitu "aktif" atau "ditangguhkan"
   });
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
