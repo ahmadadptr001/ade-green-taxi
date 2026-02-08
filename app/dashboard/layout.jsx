@@ -1,17 +1,16 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from '@/components/dashboard/AppSidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 export const metadata = {
   title: {
     default: 'DASHBOARD - ADEGREENTX ',
     template: '%s | Ade Green TX',
   },
-  description:
-    'Anlisis dan dapatkan akses berita terupdate.',
+  description: 'Anlisis dan dapatkan akses berita terupdate.',
 
   openGraph: {
     title: 'DASHBOARD - ADEGREENTX',
-    description:
-      'Analisis dan dapatkan akses berita terupdate',
+    description: 'Analisis dan dapatkan akses berita terupdate',
     url: 'https://adegreentx.id/dashboard',
     siteName: 'Ade Green TX',
     images: [
@@ -29,8 +28,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'DASHBOARD - ADEGREENTX',
-    description:
-    'Analisis dan dapatkan akses berita terupdate',
+    description: 'Analisis dan dapatkan akses berita terupdate',
     images: ['https://adegreentx.id/odgr.png'],
   },
   robots: {
@@ -45,13 +43,16 @@ export default function RootLayout({ children }) {
     <html lang="id">
       <head>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <meta
-          name="og:image"
-          content="https://adegreentx.id/odgr.png"
-        ></meta>
+        <meta name="og:image" content="https://adegreentx.id/odgr.png"></meta>
       </head>
       <body>
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
