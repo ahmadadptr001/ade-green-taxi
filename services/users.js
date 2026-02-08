@@ -9,3 +9,13 @@ export async function getUsers() {
     throw err
   }
 }
+
+export async function getCountsAllUser() {
+  try {
+    const response = await axios.get('/api/users/counts');
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}

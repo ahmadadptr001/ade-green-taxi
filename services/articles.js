@@ -10,6 +10,17 @@ export async function getViewsAllArticle() {
   }
 }
 
+export async function getCountsAllArticle() {
+  try {
+    const response = await axios.get('/api/articles/counts');
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+
 export async function getArticles() {
   try {
     const response = await axios.get('/api/articles');

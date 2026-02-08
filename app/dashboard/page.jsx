@@ -1,19 +1,27 @@
 'use client';
 import { useUser } from '@/context/UserContext';
-import { getViewsAllArticle } from '@/services/articles';
-import { Eye, FileText, SplinePointer, ArrowUpRight, Activity, Users } from 'lucide-react';
+import { getCountsAllArticle, getViewsAllArticle } from '@/services/articles';
+import { getCountsAllUser } from '@/services/users';
+import {
+  Eye,
+  FileText,
+  SplinePointer,
+  ArrowUpRight,
+  Activity,
+  Users,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export default function DashboardPage() {
   const user = useUser();
-  
+
   const [dashboardItems, setDashboardItems] = useState([
     {
       name: 'Total Views',
       icon: Eye,
       iconColor: 'text-sky-600',
-      backgroundColor: 'bg-sky-50', 
+      backgroundColor: 'bg-sky-50',
       borderColor: 'border-sky-100',
       decorationColor: 'bg-sky-500',
       total: 0,
@@ -42,13 +50,19 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const dataViewsResp = await getViewsAllArticle();
-        // Logika update state tetap sama
+        const dataCountsResp = await getCountsAllArticle();
+        const dataCountsUserResp = await getCountsAllUser();
+
         setDashboardItems((prev) =>
           prev.map((item) =>
             item.name === 'Total Views'
               ? { ...item, total: dataViewsResp.views }
-              : item
-          ) 
+              : item.name === 'Total Artikel'
+                ? { ...item, total: dataCountsResp.counts }
+                : item.name === 'User Aktif'
+                  ? { ...item, total: dataCountsUserResp.counts }
+                  : item
+          )
         );
       } catch (err) {
         Swal.fire({
@@ -56,7 +70,7 @@ export default function DashboardPage() {
           text: err.message,
           customClass: {
             popup: 'rounded-2xl font-sans',
-          }
+          },
         });
       }
     };
@@ -64,7 +78,12 @@ export default function DashboardPage() {
   }, []);
 
   // Mendapatkan tanggal hari ini untuk UI Header
-  const today = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const today = new Date().toLocaleDateString('id-ID', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <main className="relative min-h-screen overflow-hidden w-full bg-slate-50 font-sans selection:bg-slate-200">
@@ -86,11 +105,14 @@ export default function DashboardPage() {
               Dashboard
             </h1>
             <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-              Halo, <span className="font-semibold text-slate-900">{user?.fullname}</span>. 
-              Berikut adalah ringkasan dashboard Anda.
+              Halo,{' '}
+              <span className="font-semibold text-slate-900">
+                {user?.fullname}
+              </span>
+              . Berikut adalah ringkasan dashboard Anda.
             </p>
           </div>
-          
+
           <button className="group flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-slate-800 hover:shadow-lg hover:shadow-slate-200 active:scale-95">
             <Activity size={18} />
             <span>Anlisis</span>
@@ -115,9 +137,11 @@ export default function DashboardPage() {
                     </h2>
                   </div>
                 </div>
-                
+
                 {/* Icon Container Modern */}
-                <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${item.backgroundColor} ${item.iconColor} transition-all duration-500 group-hover:rotate-12 group-hover:scale-110`}>
+                <div
+                  className={`flex h-16 w-16 items-center justify-center rounded-2xl ${item.backgroundColor} ${item.iconColor} transition-all duration-500 group-hover:rotate-12 group-hover:scale-110`}
+                >
                   <item.icon size={32} strokeWidth={1.5} />
                 </div>
               </div>
@@ -126,15 +150,22 @@ export default function DashboardPage() {
               <div className="mt-8 flex items-center justify-between">
                 <div className="flex items-center gap-1 text-xs font-semibold text-slate-400 group-hover:text-slate-600 transition-colors">
                   <span>Lihat detail</span>
-                  <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight
+                    size={14}
+                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
                 </div>
-                
+
                 {/* Decorative Line that animates */}
-                <div className={`h-1.5 w-12 rounded-full ${item.decorationColor || 'bg-slate-200'} opacity-20 transition-all duration-500 group-hover:w-24 group-hover:opacity-100`}></div>
+                <div
+                  className={`h-1.5 w-12 rounded-full ${item.decorationColor || 'bg-slate-200'} opacity-20 transition-all duration-500 group-hover:w-24 group-hover:opacity-100`}
+                ></div>
               </div>
 
               {/* Gradient Glow effect on Hover */}
-              <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full ${item.decorationColor || 'bg-slate-400'} opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-20`}></div>
+              <div
+                className={`absolute -right-10 -top-10 h-32 w-32 rounded-full ${item.decorationColor || 'bg-slate-400'} opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-20`}
+              ></div>
             </div>
           ))}
         </div>
