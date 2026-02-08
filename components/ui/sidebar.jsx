@@ -35,7 +35,7 @@ import {
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '16rem';
-const SIDEBAR_WIDTH_MOBILE = '85%';
+const SIDEBAR_WIDTH_MOBILE = '80%';
 const SIDEBAR_WIDTH_ICON = '5rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 let realShow = false;
@@ -241,7 +241,7 @@ function Sidebar({
 
 function SidebarTrigger({ className, onClick, ...props }) {
   const { toggleSidebar } = useSidebar();
-  const [show, setShow] = React.useState(false)
+  const [show, setShow] = React.useState(false);
   return (
     <Button
       data-sidebar="trigger"
@@ -259,8 +259,11 @@ function SidebarTrigger({ className, onClick, ...props }) {
       }}
       {...props}
     >
-      
-      {show ? <ChevronFirst className="text-xl" /> : <ChevronLast className="text-xl" />}
+      {show ? (
+        <ChevronFirst className="text-xl" />
+      ) : (
+        <ChevronLast className="text-xl" />
+      )}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
