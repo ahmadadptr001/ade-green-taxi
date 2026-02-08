@@ -1,20 +1,18 @@
-import './globals.css';
-import './app.css';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata = {
   title: {
-    default: 'Ade Green TX',
+    default: 'DASHBOARD - ADEGREENTX ',
     template: '%s | Ade Green TX',
   },
   description:
-    'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
+    'Anlisis dan dapatkan akses berita terupdate.',
 
   openGraph: {
-    title: 'Ade Green TX',
+    title: 'DASHBOARD - ADEGREENTX',
     description:
-      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
-    url: 'https://adegreentx.id',
+      'Analisis dan dapatkan akses berita terupdate',
+    url: 'https://adegreentx.id/dashboard',
     siteName: 'Ade Green TX',
     images: [
       {
@@ -30,9 +28,9 @@ export const metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Ade Green TX',
+    title: 'DASHBOARD - ADEGREENTX',
     description:
-      'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',
+    'Analisis dan dapatkan akses berita terupdate',
     images: ['https://adegreentx.id/odgr.png'],
   },
   robots: {
@@ -48,16 +46,12 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <meta
-          name="google-site-verification"
-          content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
-        />
-        <meta
           name="og:image"
           content="https://adegreentx.id/odgr.png"
         ></meta>
       </head>
       <body>
-        <TooltipProvider>{children}</TooltipProvider>
+        <SidebarProvider>{children}</SidebarProvider>
       </body>
     </html>
   );

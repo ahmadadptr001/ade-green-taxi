@@ -327,7 +327,10 @@ export default function PremiumNewsPage() {
             </button>
 
             <div className="flex flex-col items-center text-center">
-              <div className="w-40 h-40 sm:h-60 sm:w-60  md:h-80 md:w-80 mb-6" id="container-lottie">
+              <div
+                className="w-40 h-40 sm:h-60 sm:w-60  md:h-80 md:w-80 mb-6"
+                id="container-lottie"
+              >
                 <Lottie animationData={animationData} />
               </div>
 
@@ -428,7 +431,7 @@ export default function PremiumNewsPage() {
                     onError={handleImgError}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     alt="Main"
-                    loading='lazy'
+                    loading="lazy"
                   />
                   {/* Modern Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90" />
@@ -491,16 +494,7 @@ export default function PremiumNewsPage() {
                         </div>
                       </Link>
                     ))
-                  : [0, 1].map((i) => (
-                      <div
-                        key={i}
-                        className="flex-1 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center"
-                      >
-                        <span className="text-slate-300 text-xs">
-                          Konten segera hadir
-                        </span>
-                      </div>
-                    ))}
+                  : [0, 1].map((i) => <div key={i}></div>)}
               </div>
             </div>
           </section>
@@ -546,7 +540,7 @@ export default function PremiumNewsPage() {
                           onError={handleImgError}
                           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 opacity-95 group-hover:opacity-100"
                           alt={news.title}
-                          loading='lazy'
+                          loading="lazy"
                         />
                       </div>
 
@@ -580,13 +574,9 @@ export default function PremiumNewsPage() {
                   </article>
                 ))
               ) : (
-                <div className="text-center py-24 bg-slate-50 rounded-2xl border border-slate-100">
-                  <Search className="h-10 w-10 text-slate-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">
-                    Tidak ada berita ditemukan
-                  </h3>
-                  <p className="text-slate-400 text-sm">
-                    Silakan cari dengan kata kunci lain.
+                <div>
+                  <p className="text-gray-500 text-center text-sm">
+                    Tidak ada berita
                   </p>
                 </div>
               )}
@@ -665,12 +655,13 @@ export default function PremiumNewsPage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {tags.slice(0, 8).map((tag) => (
-                    <span
+                    <Link
+                      href={'/berita/tag/' + tag.slug}
                       key={tag.id}
                       className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
                     >
                       #{tag.name}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>
