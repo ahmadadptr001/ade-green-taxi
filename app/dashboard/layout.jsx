@@ -1,5 +1,4 @@
-import AppSidebar from '@/components/dashboard/AppSidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import LayoutSidebar from '@/components/dashboard/LayoutSidebar';
 
 export const metadata = {
   title: {
@@ -38,22 +37,6 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
-  return (
-    <html lang="id">
-      <head>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <meta name="og:image" content="https://adegreentx.id/odgr.png"></meta>
-      </head>
-      <body>
-        <SidebarProvider>
-          <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
-      </body>
-    </html>
-  );
+export default function RootLayout() {
+  return <LayoutSidebar />;
 }
