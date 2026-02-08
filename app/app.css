@@ -10,3 +10,10 @@ hh {
 div[data-state='collapsed'] span.line-clamp-1 {
   width: 0 !important;
 }
+.swal2-container {
+  pointer-events: auto !important;
+}
+.swal2-popup {
+  pointer-events: auto !important;
+}
+

@@ -13,6 +13,7 @@ import {
   User2,
   UserPlus,
   Users,
+  Users2,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -72,13 +73,17 @@ export default function AppSidebar() {
       icon: 'question',
       text: 'Anda yakin ingin keluar?',
       showCancelButton: true,
+      target: document.body,
+      customClass: {
+        container: 'swal-portal',
+      },
     }).then((result) => {
-      if (result.isConfirmed){
-        localStorage.removeItem('user')
+      if (result.isConfirmed) {
+        localStorage.removeItem('user');
         router.replace('/berita');
       }
-    })
-  }
+    });
+  };
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className={'pe-2'}>
@@ -148,12 +153,44 @@ export default function AppSidebar() {
           >
             ADMINISTRATOR
           </SidebarGroupLabel>
+          <SidebarGroupContent className={'pe-2'}>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={
+                    'hover:bg-gray-100 !text-black !my-0 !font-semibold'
+                  }
+                >
+                  <Link
+                    href="/dashboard/user"
+                    className={
+                      pathname === '/dashboard/user'
+                        ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
+                        : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
+                    }
+                    onClick={(e) => setPathname(e.target.href)}
+                  >
+                    <div className="flex items-center justify-between gap-2 w-full">
+                      <div className="flex items-center gap-2">
+                        <Users2 size={20} />
+                        <span className="line-clamp-1">Management User</span>
+                      </div>
+                      {pathname == '/dashboard/user' && (
+                        <div className="w-2 h-2 rounded-full bg-sky-600"></div>
+                      )}
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <div className="rounded-md border bg-gray-100 p-3">
+            <div className="rounded-md border bg-gray-50 p-3">
               <div className="flex items-center mb-3">
                 <img
                   className="w-10 h-10 rounded-full border border-slate-200 bg-white"
@@ -161,7 +198,9 @@ export default function AppSidebar() {
                   alt={`avatar-${user?.fullname}`}
                 />
                 <div className="ml-3 overflow-hidden">
-                  <p className="text-sm font-bold truncate">{user?.fullname}</p>
+                  <p className="text-sm font-bold truncate line-clamp-1">
+                    {user?.fullname}
+                  </p>
                   <p className="text-xs text-blue-600 font-medium capitalize flex items-center gap-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +221,10 @@ export default function AppSidebar() {
                   </p>
                 </div>
               </div>
-              <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-200 py-2 rounded-lg transition-all text-sm font-medium">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center space-x-2 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-200 py-2 rounded-lg transition-all text-sm font-medium"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
