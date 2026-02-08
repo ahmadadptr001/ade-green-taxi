@@ -67,7 +67,7 @@ export default function DashboardPage() {
   const today = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <main className="relative min-h-screen w-full bg-slate-50 font-sans selection:bg-slate-200">
+    <main className="relative min-h-screen overflow-hidden w-full bg-slate-50 font-sans selection:bg-slate-200">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70"></div>
         <div className="absolute left-0 top-0 -z-10 h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[100px]"></div>
