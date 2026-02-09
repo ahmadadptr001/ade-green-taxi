@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const base_url = process.env.NEXT_PUBLIC_URL_SEND_OTP;
 
@@ -12,6 +13,19 @@ export async function sendOTP(email) {
   }
 }
 
+export async function otpValidate(email, otp) {
+  try {
+    const resp = await axios.post('/api/otp/validate', {email, code: otp})
+    if (!resp.data.success) throw new Error(resp.data.message)
+    return resp.data
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: err.message
+    })
+  }
+}
+
 export async function login(email, password) {
   const payload = {
     email,
@@ -20,7 +34,7 @@ export async function login(email, password) {
   try {
     const resp = await axios.post('/api/auth/login', payload);
     if (!resp.statusText === 200) throw resp.data.message;
-    return resp.data
+    return resp.data;
   } catch (err) {
     throw err;
   }
@@ -32,12 +46,12 @@ export async function daftar(payload) {
     password: payload.password,
     role: payload.role,
     phone: payload.whatsapp,
-    status: payload.status
-  }
+    status: payload.status,
+  };
   try {
     const resp = await axios.post('/api/auth/daftar', newPayload);
     if (!resp.statusText === 200) throw resp.data.message;
-    return resp.data
+    return resp.data;
   } catch (err) {
     throw err;
   }
@@ -49,6 +63,6 @@ export async function emailCheck(email) {
     if (!resp.statusText === 200) return resp.data.message;
     return resp.data;
   } catch (err) {
-    throw err
+    throw err;
   }
 }

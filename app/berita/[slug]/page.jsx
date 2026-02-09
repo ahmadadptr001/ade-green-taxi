@@ -9,15 +9,35 @@ import {
   ArrowRight,
   Bookmark,
   TrendingUp,
+  Quote, // Icon tambahan untuk blockquote
+  ExternalLink, // Icon tambahan untuk link
 } from 'lucide-react';
 import { getArticles, updateViewArticle } from '@/services/articles';
 import { formatDate } from '@/utils/date';
-import parse from 'html-react-parser';
+import parse, { domToReact } from 'html-react-parser'; // Import domToReact
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+async function shareLink(title, description, url) {
+  if (!url) return;
+
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: title,
+        text: description,
+        url: url,
+      });
+    } else {
+      await navigator.clipboard.writeText(url);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function BeritaContent({ params }) {
-  const router = useRouter()
+  const router = useRouter();
   const [slug, setSlug] = useState(null);
   const [allArticles, setAllArticles] = useState([]);
   const [article, setArticle] = useState(null);
@@ -25,12 +45,115 @@ export default function BeritaContent({ params }) {
   const [notFound, setNotFound] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Resolve params (Next.js passes params as a Promise to client components)
+  const contentParserOptions = {
+    replace: (domNode) => {
+      // ... (Blockquote, Img, Link tetap sama seperti sebelumnya) ...
+
+      // Handle Blockquotes (Kutipan)
+      if (domNode.name === 'blockquote') {
+        return (
+          <div className="my-8 pl-6 border-l-4 border-emerald-500 bg-slate-50 py-4 pr-4 rounded-r-lg relative overflow-hidden group">
+            <Quote className="absolute top-2 left-2 w-6 h-6 text-emerald-100 -z-0 transform -scale-x-100" />
+            <div className="relative z-10 font-serif text-lg italic text-slate-700 leading-relaxed">
+              {domToReact(domNode.children, contentParserOptions)}
+            </div>
+          </div>
+        );
+      }
+
+      // Handle Images
+      if (domNode.name === 'img') {
+        return (
+          <figure className="my-10 group">
+            <div className="rounded-xl overflow-hidden shadow-lg border border-slate-100 bg-slate-50">
+              <img
+                {...domNode.attribs}
+                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.01]"
+                loading="lazy"
+              />
+            </div>
+            {domNode.attribs.alt && (
+              <figcaption className="mt-3 text-center text-xs text-slate-400 font-medium tracking-wide uppercase">
+                {domNode.attribs.alt}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
+
+      // Handle Links
+      if (domNode.name === 'a') {
+        // ... (kode link tetap sama)
+        const href = domNode.attribs.href || '#';
+        const isInternal = href.startsWith('/');
+        const className =
+          'inline-flex items-center gap-0.5 text-emerald-600 font-semibold border-b border-emerald-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all decoration-0';
+
+        if (isInternal) {
+          return (
+            <Link href={href} className={className}>
+              {domToReact(domNode.children, contentParserOptions)}
+            </Link>
+          );
+        }
+        return (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={className}
+          >
+            {domToReact(domNode.children, contentParserOptions)}
+            <ExternalLink className="w-3 h-3 ml-0.5 opacity-70" />
+          </a>
+        );
+      }
+
+      // --- PERBAIKAN UTAMA DI SINI (LIST) ---
+
+      // Handle Unordered Lists (Bullet Points)
+      if (domNode.name === 'ul') {
+        return (
+          // pl-6 (padding-left 1.5rem) membuat list menjorok ke dalam
+          // list-disc memunculkan bullet points
+          <ul className="my-6 pl-6 space-y-2 list-disc list-outside text-slate-700 marker:text-slate-400">
+            {domToReact(domNode.children, contentParserOptions)}
+          </ul>
+        );
+      }
+
+      // Handle Ordered Lists (Angka 1. 2. 3.)
+      if (domNode.name === 'ol') {
+        return (
+          // pl-6 membuat list menjorok
+          // list-decimal memunculkan angka
+          <ol className="my-6 pl-6 space-y-2 list-decimal list-outside text-slate-700 marker:text-emerald-600 marker:font-bold">
+            {domToReact(domNode.children, contentParserOptions)}
+          </ol>
+        );
+      }
+
+      // Handle List Items
+      if (domNode.name === 'li') {
+        return (
+          <li className="pl-1 leading-relaxed">
+            {domToReact(domNode.children, contentParserOptions)}
+          </li>
+        );
+      }
+    },
+  };
+
+  // ---------------------------------------------------------------------------
+  // LOGIC FETCHING (TIDAK DIUBAH)
+  // ---------------------------------------------------------------------------
+
+  // Resolve params
   useEffect(() => {
     let mounted = true;
     const resolveParams = async () => {
       try {
-        const resolved = await params; // important: await params
+        const resolved = await params;
         if (!mounted) return;
         setSlug(resolved?.slug ?? null);
       } catch (err) {
@@ -44,7 +167,7 @@ export default function BeritaContent({ params }) {
     };
   }, [params]);
 
-  // Fetch articles once slug is known
+  // Fetch articles
   useEffect(() => {
     let mounted = true;
     const fetchData = async () => {
@@ -79,7 +202,6 @@ export default function BeritaContent({ params }) {
       }
     };
 
-    // Only fetch when slug is resolved (you can also fetch earlier if you want)
     if (slug !== null) {
       fetchData();
     }
@@ -103,9 +225,7 @@ export default function BeritaContent({ params }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // -----------------------
-  // Derived data (useMemo)
-  // -----------------------
+  // Derived data
   const category = useMemo(
     () => article?.article_categories?.[0]?.categories?.name ?? 'Politik',
     [article]
@@ -173,15 +293,14 @@ export default function BeritaContent({ params }) {
       .map((x) => x.item);
   }, [allArticles, article, tags]);
 
-  // safe share URL (client-only)
   const shareUrl = useMemo(() => {
     if (typeof window === 'undefined') return '';
     return window.location.href;
   }, []);
 
-  // -----------------------
-  // RENDER (UI MODIFIED, LOGIC SAME)
-  // -----------------------
+  // ---------------------------------------------------------------------------
+  // RENDER UI
+  // ---------------------------------------------------------------------------
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
@@ -226,10 +345,9 @@ export default function BeritaContent({ params }) {
     );
   }
 
-  // Modern UI Layout
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
-      {/* Scroll Progress Bar (Gradient) */}
+      {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 z-[100] bg-transparent">
         <div
           style={{
@@ -241,7 +359,7 @@ export default function BeritaContent({ params }) {
       </div>
 
       <main className="container mx-auto px-4 lg:px-8 py-8 lg:py-16">
-        {/* Navigation & Breadcrumbs */}
+        {/* Navigation */}
         <div className="max-w-7xl mx-auto mb-12">
           <button
             onClick={() => history.back()}
@@ -298,7 +416,6 @@ export default function BeritaContent({ params }) {
                     loading="eager"
                   />
                 </div>
-                {/* Optional: Gradient overlay for text readability if needed, currently clean */}
               </figure>
             )}
 
@@ -310,15 +427,18 @@ export default function BeritaContent({ params }) {
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest vertical-rl py-4">
                     Bagikan
                   </div>
-                  <a
-                    aria-label="Share on Twitter"
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(shareUrl)}`}
-                    target="_blank"
-                    rel="noreferrer"
+                  <button
+                    onClick={() =>
+                      shareLink(
+                        article.title,
+                        article.description,
+                        window.location.href
+                      )
+                    }
                     className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-black hover:text-white hover:border-black transition-all shadow-sm"
                   >
                     <Share2 className="w-4 h-4" />
-                  </a>
+                  </button>
                   <a
                     aria-label="Share on Facebook"
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
@@ -333,16 +453,39 @@ export default function BeritaContent({ params }) {
                 </div>
               </div>
 
-              {/* Text Content */}
+              {/* ========================================================================
+                CONTENT RENDERING AREA (MODIFIED FOR DRAFT.JS / RICH TEXT)
+                ========================================================================
+              */}
               <div className="flex-1 min-w-0">
                 <div
                   className="
-                    [&_p]:mb-5
-                    [&_p]:leading-relaxed
-                    [&_strong]:font-semibold
-                  "
+                      font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
+                      
+                      /* Paragraphs */
+                      [&>p]:mb-8 [&>p]:text-slate-700
+                      
+                      /* Headings */
+                      [&>h1]:text-4xl [&>h1]:font-black [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
+                      [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-14 [&>h2]:mb-6 [&>h2]:tracking-tight [&>h2]:leading-snug
+                      [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-slate-900 [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:tracking-tight
+                      [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
+                      
+                      /* --- PERBAIKAN LIST DI SINI (Global Fallback) --- */
+                      /* Menggunakan underscore (_) agar berlaku untuk nested list juga */
+                      [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_ul]:marker:text-slate-400
+                      [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-emerald-600 [&_ol]:marker:font-bold
+                      [&_li]:pl-2 [&_li]:mb-2
+                      
+                      /* Bold/Strong */
+                      [&_strong]:font-bold [&_strong]:text-slate-900
+                      
+                      /* Iframe/Embeds */
+                      [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-10 [&_iframe]:shadow-lg
+                    "
                 >
-                  {parse(article.content)}
+                  {/* Gunakan Custom Options di sini */}
+                  {parse(article.content, contentParserOptions)}
                 </div>
 
                 {/* Topics / Tags */}
@@ -359,7 +502,7 @@ export default function BeritaContent({ params }) {
                   </div>
                 )}
 
-                {/* Mobile Share (Visible only on small screens) */}
+                {/* Mobile Share */}
                 <div className="md:hidden mt-8 flex items-center gap-4 py-6 border-t border-slate-100">
                   <span className="text-sm font-bold text-slate-900">
                     Bagikan Artikel
@@ -407,7 +550,10 @@ export default function BeritaContent({ params }) {
                         placeholder="Alamat Email"
                         className="bg-white/10 border border-white/20 text-white placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full md:w-64 backdrop-blur-sm"
                       />
-                      <button onClick={() => router.push('/masuk')} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20">
+                      <button
+                        onClick={() => router.push('/masuk')}
+                        className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20"
+                      >
                         Daftar
                       </button>
                     </div>
@@ -569,7 +715,7 @@ export default function BeritaContent({ params }) {
                         href={`/berita/tag/${t.slug}`}
                         className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 text-xs font-medium hover:border-emerald-500 hover:text-emerald-600 transition-colors"
                       >
-                       #{t.name}
+                        #{t.name}
                       </Link>
                     ))}
                   </div>

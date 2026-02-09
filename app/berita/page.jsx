@@ -34,6 +34,7 @@ import animationData from '@/public/lottie/success.json';
 import { formatDate } from '@/utils/date';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton Shadcn
 import {
   Dialog,
   DialogClose,
@@ -80,27 +81,6 @@ const CATEGORIES = [
   'Life',
 ];
 
-const NOTIFICATIONS = [
-  {
-    id: 1,
-    text: 'Berita utama hari ini telah terbit.',
-    time: '2 mnt lalu',
-    unread: true,
-  },
-  {
-    id: 2,
-    text: 'Sarah Wijaya mengomentari artikel Anda.',
-    time: '1 jam lalu',
-    unread: true,
-  },
-  {
-    id: 3,
-    text: 'Update sistem berhasil diselesaikan.',
-    time: '5 jam lalu',
-    unread: false,
-  },
-];
-
 export default function PremiumNewsPage() {
   const [activeCategory, setActiveCategory] = useState('Semua');
   const [showModal, setShowModal] = useState(false);
@@ -114,6 +94,9 @@ export default function PremiumNewsPage() {
   const [topics, setTopics] = useState(null);
   const [popularArticles, setPopularArticles] = useState(null);
   const [highlight, setHighlight] = useState('');
+
+  // Flag loading state derived from data existence
+  const isLoading = articles === null;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -129,7 +112,10 @@ export default function PremiumNewsPage() {
         const tags_resp = await getTags();
         const topics_resp = await getTopics();
         const hightlight_ = await getHighlight();
-        setHighlight(hightlight_.highlight[0].text);
+        
+        if (hightlight_?.highlight?.[0]) {
+            setHighlight(hightlight_.highlight[0].text);
+        }
 
         // filter artikel jadi data yang lebih simpel
         const mappedArticles = mapArticlesToNews(data?.articles);
@@ -210,9 +196,14 @@ export default function PremiumNewsPage() {
               <span>Trending</span>
             </div>
             <div className="overflow-hidden whitespace-nowrap max-w-lg">
-              <div className="animate-marquee inline-block text-slate-900">
-                {highlight}
-              </div>
+              {/* Skeleton for Highlight */}
+              {!highlight ? (
+                 <Skeleton className="h-3 w-64 bg-slate-200" />
+              ) : (
+                <div className="animate-marquee inline-block text-slate-900">
+                  {highlight}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -253,7 +244,12 @@ export default function PremiumNewsPage() {
 
             {/* Main Nav - Minimalist */}
             <nav className="hidden lg:flex items-center gap-8">
-              {topics &&
+              {!topics ? (
+                 // Skeleton for Nav Items
+                 [1, 2, 3, 4, 5].map((i) => (
+                    <Skeleton key={i} className="h-4 w-16 bg-slate-100" />
+                 ))
+              ) : (
                 topics.map((item) => (
                   <button
                     key={item.id}
@@ -269,7 +265,8 @@ export default function PremiumNewsPage() {
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
                     )}
                   </button>
-                ))}
+                ))
+              )}
             </nav>
 
             {/* Header Actions */}
@@ -424,7 +421,17 @@ export default function PremiumNewsPage() {
           <section className="mb-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
               {/* Main Featured Article */}
-              {hasNews ? (
+              {isLoading ? (
+                // Skeleton Main Hero
+                <div className="lg:col-span-8 relative aspect-[16/10] md:aspect-[2/1] lg:aspect-auto">
+                    <Skeleton className="h-full w-full rounded-2xl bg-slate-200" />
+                    <div className="absolute bottom-6 left-6 w-3/4 space-y-3">
+                        <Skeleton className="h-4 w-24 bg-slate-300" />
+                        <Skeleton className="h-10 w-full bg-slate-300" />
+                        <Skeleton className="h-4 w-1/2 bg-slate-300" />
+                    </div>
+                </div>
+              ) : hasNews ? (
                 <Link
                   href={`/berita/${primary.slug}`}
                   className="lg:col-span-8 relative group overflow-hidden rounded-2xl bg-slate-100 aspect-[16/10] md:aspect-[2/1] lg:aspect-auto"
@@ -471,7 +478,22 @@ export default function PremiumNewsPage() {
 
               {/* Side Articles (Right Column) */}
               <div className="lg:col-span-4 flex flex-col gap-6">
-                {hasNews
+                {isLoading ? (
+                    // Skeleton Side Items
+                    [1, 2].map((i) => (
+                        <div key={i} className="flex-1 rounded-2xl bg-white border border-slate-100 p-6 flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="flex justify-between">
+                                    <Skeleton className="h-3 w-16 bg-slate-200" />
+                                    <Skeleton className="h-3 w-12 bg-slate-200" />
+                                </div>
+                                <Skeleton className="h-6 w-full bg-slate-200" />
+                                <Skeleton className="h-6 w-3/4 bg-slate-200" />
+                            </div>
+                            <Skeleton className="h-4 w-24 mt-4 bg-slate-200" />
+                        </div>
+                    ))
+                ) : hasNews
                   ? sideItems.map((item) => (
                       <Link
                         href={`/berita/${item.slug}`}
@@ -509,7 +531,12 @@ export default function PremiumNewsPage() {
           <div className="lg:col-span-8">
             {/* Filter Tabs - Clean Pill Style */}
             <div className="flex items-center gap-2 mb-10 overflow-x-auto no-scrollbar pb-2">
-              {categories &&
+              {!categories ? (
+                // Skeleton Categories
+                [1,2,3,4,5].map((i) => (
+                    <Skeleton key={i} className="h-8 w-24 rounded-full bg-slate-200 flex-shrink-0" />
+                ))
+              ) : (
                 categories.map((cat) => (
                   <button
                     key={cat.id}
@@ -522,12 +549,32 @@ export default function PremiumNewsPage() {
                   >
                     {cat.name}
                   </button>
-                ))}
+                ))
+              )}
             </div>
 
             {/* List Artikel - Editorial Layout */}
             <div className="space-y-12">
-              {filteredNews?.length > 0 ? (
+              {isLoading ? (
+                 // Skeleton Feed List
+                 [1, 2, 3].map((i) => (
+                    <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start border-b border-slate-100 pb-12">
+                         <div className="md:col-span-5 relative rounded-xl aspect-[16/10] overflow-hidden">
+                             <Skeleton className="h-full w-full bg-slate-200" />
+                         </div>
+                         <div className="md:col-span-7 flex flex-col gap-4">
+                             <div className="flex gap-2">
+                                <Skeleton className="h-4 w-16 bg-slate-200" />
+                                <Skeleton className="h-4 w-20 bg-slate-200" />
+                             </div>
+                             <Skeleton className="h-8 w-full bg-slate-200" />
+                             <Skeleton className="h-4 w-full bg-slate-200" />
+                             <Skeleton className="h-4 w-3/4 bg-slate-200" />
+                             <Skeleton className="h-3 w-20 bg-slate-200 mt-2" />
+                         </div>
+                    </div>
+                 ))
+              ) : filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
                   <article
                     key={news.id}
@@ -619,7 +666,18 @@ export default function PremiumNewsPage() {
               </div>
 
               <div className="flex flex-col gap-6">
-                {popularArticles?.length > 0 ? (
+                {isLoading ? (
+                    // Skeleton Popular
+                    [1, 2, 3, 4].map((i) => (
+                        <div key={i} className="flex gap-5 items-start">
+                            <Skeleton className="w-10 h-10 rounded-md bg-slate-200 shrink-0" />
+                            <div className="flex-1 space-y-2">
+                                <Skeleton className="h-4 w-full bg-slate-200" />
+                                <Skeleton className="h-3 w-1/2 bg-slate-200" />
+                            </div>
+                        </div>
+                    ))
+                ) : popularArticles?.length > 0 ? (
                   popularArticles.slice(0, 4).map((item, index) => (
                     <Link
                       href={`/berita/${item.slug}`}
@@ -651,27 +709,36 @@ export default function PremiumNewsPage() {
             </div>
 
             {/* Tags Cloud (Optional visual filler) */}
-            {tags && tags.length > 0 && (
-              <div>
-                <div className="flex items-center gap-4 mb-6">
+            <div>
+                 <div className="flex items-center gap-4 mb-6">
                   <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">
                     Topik Hangat
                   </h4>
                   <div className="h-px bg-slate-200 flex-1"></div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {tags.slice(0, 8).map((tag) => (
-                    <Link
-                      href={'/berita/tag/' + tag.slug}
-                      key={tag.id}
-                      className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
-                    >
-                      #{tag.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+                {!tags ? (
+                    // Skeleton Tags
+                    <div className="flex flex-wrap gap-2">
+                        {[1,2,3,4,5,6].map(i => (
+                            <Skeleton key={i} className="h-8 w-16 rounded-md bg-slate-200" />
+                        ))}
+                    </div>
+                ) : (
+                    tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {tags.slice(0, 8).map((tag) => (
+                            <Link
+                              href={'/berita/tag/' + tag.slug}
+                              key={tag.id}
+                              className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
+                            >
+                              #{tag.name}
+                            </Link>
+                          ))}
+                        </div>
+                    )
+                )}
+            </div>
           </aside>
         </section>
       </main>

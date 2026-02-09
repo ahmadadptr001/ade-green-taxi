@@ -4,6 +4,10 @@ export async function getUsers() {
   const resp = await axios.get('/api/users');
   return resp.data;
 }
+export async function getUserByEmail(email) {
+  const resp = await axios.get('/api/user/' + email);
+  return resp.data;
+}
 
 export async function getCountsAllUser() {
   try {

@@ -10,9 +10,10 @@ import {
   SendToBack,
 } from 'lucide-react';
 import Link from 'next/link';
-import { sendOTP } from '@/services/auth';
+import { otpValidate, sendOTP } from '@/services/auth';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
+import { getUserByEmail, getUserById, getUsers } from '@/services/users';
 
 export default function OTP() {
   const router = useRouter();
@@ -60,8 +61,8 @@ export default function OTP() {
           text: 'Silahkan cek email Anda untuk melihat kode OTP yang kami kirimkan',
           didOpen: () => {
             Swal.hideLoading();
-          }
-        })
+          },
+        });
       } catch (err) {
         Swal.fire({
           icon: 'error',
@@ -69,8 +70,9 @@ export default function OTP() {
           text: err.message,
           didOpen: () => {
             Swal.hideLoading();
-          }
+          },
         });
+        setIsLoading(false);
       }
     })();
     mount++;
@@ -93,30 +95,40 @@ export default function OTP() {
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
 
-    // Pindah ke input berikutnya jika ada value
+    // Pindah k input berikutnya jika ada value
     if (value && index < 5) {
       inputRefs.current[index + 1].focus();
     }
   };
 
   const handleKeyDown = (index, e) => {
-    // Kembali ke input sebelumnya jika backspace
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       inputRefs.current[index - 1].focus();
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const otpCode = otp.join('');
-    if (otpCode.length < 6) return;
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const otpCode = otp.join('');
+      if (otpCode.length < 6) return;
 
-    setIsLoading(true);
-    // Simulasi verifikasi server
-    setTimeout(() => {
+      setIsLoading(true);
+      const result = await otpValidate(email, otpCode);
       setIsLoading(false);
+      const dataUser = await getUserByEmail(email);
+      const user = dataUser.data;
+      localStorage.setItem('user', JSON.stringify(user));
+      if (!result) return;
       setIsVerified(true);
-    }, 2000);
+
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: err.message,
+      });
+      setIsLoading(false);
+    }
   };
 
   const handleResend = async () => {
@@ -250,7 +262,7 @@ export default function OTP() {
               </div>
               <Link
                 href={'/dashboard'}
-                className="w-full py-5 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-xl"
+                className="w-full py-5 px-3 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-xl"
               >
                 Masuk ke Dashboard
               </Link>
