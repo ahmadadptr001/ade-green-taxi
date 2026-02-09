@@ -47,7 +47,11 @@ export default function UserManagementPage() {
     try {
       setLoading(true);
       const resp = await updateRoleUser(id, role, email);
-      Swal.fire({ icon: 'success', text: resp.message });
+      Swal.fire({ icon: 'success', text: resp.message }).then(result => {
+        if (result.isConfirmed){
+          window.location.reload();
+        }
+      });
       setLoading(false);
     } catch (err) {
       Swal.fire({ icon: 'error', text: err.message });
