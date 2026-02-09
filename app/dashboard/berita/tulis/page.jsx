@@ -10,8 +10,8 @@ import {
   convertToRaw,
   SelectionState,
 } from 'draft-js';
-import DOMPurify from 'dompurify';
-const purify = DOMPurify(window);
+import DOMPurify from 'isomorphic-dompurify';
+const purify = DOMPurify;
 import 'draft-js/dist/Draft.css';
 import {
   Bold,

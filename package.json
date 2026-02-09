@@ -25,6 +25,7 @@
     "draftjs-to-html": "^0.9.1",
     "gsap": "^3.14.2",
     "html-react-parser": "^5.2.17",
+    "isomorphic-dompurify": "^3.0.0-rc.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
