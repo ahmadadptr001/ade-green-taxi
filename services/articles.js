@@ -44,7 +44,7 @@ export async function uploadMainImageArticle(file) {
 
     if (error) {
       console.error('Upload error:', error.message);
-      throw error
+      throw error;
     }
 
     // ambil public url
@@ -96,16 +96,27 @@ export async function insertDataArticleTopic(article_id, topic_id) {
 }
 
 export async function updateViewArticle(view, slug) {
-  try {
     const response = await axios.post('/api/article/update/view', {
       view,
       slug,
     });
-    if (!response.statusText) throw response;
     return response.data;
-  } catch (err) {
-    throw err;
-  }
+}
+
+export async function updateIsLikeArticle(isLiked, slug) {
+  const response = await axios.post('/api/article/update/like', {
+    isLiked,
+    slug,
+  });
+  return response.data;
+}
+
+export async function updateIsBookmarkedArticle(isBookmarked, slug) {
+  const response = await axios.post('/api/article/update/bookmark', {
+    isBookmarked,
+    slug,
+  });
+  return response.data;
 }
 
 export async function getCategories() {
@@ -146,7 +157,6 @@ export async function getArticlesByTopicSlug(slug) {
   }
 }
 
-
 export async function getHighlight() {
   try {
     const response = await axios.get('/api/articles/highlight/');
@@ -156,4 +166,3 @@ export async function getHighlight() {
     throw err;
   }
 }
-

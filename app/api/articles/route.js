@@ -12,6 +12,8 @@ export async function GET() {
       published_at,
       views,
       img,
+      isLiked,
+      isBookmarked,
       article_categories (
         categories(
           id,

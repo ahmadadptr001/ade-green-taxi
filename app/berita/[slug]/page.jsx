@@ -9,14 +9,16 @@ import {
   ArrowRight,
   Bookmark,
   TrendingUp,
-  Quote, // Icon tambahan untuk blockquote
-  ExternalLink, // Icon tambahan untuk link
+  Quote,
+  ExternalLink,
+  Heart,
 } from 'lucide-react';
-import { getArticles, updateViewArticle } from '@/services/articles';
+import { getArticles, updateIsBookmarkedArticle, updateIsLikeArticle, updateViewArticle } from '@/services/articles';
 import { formatDate } from '@/utils/date';
-import parse, { domToReact } from 'html-react-parser'; // Import domToReact
+import parse, { domToReact } from 'html-react-parser';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 async function shareLink(title, description, url) {
   if (!url) return;
@@ -45,11 +47,12 @@ export default function BeritaContent({ params }) {
   const [notFound, setNotFound] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  const [isLiked, setIsLiked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
   const contentParserOptions = {
     replace: (domNode) => {
-      // ... (Blockquote, Img, Link tetap sama seperti sebelumnya) ...
-
-      // Handle Blockquotes (Kutipan)
+      // Handle Blockquotes
       if (domNode.name === 'blockquote') {
         return (
           <div className="my-8 pl-6 border-l-4 border-emerald-500 bg-slate-50 py-4 pr-4 rounded-r-lg relative overflow-hidden group">
@@ -83,7 +86,6 @@ export default function BeritaContent({ params }) {
 
       // Handle Links
       if (domNode.name === 'a') {
-        // ... (kode link tetap sama)
         const href = domNode.attribs.href || '#';
         const isInternal = href.startsWith('/');
         const className =
@@ -109,31 +111,21 @@ export default function BeritaContent({ params }) {
         );
       }
 
-      // --- PERBAIKAN UTAMA DI SINI (LIST) ---
-
-      // Handle Unordered Lists (Bullet Points)
+      // Handle Lists
       if (domNode.name === 'ul') {
         return (
-          // pl-6 (padding-left 1.5rem) membuat list menjorok ke dalam
-          // list-disc memunculkan bullet points
           <ul className="my-6 pl-6 space-y-2 list-disc list-outside text-slate-700 marker:text-slate-400">
             {domToReact(domNode.children, contentParserOptions)}
           </ul>
         );
       }
-
-      // Handle Ordered Lists (Angka 1. 2. 3.)
       if (domNode.name === 'ol') {
         return (
-          // pl-6 membuat list menjorok
-          // list-decimal memunculkan angka
           <ol className="my-6 pl-6 space-y-2 list-decimal list-outside text-slate-700 marker:text-emerald-600 marker:font-bold">
             {domToReact(domNode.children, contentParserOptions)}
           </ol>
         );
       }
-
-      // Handle List Items
       if (domNode.name === 'li') {
         return (
           <li className="pl-1 leading-relaxed">
@@ -144,11 +136,6 @@ export default function BeritaContent({ params }) {
     },
   };
 
-  // ---------------------------------------------------------------------------
-  // LOGIC FETCHING (TIDAK DIUBAH)
-  // ---------------------------------------------------------------------------
-
-  // Resolve params
   useEffect(() => {
     let mounted = true;
     const resolveParams = async () => {
@@ -167,7 +154,6 @@ export default function BeritaContent({ params }) {
     };
   }, [params]);
 
-  // Fetch articles
   useEffect(() => {
     let mounted = true;
     const fetchData = async () => {
@@ -181,6 +167,8 @@ export default function BeritaContent({ params }) {
         if (slug) {
           const found = articles.find((a) => a.slug === slug) || null;
           setArticle(found);
+          setIsLiked(found.isLiked);
+          setIsBookmarked(found.isBookmarked);
           if (!Boolean(found)) {
             setNotFound(false);
             return;
@@ -211,7 +199,6 @@ export default function BeritaContent({ params }) {
     };
   }, [slug]);
 
-  // Reading progress
   useEffect(() => {
     const handleScroll = () => {
       const doc = document.documentElement;
@@ -225,7 +212,6 @@ export default function BeritaContent({ params }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Derived data
   const category = useMemo(
     () => article?.article_categories?.[0]?.categories?.name ?? 'Politik',
     [article]
@@ -345,6 +331,29 @@ export default function BeritaContent({ params }) {
     );
   }
 
+  const handleBookmarked = async () => {
+    setIsBookmarked(!isBookmarked);
+    try {
+      await updateIsBookmarkedArticle(!isBookmarked, slug);
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: err.message,
+      });
+    }
+  };
+  const handleIsLiked = async () => {
+    setIsLiked(!isLiked);
+    try {
+      await updateIsLikeArticle(!isLiked, slug);
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: err.message,
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
       {/* Scroll Progress Bar */}
@@ -421,9 +430,40 @@ export default function BeritaContent({ params }) {
 
             {/* Article Body */}
             <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-              {/* Left Side: Share (Desktop Sticky) */}
+              {/* Left Side: Share & Actions (Desktop Sticky) */}
               <div className="hidden md:block md:w-12 flex-shrink-0">
                 <div className="sticky top-32 flex flex-col gap-4 items-center">
+                  <div className="flex flex-col gap-3 pb-6 border-b border-slate-100 w-full items-center">
+                    <button
+                      onClick={handleIsLiked}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shadow-sm ${
+                        isLiked
+                          ? 'bg-red-50 border-red-200 text-red-500'
+                          : 'bg-white border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200'
+                      }`}
+                      title="Suka artikel ini"
+                    >
+                      <Heart
+                        className={`w-5 h-5 ${isLiked ? 'fill-red-500' : ''}`}
+                      />
+                    </button>
+
+                    <button
+                      onClick={handleBookmarked}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shadow-sm ${
+                        isBookmarked
+                          ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
+                          : 'bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200'
+                      }`}
+                      title="Simpan artikel"
+                    >
+                      <Bookmark
+                        className={`w-5 h-5 ${isBookmarked ? 'fill-indigo-600' : ''}`}
+                      />
+                    </button>
+                  </div>
+                  {/* ------------------------------------- */}
+
                   <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest vertical-rl py-4">
                     Bagikan
                   </div>
@@ -453,38 +493,22 @@ export default function BeritaContent({ params }) {
                 </div>
               </div>
 
-              {/* ========================================================================
-                CONTENT RENDERING AREA (MODIFIED FOR DRAFT.JS / RICH TEXT)
-                ========================================================================
-              */}
+              {/* Content Rendering Area */}
               <div className="flex-1 min-w-0">
                 <div
-                  className="
-                      font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
-                      
-                      /* Paragraphs */
+                  className="font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
                       [&>p]:mb-8 [&>p]:text-slate-700
-                      
-                      /* Headings */
                       [&>h1]:text-4xl [&>h1]:font-black [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
                       [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-14 [&>h2]:mb-6 [&>h2]:tracking-tight [&>h2]:leading-snug
                       [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-slate-900 [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:tracking-tight
                       [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
-                      
-                      /* --- PERBAIKAN LIST DI SINI (Global Fallback) --- */
-                      /* Menggunakan underscore (_) agar berlaku untuk nested list juga */
                       [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_ul]:marker:text-slate-400
                       [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-emerald-600 [&_ol]:marker:font-bold
                       [&_li]:pl-2 [&_li]:mb-2
-                      
-                      /* Bold/Strong */
                       [&_strong]:font-bold [&_strong]:text-slate-900
-                      
-                      /* Iframe/Embeds */
                       [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-10 [&_iframe]:shadow-lg
                     "
                 >
-                  {/* Gunakan Custom Options di sini */}
                   {parse(article.content, contentParserOptions)}
                 </div>
 
@@ -502,30 +526,68 @@ export default function BeritaContent({ params }) {
                   </div>
                 )}
 
-                {/* Mobile Share */}
-                <div className="md:hidden mt-8 flex items-center gap-4 py-6 border-t border-slate-100">
-                  <span className="text-sm font-bold text-slate-900">
-                    Bagikan Artikel
-                  </span>
-                  <div className="flex gap-2">
-                    <a
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-2 bg-slate-100 rounded-lg text-slate-600"
-                    >
-                      <Share2 className="w-5 h-5" />
-                    </a>
-                    <a
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-2 bg-slate-100 rounded-lg text-slate-600"
-                    >
-                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                      </svg>
-                    </a>
+                {/* Mobile Actions & Share */}
+                <div className="md:hidden mt-8 py-6 border-t border-slate-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-sm font-bold text-slate-900">
+                      Interaksi
+                    </span>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleIsLiked}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                          isLiked
+                            ? 'bg-red-50 text-red-600'
+                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Heart
+                          className={`w-5 h-5 ${isLiked ? 'fill-red-600' : ''}`}
+                        />
+                      </button>
+                      <button
+                        onClick={handleBookmarked}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                          isBookmarked
+                            ? 'bg-emerald-50 text-emerald-600'
+                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Bookmark
+                          className={`w-5 h-5 ${isBookmarked ? 'fill-emerald-600' : ''}`}
+                        />
+                      </button>
+                    </div>
+                    {/* -------------------------------------- */}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-slate-900">
+                      Bagikan
+                    </span>
+                    <div className="flex gap-2">
+                      <a
+                        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(shareUrl)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-2 bg-slate-100 rounded-lg text-slate-600"
+                      >
+                        <Share2 className="w-5 h-5" />
+                      </a>
+                      <a
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-2 bg-slate-100 rounded-lg text-slate-600"
+                      >
+                        <svg
+                          className="w-5 h-5 fill-current"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -756,30 +818,44 @@ export default function BeritaContent({ params }) {
                   </li>
                   <li>
                     <Link href="/opini" className="hover:text-emerald-600">
-                      Kolom Opini
+                      Opini & Esai
                     </Link>
                   </li>
                 </ul>
               </div>
               <div>
-                <h6 className="font-bold text-slate-900 mb-4">Hubungi Kami</h6>
-                <div className="text-sm text-slate-500 space-y-2">
-                  <p>redaksi@adegreen.id</p>
-                  <p>+62 21 5555 0000</p>
-                </div>
+                <h6 className="font-bold text-slate-900 mb-4">Perusahaan</h6>
+                <ul className="space-y-3 text-sm text-slate-500">
+                  <li>
+                    <Link href="/tentang" className="hover:text-emerald-600">
+                      Tentang Kami
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/karir" className="hover:text-emerald-600">
+                      Karir
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/kontak" className="hover:text-emerald-600">
+                      Kontak
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-
-          <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-400">
-            <div>&copy; {new Date().getFullYear()} ADEGREEN Media Group.</div>
+          <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+            <div>
+              &copy; {new Date().getFullYear()} AdeGreen. All rights reserved.
+            </div>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-slate-600">
-                Kebijakan Privasi
-              </a>
-              <a href="#" className="hover:text-slate-600">
-                Syarat Ketentuan
-              </a>
+              <Link href="/privacy" className="hover:text-slate-600">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="hover:text-slate-600">
+                Terms of Service
+              </Link>
             </div>
           </div>
         </div>
