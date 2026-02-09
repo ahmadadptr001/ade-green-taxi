@@ -1,6 +1,8 @@
 'use client';
 import {
+  Bookmark,
   ChevronsUpDown,
+  Heart,
   LayoutDashboard,
   MapPinned,
   Newspaper,
@@ -59,6 +61,16 @@ export default function AppSidebar() {
       icon: Newspaper,
     },
     {
+      title: 'Disukai',
+      url: '/dashboard/disukai',
+      icon: Heart,
+    },
+    {
+      title: 'Disimpan',
+      url: '/dashboard/disimpan',
+      icon: Bookmark,
+    },
+    {
       title: 'Tulis Berita',
       url: '/dashboard/berita/tulis',
       icon: PenLine,
@@ -70,9 +82,12 @@ export default function AppSidebar() {
     },
   ]);
   // filteer item features berdasarkan role
-  const [mounted, setMounted] = useState(true)
+  const [mounted, setMounted] = useState(true);
   useEffect(() => {
-    if (!role) {setMounted(false);return}
+    if (!role) {
+      setMounted(false);
+      return;
+    }
     if (role === 'pengunjung') {
       setItemsFeatures([
         {
@@ -80,8 +95,18 @@ export default function AppSidebar() {
           url: '/dashboard/berita',
           icon: Newspaper,
         },
+        {
+          title: 'Disukai',
+          url: '/dashboard/disukai',
+          icon: Heart,
+        },
+        {
+          title: 'Disimpan',
+          url: '/dashboard/disimpan',
+          icon: Bookmark,
+        },
       ]);
-      router.replace('/dashboard/berita')
+      router.replace('/dashboard/berita');
     }
   }, [mounted]);
 
