@@ -7,7 +7,8 @@ export async function POST(req) {
     const { data: dataPorfile, error } = await supabase_coolify
       .from('profiles')
       .insert(data)
-      .select();
+      .select()
+      .maybeSingle()
 
     if (error)
       return NextResponse.json({ message: error.message }, { status: 500 });
@@ -16,7 +17,7 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }

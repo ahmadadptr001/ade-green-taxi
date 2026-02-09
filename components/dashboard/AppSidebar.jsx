@@ -41,25 +41,41 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
 
-const itemsFeatures = [
-  { title: 'Dashboard Utama', url: '/dashboard', icon: LayoutDashboard },
-  {
-    title: 'Feed Berita',
-    url: '/dashboard/berita',
-    icon: Newspaper,
-  },
-  {
-    title: 'Tulis Berita',
-    url: '/dashboard/berita/tulis',
-    icon: PenLine,
-  },
-];
-
 export default function AppSidebar() {
   const user = useUser();
+  const role = user?.role;
+  const status = user?.status;
   const router = useRouter();
   const [width, setWidth] = useState(0);
   const [pathname, setPathname] = useState('/dashboard');
+  const [itemsFeatures, setItemsFeatures] = useState([
+    { title: 'Dashboard Utama', url: '/dashboard', icon: LayoutDashboard },
+    {
+      title: 'Feed Berita',
+      url: '/dashboard/berita',
+      icon: Newspaper,
+    },
+    {
+      title: 'Tulis Berita',
+      url: '/dashboard/berita/tulis',
+      icon: PenLine,
+    },
+  ]);
+  // filteer item features berdasarkan role
+  const [mounted, setMounted] = useState(true)
+  useEffect(() => {
+    if (!role) {setMounted(false);return}
+    if (role === 'pengunjung') {
+      setItemsFeatures([
+        {
+          title: 'Feed Berita',
+          url: '/dashboard/berita',
+          icon: Newspaper,
+        },
+      ]);
+      router.replace('/dashboard/berita')
+    }
+  }, [mounted]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -129,7 +145,7 @@ export default function AppSidebar() {
                           ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
                           : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
                       }
-                      onClick={(e) => setPathname(e.target.href)}
+                      onClick={() => setPathname(item.url)}
                     >
                       <div className="flex items-center justify-between gap-2 w-full">
                         <div className="flex items-center gap-2">
@@ -147,7 +163,9 @@ export default function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
+        <SidebarGroup
+          className={role === 'admin' || role === 'pengunjung' ? 'hidden' : ''}
+        >
           <SidebarGroupLabel
             className={'text-sm font-bold text-slate-400 mb-3'}
           >
@@ -169,7 +187,7 @@ export default function AppSidebar() {
                         ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
                         : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
                     }
-                    onClick={(e) => setPathname(e.target.href)}
+                    onClick={() => setPathname('/dashboard/pengguna')}
                   >
                     <div className="flex items-center justify-between gap-2 w-full">
                       <div className="flex items-center gap-2">
@@ -242,7 +260,7 @@ export default function AppSidebar() {
                   <path d="M21 12H9"></path>
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 </svg>
-                <span className='line-clamp-1'> Keluar</span>
+                <span className="line-clamp-1"> Keluar</span>
               </button>
             </div>
           </SidebarMenuItem>

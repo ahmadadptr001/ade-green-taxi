@@ -126,7 +126,7 @@ export default function UserManagementPage() {
   // --- END LOGIC AREA ---
 
   return (
-    <main className="min-h-screen w-full bg-[#F8FAFC] p-4 lg:p-8 pt-24 lg:pt-12">
+    <main className="min-h-screen w-full bg-[#F8FAFC] p-4 lg:p-8 pt-12">
       <div className="max-w-6xl mx-auto">
         {/* Header Section with Modern Gradient Text */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">

@@ -32,6 +32,7 @@ export async function daftar(payload) {
     password: payload.password,
     role: payload.role,
     phone: payload.whatsapp,
+    status: payload.status
   }
   try {
     const resp = await axios.post('/api/auth/daftar', newPayload);

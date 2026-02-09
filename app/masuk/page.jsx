@@ -54,17 +54,28 @@ export default function LoginPaeg() {
     try {
       const dataUser = await login(formData.email, formData.password);
       setIsLoading(false);
+      if (dataUser.data.status == 'ditangguhkan') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Akun Ditangguhkan',
+          text: 'Akun Anda sementara ditangguhkan dan tidak dapat masuk ke sistem. Silakan hubungi Customer Service untuk informasi lebih lanjut.',
+          confirmButtonText: 'Mengerti',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+        return;
+      }
       Swal.fire({
         icon: 'success',
         title: 'Login Berhasil!',
         text: 'Berhasil login ke akun Anda',
-        confirmButtonText: "Masuk ke dashboard",
+        confirmButtonText: 'Masuk ke dashboard',
       }).then((result) => {
-        if (result.isConfirmed){
-          localStorage.setItem('user', JSON.stringify(dataUser.data))
-          router.replace('/dashboard')
+        if (result.isConfirmed) {
+          localStorage.setItem('user', JSON.stringify(dataUser.data));
+          router.replace('/dashboard');
         }
-      })
+      });
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -74,7 +85,6 @@ export default function LoginPaeg() {
       });
       setIsLoading(false);
     }
-
   };
 
   return (
@@ -85,7 +95,7 @@ export default function LoginPaeg() {
           src="/bg-auth.jpg"
           alt="Environmental Background"
           className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-10000 hover:scale-105"
-          loading='lazy'
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
         <div className="relative z-10 text-center p-12">

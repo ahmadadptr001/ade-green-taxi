@@ -26,7 +26,7 @@ export default function App() {
     whatsapp: '',
     password: '',
     role: 'pengunjung',
-    status: 'aktif' // status nya hanya dua yaitu "aktif" atau "ditangguhkan"
+    status: 'aktif', // status nya hanya dua yaitu "aktif" atau "ditangguhkan"
   });
   const [isLoading, setIsLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
@@ -40,7 +40,8 @@ export default function App() {
       formData.email.includes('@') && formData.email.includes('.');
     const isWaValid =
       formData.whatsapp.length >= 9 && formData.whatsapp[0] === '8';
-    setIsValid(isNameValid && isEmailValid && isWaValid);
+    const isPasswordValid = formData.password.length >= 6;
+    setIsValid(isNameValid && isEmailValid && isWaValid && isPasswordValid);
   }, [formData]);
 
   const handleChange = (field, value) => {
