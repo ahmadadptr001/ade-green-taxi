@@ -10,10 +10,13 @@ import {
   Route,
   Settings,
   ShieldUser,
+  Text,
   User2,
   UserPlus,
   Users,
   Users2,
+  WholeWord,
+  Zap,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -59,6 +62,11 @@ export default function AppSidebar() {
       title: 'Tulis Berita',
       url: '/dashboard/berita/tulis',
       icon: PenLine,
+    },
+    {
+      title: 'Pesan Highlight',
+      url: '/dashboard/berita/pesan',
+      icon: Zap,
     },
   ]);
   // filteer item features berdasarkan role

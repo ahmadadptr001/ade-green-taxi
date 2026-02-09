@@ -145,3 +145,15 @@ export async function getArticlesByTopicSlug(slug) {
     throw err;
   }
 }
+
+
+export async function getHighlight() {
+  try {
+    const response = await axios.get('/api/articles/highlight/');
+    if (!response.statusText) throw response;
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+

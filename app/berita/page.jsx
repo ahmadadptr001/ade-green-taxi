@@ -25,6 +25,7 @@ import {
 import {
   getArticles,
   getCategories,
+  getHighlight,
   getTags,
   getTopics,
 } from '@/services/articles';
@@ -112,6 +113,7 @@ export default function PremiumNewsPage() {
   const [tags, setTags] = useState(null);
   const [topics, setTopics] = useState(null);
   const [popularArticles, setPopularArticles] = useState(null);
+  const [highlight, setHighlight] = useState('');
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -126,6 +128,8 @@ export default function PremiumNewsPage() {
         const categories_resp = await getCategories();
         const tags_resp = await getTags();
         const topics_resp = await getTopics();
+        const hightlight_ = await getHighlight();
+        setHighlight(hightlight_.highlight[0].text);
 
         // filter artikel jadi data yang lebih simpel
         const mappedArticles = mapArticlesToNews(data?.articles);
@@ -207,8 +211,7 @@ export default function PremiumNewsPage() {
             </div>
             <div className="overflow-hidden whitespace-nowrap max-w-lg">
               <div className="animate-marquee inline-block text-slate-900">
-                Laporan Khusus: Transisi Energi Terbarukan di Asia Tenggara •
-                Indeks Saham Gabungan Menguat 0.5% •
+                {highlight}
               </div>
             </div>
           </div>

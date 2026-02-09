@@ -14,11 +14,10 @@ import { getArticles, updateViewArticle } from '@/services/articles';
 import { formatDate } from '@/utils/date';
 import parse from 'html-react-parser';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function BeritaContent({ params }) {
-  // -----------------------
-  // ALL HOOKS MUST BE HERE (LOGIC UNCHANGED)
-  // -----------------------
+  const router = useRouter()
   const [slug, setSlug] = useState(null);
   const [allArticles, setAllArticles] = useState([]);
   const [article, setArticle] = useState(null);
@@ -408,7 +407,7 @@ export default function BeritaContent({ params }) {
                         placeholder="Alamat Email"
                         className="bg-white/10 border border-white/20 text-white placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full md:w-64 backdrop-blur-sm"
                       />
-                      <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20">
+                      <button onClick={() => router.push('/masuk')} className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20">
                         Daftar
                       </button>
                     </div>

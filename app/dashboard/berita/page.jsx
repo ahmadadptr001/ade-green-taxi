@@ -17,6 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   getArticles,
   getCategories,
+  getHighlight,
   getTags,
   getTopics,
 } from '@/services/articles';
@@ -40,6 +41,7 @@ export default function FeedBeritaComponent() {
   const [selectedTopic, setSelectedTopic] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [highlight, setHighlight] = useState('');
 
   const [categories, setCategories] = useState([]);
   const [topics, setTopics] = useState([]);
@@ -61,6 +63,7 @@ export default function FeedBeritaComponent() {
         const categories_ = await getCategories();
         const topics_ = await getTopics();
         const tags_ = await getTags();
+        const highlight_ = await getHighlight();
 
         if (!mounted) return;
 
@@ -68,6 +71,7 @@ export default function FeedBeritaComponent() {
         setCategories(categories_.categories ?? []);
         setTopics(topics_.topics ?? []);
         setTags(tags_.tags ?? []);
+        setHighlight(highlight_.highlight[0].text);
       } catch (err) {
         Swal.fire({
           icon: 'error',
@@ -157,7 +161,7 @@ export default function FeedBeritaComponent() {
           </div>
           <marquee behavior="scroll" direction="right" scrollamount={4}>
             <p className="font-bold text-xs text-slate-700">
-              Kota kendari memiliki ikonik bersejarah dan dinamai tugu
+              {highlight}
             </p>
           </marquee>
         </div>
