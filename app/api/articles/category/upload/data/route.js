@@ -8,16 +8,19 @@ export async function POST(req) {
       categorie_id,
       article_id: artID,
     });
+    console.log(categorie_id, artID);
 
-    if (error) {
-      return NextResponse.json({ message: error.message }, { status: 500 });
-    }
+    console.log('error log: ', error);
+    // if (error) {
+    //   return NextResponse.json({ message: error.message }, { status: 400 });
+    // }
 
     return NextResponse.json(
       { message: 'Berhasil menautkan kategori ke dalam artikel' },
       { status: 200 }
     );
   } catch (err) {
+    console.log('error log: ', err)
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }

@@ -9,9 +9,9 @@ export async function POST(req) {
       topic_id
     });
 
-    if (error) {
-      return NextResponse.json({ message: error.message }, { status: 500 });
-    }
+    // if (error) {
+    //   return NextResponse.json({ message: error.message }, { status: 500 });
+    // }
 
     return NextResponse.json(
       { message: 'Berhasil menautkan topik ke dalam artikel' },

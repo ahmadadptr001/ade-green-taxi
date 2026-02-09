@@ -58,9 +58,9 @@ export default function RichEditorWithMeta() {
     EditorState.createEmpty()
   );
   const [title, setTitle] = useState('');
-  const [topic, setTopic] = useState('Umum');
+  const [topic, setTopic] = useState(null);
   const [deskripsi, setDeskripsi] = useState('');
-  const [category, setCategory] = useState('Artikel');
+  const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([{ id: 1, name: '', slug: '' }]);
   const [topics, setTopics] = useState([{ id: 1, name: '', slug: '' }]);
   const [tags, setTags] = useState([]);
@@ -427,6 +427,20 @@ export default function RichEditorWithMeta() {
       Swal.fire({
         icon: 'warning',
         title: 'Judul tidak boleh kosong!',
+      });
+      return;
+    }
+    if (!category) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Kategori harus dipilih!',
+      });
+      return;
+    }
+    if (!topic) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Topik harus dipilih!',
       });
       return;
     }
