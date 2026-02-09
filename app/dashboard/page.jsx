@@ -67,7 +67,6 @@ export default function DashboardPage() {
         const dataCountsResp = await getCountsAllArticle();
         const dataCountsUserActiveResp = await getCountsAllUserByActive();
         const dataCountsUserSuspendedResp = await getCountsAllUserBySuspended();
-
         setDashboardItems((prev) =>
           prev.map((item) =>
             item.name === 'Total Views'
@@ -76,7 +75,7 @@ export default function DashboardPage() {
                 ? { ...item, total: dataCountsResp.counts }
                 : item.name === 'User Aktif'
                   ? { ...item, total: dataCountsUserActiveResp.counts }
-                  : item.nmae === 'User Ditangguhkan'
+                  : item.name === 'Ditangguhkan'
                     ? { ...item, total: dataCountsUserSuspendedResp.counts }
                     : item
           )

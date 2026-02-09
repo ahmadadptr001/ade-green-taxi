@@ -1,13 +1,8 @@
-import axios from "axios"
+import axios from 'axios';
 
 export async function getUsers() {
-  try {
-    const resp = await axios.get('/api/users')
-    if (resp?.statusText === 200) return resp.data;
-    throw new Error(resp.data.message )
-  } catch (err) {
-    throw err
-  }
+  const resp = await axios.get('/api/users');
+  return resp.data;
 }
 
 export async function getCountsAllUser() {
@@ -38,4 +33,17 @@ export async function getCountsAllUserBySuspended() {
   } catch (err) {
     throw err;
   }
+}
+
+export async function updateRoleUser(id, role, email) {
+  const response = await axios.post('/api/user/role/update', { id, role, email });
+  return response.data;
+}
+export async function updateStatusUser(id, status, email) {
+  const response = await axios.post('/api/user/status/update', { id, status, email });
+  return response.data;
+}
+export async function deleteUser(id) {
+  const response = await axios.post('/api/user/delete', { id });
+  return response.data;
 }

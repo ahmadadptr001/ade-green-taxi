@@ -163,9 +163,9 @@ export default function AppSidebar() {
                   }
                 >
                   <Link
-                    href="/dashboard/user"
+                    href="/dashboard/pengguna"
                     className={
-                      pathname === '/dashboard/user'
+                      pathname === '/dashboard/pengguna'
                         ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
                         : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
                     }
@@ -176,7 +176,7 @@ export default function AppSidebar() {
                         <Users2 size={20} />
                         <span className="line-clamp-1">Management User</span>
                       </div>
-                      {pathname == '/dashboard/user' && (
+                      {pathname == '/dashboard/pengguna' && (
                         <div className="w-2 h-2 rounded-full bg-sky-600"></div>
                       )}
                     </div>
