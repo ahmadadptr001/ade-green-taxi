@@ -148,7 +148,7 @@ export default function FeedBeritaComponent() {
   return (
     <div className="h-[calc(100vh-40px)] bg-sky-50/50 overflow-auto text-neutral-900 font-sans selection:bg-black selection:text-white">
       {/* ================= HEADER ================= */}
-      <div className="relative pt-16 pb-6 px-4 text-center overflow-hidden">
+      <div className="relative pt-6 pb-6 px-4 text-center overflow-hidden">
         <div className="flex items-center gap-4 bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg shadow-indigo-100/50 rounded-2xl p-2 mb-2 overflow-hidden relative">
           {/* Badge Live */}
           <div className="flex items-center gap-2 bg-red-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider shrink-0 shadow-md animate-pulse">

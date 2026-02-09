@@ -26,6 +26,45 @@ export async function getArticles() {
   return response.data;
 }
 
+export async function uploadMainImageArticle(file_image) {
+  const formData = new FormData();
+  formData.append('file', file_image);
+  console.log(file_image);
+  const response = await axios.post('/api/article/upload/image', formData, {});
+  if (!response.statusText) throw response;
+  return response.data;
+}
+
+export async function insertDataArticle(payload) {
+  const response = await axios.post('/api/article/upload/data', { payload });
+  if (!response.statusText) throw response;
+  return response.data;
+}
+
+export async function insertDataTag(tags, article_id) {
+  // tags = [..,...,...]
+  const response = await axios.post('/api/articles/tag/upload/data', { tags, article_id });
+  if (!response.statusText) throw response;
+  return response.data;
+}
+export async function insertDataArticleCategorie(categorie_id, article_id) {
+  const response = await axios.post('/api/articles/category/upload/data', {
+    categorie_id,
+    artID: article_id,
+  });
+  if (!response.statusText) throw response;
+  return response.data;
+}
+
+export async function insertDataArticleTopic(article_id, topic_id) {
+  const response = await axios.post('/api/articles/topic/upload/data', {
+   artID: article_id,
+    topic_id,
+  });
+  if (!response.statusText) throw response;
+  return response.data;
+}
+
 export async function updateViewArticle(view, slug) {
   try {
     const response = await axios.post('/api/article/update/view', {
@@ -40,23 +79,23 @@ export async function updateViewArticle(view, slug) {
 }
 
 export async function getCategories() {
-    const response = await axios.get('/api/articles/categories');
-    return response.data;
+  const response = await axios.get('/api/articles/categories');
+  return response.data;
 }
 
 export async function getTags() {
-    const response = await axios.get('/api/articles/tags');
-    return response.data;
+  const response = await axios.get('/api/articles/tags');
+  return response.data;
 }
 
 export async function getTopics() {
-    const response = await axios.get('/api/articles/topics');
-    return response.data;
+  const response = await axios.get('/api/articles/topics');
+  return response.data;
 }
 
 export async function getArticlesByCategorySlug(slug) {
-    const response = await axios.get('/api/articles/category/' + slug);
-    return response.data;
+  const response = await axios.get('/api/articles/category/' + slug);
+  return response.data;
 }
 export async function getArticlesByTagSlug(slug) {
   try {

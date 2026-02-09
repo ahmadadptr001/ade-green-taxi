@@ -59,11 +59,11 @@ export default function BeritaContent({ params }) {
         if (slug) {
           const found = articles.find((a) => a.slug === slug) || null;
           setArticle(found);
-          if (!Boolean(found)){
+          if (!Boolean(found)) {
             setNotFound(false);
-            return
+            return;
           }
-          await updateViewArticle(found.views, found.slug)
+          await updateViewArticle(found.views, found.slug);
         } else {
           setArticle(null);
           setNotFound(true);
@@ -245,7 +245,7 @@ export default function BeritaContent({ params }) {
         {/* Navigation & Breadcrumbs */}
         <div className="max-w-7xl mx-auto mb-12">
           <button
-          onClick={() => history.back()}
+            onClick={() => history.back()}
             className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-emerald-600 transition-colors"
           >
             <div className="p-2 rounded-full bg-slate-50 group-hover:bg-emerald-50 transition-colors">
@@ -337,13 +337,11 @@ export default function BeritaContent({ params }) {
               {/* Text Content */}
               <div className="flex-1 min-w-0">
                 <div
-                  className="prose prose-lg prose-slate max-w-none 
-                  prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900 
-                  prose-p:leading-relaxed prose-p:text-slate-700 
-                  prose-a:text-emerald-600 prose-a:font-bold prose-a:no-underline hover:prose-a:text-emerald-500 hover:prose-a:underline
-                  prose-img:rounded-2xl prose-img:shadow-lg
-                  prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:bg-slate-50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:font-medium
-                "
+                  className="
+                    [&_p]:mb-5
+                    [&_p]:leading-relaxed
+                    [&_strong]:font-semibold
+                  "
                 >
                   {parse(article.content)}
                 </div>
@@ -489,7 +487,7 @@ export default function BeritaContent({ params }) {
                             src={item.img}
                             alt={item.title}
                             className="w-full h-full object-cover"
-                            loading='lazy'
+                            loading="lazy"
                           />
                         </div>
                         <div>
@@ -563,7 +561,7 @@ export default function BeritaContent({ params }) {
               {tags.length > 0 && (
                 <div>
                   <h5 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
-                    Tags Populer
+                    Tags
                   </h5>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((t) => (
@@ -572,7 +570,7 @@ export default function BeritaContent({ params }) {
                         href={`/berita/tag/${t.slug}`}
                         className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 text-xs font-medium hover:border-emerald-500 hover:text-emerald-600 transition-colors"
                       >
-                        {t.name}
+                       #{t.name}
                       </Link>
                     ))}
                   </div>
