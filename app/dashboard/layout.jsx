@@ -38,5 +38,5 @@ export const metadata = {
 };
 
 export default function RootLayout({children}) {
-  return <LayoutSidebar children={children}/>;
+  return <LayoutSidebar children={children} />;
 }

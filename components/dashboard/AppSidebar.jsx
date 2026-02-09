@@ -47,7 +47,7 @@ export default function AppSidebar() {
   const status = user?.status;
   const router = useRouter();
   const [width, setWidth] = useState(0);
-  const [pathname, setPathname] = useState('/dashboard');
+  const [pathname, setPathname] = useState('');
   const [itemsFeatures, setItemsFeatures] = useState([
     { title: 'Dashboard Utama', url: '/dashboard', icon: LayoutDashboard },
     {

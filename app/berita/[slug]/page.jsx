@@ -244,15 +244,15 @@ export default function BeritaContent({ params }) {
       <main className="container mx-auto px-4 lg:px-8 py-8 lg:py-16">
         {/* Navigation & Breadcrumbs */}
         <div className="max-w-7xl mx-auto mb-12">
-          <Link
-            href="/berita"
+          <button
+          onClick={() => history.back()}
             className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-emerald-600 transition-colors"
           >
             <div className="p-2 rounded-full bg-slate-50 group-hover:bg-emerald-50 transition-colors">
               <ChevronLeft className="w-4 h-4" />
             </div>
             <span>Kembali ke Berita</span>
-          </Link>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 max-w-7xl mx-auto">
