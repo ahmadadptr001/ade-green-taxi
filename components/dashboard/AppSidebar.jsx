@@ -142,8 +142,8 @@ export default function AppSidebar() {
                       href={item.url}
                       className={
                         pathname === item.url
-                          ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
-                          : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
+                          ? 'ms-2 flex items-center h-12  gap-2 active:!bg-sky-600/10 bg-sky-600/10 !text-sky-700'
+                          : 'ms-2 flex items-center gap-2 h-12 !text-gray-500 active:!bg-sky-600/10'
                       }
                       onClick={() => setPathname(item.url)}
                     >
@@ -184,8 +184,8 @@ export default function AppSidebar() {
                     href="/dashboard/pengguna"
                     className={
                       pathname === '/dashboard/pengguna'
-                        ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700'
-                        : 'ms-2 flex items-center gap-2 h-12 !text-gray-500'
+                        ? 'ms-2 flex items-center h-12  gap-2 bg-sky-600/10 !text-sky-700 active:!bg-sky-600/10'
+                        : 'ms-2 flex items-center gap-2 h-12 !text-gray-500 active:!bg-sky-600/10'
                     }
                     onClick={() => setPathname('/dashboard/pengguna')}
                   >
