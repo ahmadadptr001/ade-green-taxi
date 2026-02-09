@@ -1,3 +1,4 @@
+import { supabase_coolify } from '@/config/supabase';
 import axios from 'axios';
 
 export async function getViewsAllArticle() {
@@ -26,13 +27,39 @@ export async function getArticles() {
   return response.data;
 }
 
-export async function uploadMainImageArticle(file_image) {
-  const formData = new FormData();
-  formData.append('file', file_image);
-  console.log(file_image);
-  const response = await axios.post('/api/article/upload/image', formData, {});
-  if (!response.statusText) throw response;
-  return response.data;
+export async function uploadMainImageArticle(file) {
+  try {
+    console.log('file debug: ', file);
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `images/${fileName}`;
+
+    const { data, error } = await supabase_coolify.storage
+      .from('articles') //
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('Upload error:', error.message);
+      throw error
+    }
+
+    // ambil public url
+    const { data: publicData } = supabase_coolify.storage
+      .from('articles')
+      .getPublicUrl(data.path);
+
+    return {
+      message: 'Berhasil mengupload gambar utama berita',
+      url: publicData.publicUrl,
+    };
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
 
 export async function insertDataArticle(payload) {
@@ -43,7 +70,10 @@ export async function insertDataArticle(payload) {
 
 export async function insertDataTag(tags, article_id) {
   // tags = [..,...,...]
-  const response = await axios.post('/api/articles/tag/upload/data', { tags, article_id });
+  const response = await axios.post('/api/articles/tag/upload/data', {
+    tags,
+    article_id,
+  });
   if (!response.statusText) throw response;
   return response.data;
 }
@@ -58,7 +88,7 @@ export async function insertDataArticleCategorie(categorie_id, article_id) {
 
 export async function insertDataArticleTopic(article_id, topic_id) {
   const response = await axios.post('/api/articles/topic/upload/data', {
-   artID: article_id,
+    artID: article_id,
     topic_id,
   });
   if (!response.statusText) throw response;

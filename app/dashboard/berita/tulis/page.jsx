@@ -511,10 +511,11 @@ export default function RichEditorWithMeta() {
         didOpen: () => Swal.hideLoading(),
       });
     } catch (err) {
+      console.log(err)
       Swal.fire({
         icon: 'error',
         title: err.message,
-        didOpen: () => Swal.hideLoading,
+        didOpen: () => Swal.hideLoading(),
       });
     }
   };
