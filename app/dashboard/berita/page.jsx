@@ -25,6 +25,8 @@ import {
   updateIsBookmarkedArticle,
   updateIsLikeArticle,
 } from '@/services/articles';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
 // --- Helper Components ---
 const FilterSelect = ({
@@ -44,8 +46,8 @@ const FilterSelect = ({
       className="w-full appearance-none bg-white border-2 border-slate-100 hover:border-indigo-100 focus:border-indigo-500 rounded-xl py-2.5 pl-9 pr-8 text-sm font-semibold text-slate-700 focus:outline-none transition-all cursor-pointer shadow-sm"
     >
       <option value="">{placeholder}</option>
-      {options.map((opt) => (
-        <option key={opt.id} value={opt.name}>
+      {options.map((opt, i) => (
+        <option key={i} value={opt.name}>
           {opt.name}
         </option>
       ))}
@@ -57,13 +59,13 @@ const FilterSelect = ({
 );
 
 export default function FeedBeritaComponent() {
-  // --- State Data ---
+  const router = useRouter();
+  const user = useUser();
   const [articles, setArticles] = useState([]);
   const [categories, setCategories] = useState([]);
   const [topics, setTopics] = useState([]);
   const [tags, setTags] = useState([]);
   const [highlight, setHighlight] = useState('');
-
   const [loading, setLoading] = useState(true);
 
   // --- Filter State ---
@@ -71,44 +73,43 @@ export default function FeedBeritaComponent() {
   const [filters, setFilters] = useState({ category: '', topic: '', tag: '' });
 
   // --- Fetch Data ---
-  useEffect(() => {
-    let mounted = true;
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [resArt, resCat, resTop, resTag, resHigh] = await Promise.all([
-          getArticles(),
-          getCategories(),
-          getTopics(),
-          getTags(),
-          getHighlight(),
-        ]);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [resArt, resCat, resTop, resTag, resHigh] = await Promise.all([
+        getArticles(),
+        getCategories(),
+        getTopics(),
+        getTags(),
+        getHighlight(),
+      ]);
 
-        if (mounted) {
-          setArticles(resArt.articles ?? []);
-          setCategories(resCat.categories ?? []);
-          setTopics(resTop.topics ?? []);
-          setTags(resTag.tags ?? []);
-          setHighlight(
-            resHigh.highlight?.[0]?.text || 'Selamat Datang di Portal Berita'
-          );
-        }
-      } catch (err) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal',
-          text: 'Gagal memuat data berita.',
-          confirmButtonColor: '#4f46e5',
-        });
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
+      setArticles(resArt.articles ?? []);
+      setCategories(resCat.categories ?? []);
+      setTopics(resTop.topics ?? []);
+      setTags(resTag.tags ?? []);
+      setHighlight(
+        resHigh.highlight?.[0]?.text || 'Selamat Datang di Portal Berita'
+      );
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Gagal memuat data berita.',
+        confirmButtonColor: '#4f46e5',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-    return () => {
-      mounted = false;
-    };
   }, []);
+
+  const handleReload = () => {
+    fetchData();
+  };
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
@@ -128,7 +129,6 @@ export default function FeedBeritaComponent() {
         ? topicNames.includes(filters.topic)
         : true;
       const matchTag = filters.tag ? tagNames.includes(filters.tag) : true;
-
       return matchSearch && matchCategory && matchTopic && matchTag;
     });
   }, [search, filters, articles]);
@@ -142,52 +142,28 @@ export default function FeedBeritaComponent() {
     e.currentTarget.src = 'https://via.placeholder.com/800x600?text=No+Image';
   };
 
-  const handleIsLiked = async (article) => {
-    const previousIsLiked = article.isLiked;
-    const newIsLiked = !previousIsLiked;
-
-    setArticles((prevArticles) =>
-      prevArticles.map((a) =>
-        a.id === article.id ? { ...a, isLiked: newIsLiked } : a
-      )
-    );
-
+  const handleIsBookmarked = async (article) => {
+    const article_id = article.id;
     try {
-      await updateIsLikeArticle(newIsLiked, article.slug);
+      await updateIsBookmarkedArticle(article_id, user.id);
+      handleReload();
     } catch (err) {
-      setArticles((prevArticles) =>
-        prevArticles.map((a) =>
-          a.id === article.id ? { ...a, isLiked: previousIsLiked } : a
-        )
-      );
       Swal.fire({
         icon: 'error',
-        title: 'Gagal Update Like',
+        title: 'Gagal Update Bookmark',
         text: err.message,
       });
     }
   };
-  const handleIsBookmarked = async (article) => {
-    const previousIsBookmarked = article.isBookmarked;
-    const newIsBookmarked = !previousIsBookmarked;
-
-    setArticles((prevArticles) =>
-      prevArticles.map((a) =>
-        a.id === article.id ? { ...a, isBookmarked: newIsBookmarked } : a
-      )
-    );
-
+  const handleIsLiked = async (article) => {
+    const article_id = article.id;
     try {
-      await updateIsBookmarkedArticle(newIsBookmarked, article.slug );
+      await updateIsLikeArticle(article_id, user.id);
+      handleReload();
     } catch (err) {
-      setArticles((prevArticles) =>
-        prevArticles.map((a) =>
-          a.id === article.id ? { ...a, isBookmarked: previousIsBookmarked } : a
-        )
-      );
       Swal.fire({
         icon: 'error',
-        title: 'Gagal Update Bookmark',
+        title: 'Gagal Update Favorit',
         text: err.message,
       });
     }
@@ -306,7 +282,14 @@ export default function FeedBeritaComponent() {
             filteredArticles.map((article) => {
               const categoryName =
                 article.article_categories?.[0]?.categories?.name;
-
+              const isLiked = article.article_likes.some(
+                (like) => like.profiles.id === user.id
+              );
+              console.log(article.article_bookmarks);
+              const isBookmarked = article.article_bookmarks.some(
+                (bookmark) => bookmark.profiles.id === user.id
+              );
+              console.log(isLiked, isBookmarked);
               return (
                 <section
                   key={article.id}
@@ -336,27 +319,27 @@ export default function FeedBeritaComponent() {
                       <button
                         onClick={async (e) => await handleIsBookmarked(article)}
                         className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/20 shadow-lg ${
-                          article.isBookmarked
+                          isBookmarked
                             ? 'bg-indigo-500 text-white shadow-indigo-500/40'
                             : 'bg-black/20 text-white hover:bg-white hover:text-indigo-600'
                         }`}
                       >
                         <Bookmark
                           size={18}
-                          className={article.isBookmarked ? 'fill-current' : ''}
+                          className={isBookmarked ? 'fill-current' : ''}
                         />
                       </button>
                       <button
                         onClick={async (e) => await handleIsLiked(article)}
                         className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/20 shadow-lg ${
-                          article.isLiked
+                          isLiked
                             ? 'bg-rose-500 text-white shadow-rose-500/40'
                             : 'bg-black/20 text-white hover:bg-white hover:text-rose-600'
                         }`}
                       >
                         <Heart
                           size={18}
-                          className={article.isLiked ? 'fill-current' : ''}
+                          className={isLiked ? 'fill-current' : ''}
                         />
                       </button>
                     </div>
@@ -391,25 +374,27 @@ export default function FeedBeritaComponent() {
                     {/* Footer Card: Tags & Visual Indicators */}
                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                       <div className="flex gap-1 overflow-hidden">
-                        {(article.article_tags ?? []).slice(0, 2).map((t) => (
-                          <span
-                            key={t.id}
-                            className="text-[10px] font-semibold bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md"
-                          >
-                            #{t.tags?.name}
-                          </span>
-                        ))}
+                        {(article.article_tags ?? [])
+                          .slice(0, 2)
+                          .map((t, i) => (
+                            <span
+                              key={i}
+                              className="text-[10px] font-semibold bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md"
+                            >
+                              #{t.tags?.name}
+                            </span>
+                          ))}
                       </div>
 
                       {/* Mini Indicator Active State */}
                       <div className="flex gap-2 opacity-50">
-                        {article.isLiked && (
+                        {isLiked && (
                           <Heart
                             size={14}
                             className="text-rose-500 fill-rose-500"
                           />
                         )}
-                        {article.isBookmarked && (
+                        {isBookmarked && (
                           <Bookmark
                             size={14}
                             className="text-indigo-500 fill-indigo-500"

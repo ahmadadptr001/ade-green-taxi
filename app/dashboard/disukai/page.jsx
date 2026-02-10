@@ -1,11 +1,13 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Heart, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { getArticles } from '@/services/articles';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUser } from '@/context/UserContext';
 
 export default function DisukaiPage() {
+  const user = useUser();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,14 +16,20 @@ export default function DisukaiPage() {
       try {
         const res = await getArticles();
         // Filter hanya yang isLiked = true
-        const liked = (res.articles ?? []).filter((a) => a.isLiked === true);
-        setArticles(liked);
+        setArticles(res.articles)
       } finally {
         setLoading(false);
       }
     };
     fetchLiked();
   }, []);
+
+  const articleFiltered = useMemo(() => {
+      if (!articles || !user) return;
+      return articles.filter((a) =>
+        a.article_likes.some((bookmark) => bookmark.profiles.id === user?.id)
+      );
+    }, [articles]);
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-8">
@@ -47,13 +55,13 @@ export default function DisukaiPage() {
               <Skeleton key={i} className="h-64 w-full rounded-3xl" />
             ))}
           </div>
-        ) : articles.length > 0 ? (
+        ) : articleFiltered?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Gunakan komponen card yang sama seperti di Feed Berita */}
-            {articles.map((article) => (
+            {articleFiltered.map((article, i) => (
               <Link
                 href={`/berita/${article.slug}`}
-                key={article.id}
+                key={i}
                 className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm"
               >
                 <img

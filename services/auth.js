@@ -26,6 +26,16 @@ export async function otpValidate(email, otp) {
   }
 }
 
+export async function changePassword(id, newPassword) {
+  const response = await axios.post('/api/user/password/update', { id, newPassword });
+  return response.data
+}
+
+export async function changeUsername(id, newFullname) {
+  const response = await axios.post('/api/user/username/update', { id, newFullname });
+  return response.data
+}
+
 export async function login(email, password) {
   const payload = {
     email,

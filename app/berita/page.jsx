@@ -128,7 +128,7 @@ export default function PremiumNewsPage() {
         setPopularArticles(mappedPopular);
 
         setTags(tags_resp.tags);
-        setTopics(topics_resp.topics);
+        setTopics(topics_resp.topics.slice(0, 4));
         setCategories(categories_resp.categories);
       } catch (err) {
         console.log(err);
@@ -238,6 +238,7 @@ export default function PremiumNewsPage() {
               <div className="flex flex-col leading-none">
                 <span className="text-lg font-black tracking-tighter text-slate-900">
                   ADE<span className="text-emerald-600">GREEN</span>
+                  <span>BERITA</span>
                 </span>
               </div>
             </a>
@@ -318,7 +319,7 @@ export default function PremiumNewsPage() {
           onClick={() => setShowModal(false)}
         ></div>
         <div className="absolute inset-0 flex items-center justify-center p-4">
-          <div className="relative bg-white w-full h-full sm:max-h-[80%] md:max-h-[90%] max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 animate-in zoom-in-95 duration-200">
+          <div id='modal-berita' className="relative bg-white w-full h-fit sm:max-h-[80%] md:max-h-[90%] max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 p-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-900 transition-colors"
@@ -400,7 +401,7 @@ export default function PremiumNewsPage() {
                     {item.name}
                   </button>
                 ))}
-              <hr className="border-slate-100 my-2" />
+              <hr className="border-slate-200 my-2" />
               <button
                 onClick={() => {
                   setShowModal(true);

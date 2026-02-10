@@ -96,25 +96,25 @@ export async function insertDataArticleTopic(article_id, topic_id) {
 }
 
 export async function updateViewArticle(view, slug) {
-    const response = await axios.post('/api/article/update/view', {
-      view,
-      slug,
-    });
-    return response.data;
-}
-
-export async function updateIsLikeArticle(isLiked, slug) {
-  const response = await axios.post('/api/article/update/like', {
-    isLiked,
+  const response = await axios.post('/api/article/update/view', {
+    view,
     slug,
   });
   return response.data;
 }
 
-export async function updateIsBookmarkedArticle(isBookmarked, slug) {
+export async function updateIsLikeArticle(article_id, profile_id) {
+  const response = await axios.post('/api/article/update/like', {
+    article_id,
+    profile_id,
+  });
+  return response.data;
+}
+
+export async function updateIsBookmarkedArticle(article_id, profile_id) {
   const response = await axios.post('/api/article/update/bookmark', {
-    isBookmarked,
-    slug,
+    article_id,
+    profile_id,
   });
   return response.data;
 }

@@ -12,28 +12,16 @@ export async function GET() {
       published_at,
       views,
       img,
-      isLiked,
-      isBookmarked,
+      article_likes (profiles(id, fullname, role, status, email)),
+      article_bookmarks (profiles(id, fullname, role, status, email )),
       article_categories (
-        categories(
-          id,
-          name,
-          slug
-        )
+        categories( id, name, slug )
       ),
       article_tags (
-        tags (
-        id,
-        name,
-        slug
-        )
+        tags ( id, name, slug)
       ),
       article_topics (
-        topics (
-          id,
-          name,
-          slug
-        )
+        topics ( id, name, slug)
       )
       `);
     if (error) {

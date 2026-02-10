@@ -14,7 +14,7 @@ export async function POST(req) {
     // if (error) {
     //   return NextResponse.json({ message: error.message }, { status: 400 });
     // }
-
+    
     return NextResponse.json(
       { message: 'Berhasil menautkan kategori ke dalam artikel' },
       { status: 200 }
