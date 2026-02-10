@@ -5,6 +5,9 @@ import {
   ChevronRight,
   ChevronsUpDown,
   Cog,
+  FileText,
+  FolderTree,
+  Hash,
   Heart,
   Key,
   LayoutDashboard,
@@ -13,11 +16,14 @@ import {
   Newspaper,
   PenBox,
   PenLine,
+  PrinterCheck,
   ReceiptText,
   Route,
   Settings,
   ShieldCheck,
   ShieldUser,
+  Tag,
+  Tags,
   Text,
   Trash2,
   User,
@@ -94,6 +100,21 @@ const itemFeaturesAdmin = [
     url: '/dashboard/berita/pesan',
     icon: Zap,
   },
+  {
+    title: 'Kelola Tag',
+    url: '/dashboard/berita/tag',
+    icon: Hash,
+  },
+  {
+    title: 'Kelola Kategori',
+    url: '/dashboard/berita/kategori',
+    icon: FolderTree,
+  },
+  {
+    title: 'Kelola Topik',
+    url: '/dashboard/berita/topik',
+    icon: FileText,
+  }
 ];
 
 const itemFeaturesSuperAdmin = [

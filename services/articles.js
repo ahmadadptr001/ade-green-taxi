@@ -166,3 +166,28 @@ export async function getHighlight() {
     throw err;
   }
 }
+
+export async function addTag(name, slug) {
+  const response = await axios.post('/api/articles/tag/add', {name, slug})
+  return response.data
+}
+export async function removeTag(id) {
+  const response = await axios.post('/api/articles/tag/remove', {id})
+  return response.data
+}
+export async function addTopic(name, slug) {
+  const response = await axios.post('/api/articles/topic/add', {name, slug})
+  return response.data
+}
+export async function removeTopic(id) {
+  const response = await axios.post('/api/articles/topic/remove', {id})
+  return response.data
+}
+export async function addCategory(name, slug) {
+  const response = await axios.post('/api/articles/category/add', {name, slug})
+  return response.data
+}
+export async function removeCategory(id) {
+  const response = await axios.post('/api/articles/category/remove', {id})
+  return response.data
+}
