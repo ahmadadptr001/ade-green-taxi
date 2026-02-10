@@ -403,9 +403,9 @@ export default function BeritaContent({ params }) {
         />
       </div>
 
-      <main className="container mx-auto px-4 lg:px-8 py-8 lg:py-16">
+      <main className="container mx-auto p-8">
         {/* Navigation */}
-        <div className="max-w-7xl mx-auto mb-12">
+        <div className="max-w-7xl mx-auto mb-3">
           <button
             onClick={() => history.back()}
             className="group inline-flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-emerald-600 transition-colors"
@@ -834,7 +834,7 @@ export default function BeritaContent({ params }) {
           <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             <div className="max-w-sm">
               <div className="font-black text-2xl tracking-tighter mb-4">
-                ADE<span className="text-emerald-600">GREEN</span>
+                ADE<span className="text-emerald-600">GREEN</span>BERITA
               </div>
               <p className="text-slate-500 text-sm leading-relaxed">
                 Platform jurnalisme independen yang menyajikan perspektif

@@ -361,7 +361,7 @@ export default function FeedBeritaComponent() {
                       </div>
                     </div>
 
-                    <Link href={`/berita/${article.slug}`}>
+                    <Link href={`/dashboard/berita/${article.slug}`}>
                       <h2 className="text-xl font-bold text-slate-800 leading-snug mb-3 group-hover:text-indigo-600 transition-colors line-clamp-2">
                         {article.title}
                       </h2>

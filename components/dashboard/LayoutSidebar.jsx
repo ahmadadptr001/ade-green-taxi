@@ -13,7 +13,7 @@ export default function LayoutSidebar({ children }) {
 
   useEffect(() => {
     const dataLocalUser = localStorage.getItem('user');
-    if (!dataLocalUser) {
+    if (!dataLocalUser || dataLocalUser === 'undefined') {
       Swal.fire({
         icon: 'warning',
         text: 'Silahkan login ke akun Anda terlebih dahulu',
@@ -28,8 +28,9 @@ export default function LayoutSidebar({ children }) {
         }
         return;
       });
+    } else {
+      setUser(JSON.parse(dataLocalUser));
     }
-    setUser(JSON.parse(dataLocalUser));
   }, []);
   return (
     <UserProvider user={user}>
@@ -37,7 +38,7 @@ export default function LayoutSidebar({ children }) {
         <AppSidebar />
         <main className="w-full">
           <CustomSidebarTrigger />
-          {children}
+          {user && user !== "undefined" && children}
         </main>
       </SidebarProvider>
     </UserProvider>
