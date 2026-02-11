@@ -20,6 +20,7 @@ import {
   Heading2,
   Undo,
   Redo,
+  X,
 } from 'lucide-react';
 
 // --- TIPTAP IMPORTS ---
@@ -508,7 +509,7 @@ export default function ArticleManager() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" onClick={() => setSearchQuery('')}>
-            Clear
+            <X />
           </Button>
           <Button
             variant="outline"
