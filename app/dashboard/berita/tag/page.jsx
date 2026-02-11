@@ -220,9 +220,9 @@ export default function TagsPage() {
                     {/* Delete Dialog */}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <button className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <button className="opacity-100 transition-opacity p-2 bg-red-50 text-red-500 rounded-full">
+                                                  <Trash2 className="h-6 w-6 font-bold" />
+                                                </button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
