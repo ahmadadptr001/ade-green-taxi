@@ -51,10 +51,11 @@ export default function RootLayout({ children }) {
           name="google-site-verification"
           content="iaxa3swed2EWX89v3HlPrfTpYgVsHKLHPVwBIDZOh3c"
         />
+        <meta name="og:image" content="https://adegreentx.id/odgr.png"></meta>
         <meta
-          name="og:image"
-          content="https://adegreentx.id/odgr.png"
-        ></meta>
+          name="google-site-verification"
+          content="eY-JG6TjovipkId0gTSPuu9nvt_YoJFnwPMl93YnV8k"
+        />
       </head>
       <body>
         <TooltipProvider>{children}</TooltipProvider>
