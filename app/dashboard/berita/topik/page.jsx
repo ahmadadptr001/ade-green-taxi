@@ -27,6 +27,7 @@ import Swal from 'sweetalert2';
 import { addTopic, getTopics, removeTopic } from '@/services/articles';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Capitalize } from '@/utils/text';
+import { slugify } from '@/utils/slug';
 
 export default function TopicsPage() {
   const [topics, setTopics] = useState([

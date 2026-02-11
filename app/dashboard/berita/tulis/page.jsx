@@ -543,7 +543,7 @@ export default function RichEditorWithMeta() {
       `}</style>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 flex flex-col min-w-0 bg-white">
+      <div className="flex-1 relative flex flex-col min-w-0 bg-white">
         {/* HEADER */}
         <header className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-white sticky top-0 z-50">
           <input
@@ -662,7 +662,6 @@ export default function RichEditorWithMeta() {
           </div>
         </div>
 
-        {/* EMOJI PICKER OVERLAY */}
         {showEmojiPicker && (
           <div className="absolute z-[100] top-32 left-4 p-3 bg-white border border-slate-200 shadow-2xl rounded-2xl grid grid-cols-6 gap-1">
             {[

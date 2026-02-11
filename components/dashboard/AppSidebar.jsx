@@ -1,38 +1,24 @@
 'use client';
+
 import {
   AlertTriangle,
   Bookmark,
   ChevronRight,
   ChevronsUpDown,
-  Cog,
   FileText,
   FolderTree,
   Hash,
   Heart,
   Key,
-  LayoutDashboard,
   LogOut,
-  MapPinned,
   Newspaper,
-  PenBox,
   PenLine,
-  PrinterCheck,
-  ReceiptText,
-  Route,
-  Settings,
-  ShieldCheck,
   ShieldUser,
-  Tag,
-  Tags,
-  Text,
   Trash2,
   User,
-  User2,
-  UserPlus,
-  Users,
-  Users2,
-  WholeWord,
   Zap,
+  Users2,
+  LayoutDashboardIcon,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -45,6 +31,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarSeparator,
 } from '../ui/sidebar';
 import {
@@ -54,15 +43,15 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Tooltip, TooltipTrigger } from '../ui/tooltip';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
@@ -91,29 +80,36 @@ const itemFeaturesPengunjung = [
 
 const itemFeaturesAdmin = [
   {
-    title: 'Tulis Berita',
+    title: 'Dashboard',
+    icon: LayoutDashboardIcon,
     url: '/dashboard/berita/tulis',
-    icon: PenLine,
   },
   {
-    title: 'Pesan Highlight',
-    url: '/dashboard/berita/pesan',
-    icon: Zap,
+    title: 'Manajemen Konten',
+    icon: Newspaper,
+    items: [
+      { title: 'Tulis Berita', url: '/dashboard/berita/tulis', icon: PenLine },
+      {
+        title: 'Kelola Berita',
+        url: '/dashboard/berita/kelola',
+        icon: FileText,
+      },
+      { title: 'Pesan Highlight', url: '/dashboard/berita/pesan', icon: Zap },
+    ],
   },
   {
-    title: 'Kelola Tag',
-    url: '/dashboard/berita/tag',
-    icon: Hash,
-  },
-  {
-    title: 'Kelola Kategori',
-    url: '/dashboard/berita/kategori',
+    title: 'Taksonomi',
     icon: FolderTree,
-  },
-  {
-    title: 'Kelola Topik',
-    url: '/dashboard/berita/topik',
-    icon: FileText,
+    items: [
+      // Ini Child-nya
+      { title: 'Kelola Tag', url: '/dashboard/berita/tag', icon: Hash },
+      {
+        title: 'Kelola Kategori',
+        url: '/dashboard/berita/kategori',
+        icon: FolderTree,
+      },
+      { title: 'Kelola Topik', url: '/dashboard/berita/topik', icon: FileText },
+    ],
   },
 ];
 
@@ -128,14 +124,13 @@ const itemFeaturesSuperAdmin = [
 export default function AppSidebar() {
   const user = useUser();
   const role = user?.role;
-  const status = user?.status;
   const router = useRouter();
+
   const [width, setWidth] = useState(0);
   const [pathname, setPathname] = useState('');
   const [fullname, setFullname] = useState(user?.fullname);
   const [newPassword, setNewPassword] = useState(user?.password);
   const [confirmNewPassword, setConfirmNewPassword] = useState(user?.password);
-
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
@@ -143,7 +138,7 @@ export default function AppSidebar() {
       setMounted(false);
       return;
     }
-  }, [mounted]);
+  }, [role]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -173,18 +168,12 @@ export default function AppSidebar() {
     e.preventDefault();
     if (!user) return;
     if (!newPassword || !confirmNewPassword) {
-      Swal.fire({
-        icon: 'error',
-        text: 'Kolom tidak boleh kosong',
-      });
+      Swal.fire({ icon: 'error', text: 'Kolom tidak boleh kosong' });
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      Swal.fire({
-        icon: 'error',
-        text: 'Password tidak sama',
-      });
+      Swal.fire({ icon: 'error', text: 'Password tidak sama' });
       return;
     }
 
@@ -211,13 +200,11 @@ export default function AppSidebar() {
       });
     }
   };
+
   const handleChangeUsername = async () => {
     if (!user) return;
     if (!fullname) {
-      Swal.fire({
-        icon: 'error',
-        text: 'Kolom tidak boleh kosong',
-      });
+      Swal.fire({ icon: 'error', text: 'Kolom tidak boleh kosong' });
       return;
     }
 
@@ -248,6 +235,7 @@ export default function AppSidebar() {
       });
     }
   };
+
   const handleDeleteAccount = async () => {
     if (!user) return;
     Swal.fire({
@@ -293,7 +281,7 @@ export default function AppSidebar() {
               <div className="me-auto leading-4">
                 <p className="font-extrabold text-lg">
                   ADE<span className="text-emerald-600">GREEN</span>
-                  <span className="">PANEL</span>
+                  <span>PANEL</span>
                 </p>
                 <small className="text-[.7rem] text-sky-600 font-semibold">
                   MANAGEMENT SYSTEM
@@ -303,156 +291,152 @@ export default function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className={'pe-2'}>
+
+      <SidebarContent className="pe-2">
+        {/* GROUP PENGUNJUNG (Single Level) */}
         <SidebarGroup>
-          <SidebarSeparator className={'mb-6'} />
-          <SidebarGroupLabel
-            className={'text-sm font-bold text-slate-400 mb-3'}
-          >
+          <SidebarSeparator className="mb-6" />
+          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
             PENGUNJUNG
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-3">
-              {itemFeaturesPengunjung.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
+          <SidebarMenu className="gap-2">
+            {itemFeaturesPengunjung.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
+                >
+                  <Link
+                    href={item.url}
+                    onClick={() => setPathname(item.url)}
                     className={
-                      'hover:bg-gray-100 !text-black !my-0 !font-semibold'
+                      pathname === item.url
+                        ? 'text-sky-700 bg-sky-600/10'
+                        : 'text-gray-500'
                     }
                   >
-                    <Link
-                      href={item.url}
-                      className={
-                        pathname === item.url
-                          ? 'ms-2 flex items-center h-12  gap-2 active:!bg-sky-600/10 bg-sky-600/10 !text-sky-700'
-                          : 'ms-2 flex items-center gap-2 h-12 !text-gray-500 active:!bg-sky-600/10'
-                      }
-                      onClick={() => setPathname(item.url)}
-                    >
-                      <div className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2">
-                          <item.icon size={20} />
-                          <span className="line-clamp-1">{item.title}</span>
-                        </div>
-                        {pathname == item.url && (
-                          <div className="w-2 h-2 rounded-full bg-sky-600"></div>
-                        )}
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+                    <item.icon size={20} />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
+
+        {/* GROUP ADMINISTRATOR (Parent-Child Level) */}
         <SidebarGroup className={role === 'pengunjung' ? 'hidden' : ''}>
-          <SidebarGroupLabel
-            className={'text-sm font-bold text-slate-400 mb-3'}
-          >
+          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
             ADMINISTRATOR
           </SidebarGroupLabel>
-          <SidebarGroupContent
-            className={`pe-2 ${role === 'admin' || role === 'super admin' ? '' : 'hidden'}`}
-          >
-            <SidebarMenu>
-              {itemFeaturesAdmin.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={
-                      'hover:bg-gray-100 !text-black !my-0 !font-semibold'
-                    }
-                  >
-                    <Link
-                      href={item.url}
-                      className={
-                        pathname === item.url
-                          ? 'ms-2 flex items-center h-12  gap-2 active:!bg-sky-600/10 bg-sky-600/10 !text-sky-700'
-                          : 'ms-2 flex items-center gap-2 h-12 !text-gray-500 active:!bg-sky-600/10'
-                      }
-                      onClick={() => setPathname(item.url)}
-                    >
-                      <div className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2">
-                          <item.icon size={20} />
-                          <span className="line-clamp-1">{item.title}</span>
-                        </div>
-                        {pathname == item.url && (
-                          <div className="w-2 h-2 rounded-full bg-sky-600"></div>
-                        )}
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
+          <SidebarMenu>
+            {itemFeaturesAdmin.map((parent) => (
+              <Collapsible
+                key={parent.title}
+                asChild
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    {parent.items ? (
+                      <SidebarMenuButton
+                        tooltip={parent.title}
+                        className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 !font-semibold"
+                      >
+                        <parent.icon size={20} />
+                        <span>{parent.title}</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    ) : (
+                      <SidebarMenuButton
+                        asChild
+                        className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
+                      >
+                        <Link
+                          href={parent.url}
+                          onClick={() => setPathname(parent.url)}
+                          className={
+                            pathname === parent.url
+                              ? 'text-sky-700 bg-sky-600/10'
+                              : 'text-gray-500'
+                          }
+                        >
+                          <parent.icon size={20} />
+                          <span>{parent.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    )}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {parent.items &&
+                        parent.items.map((child) => (
+                          <SidebarMenuSubItem key={child.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 !font-semibold"
+                            >
+                              <Link
+                                href={child.url}
+                                onClick={() => setPathname(child.url)}
+                                className={
+                                  pathname === child.url
+                                    ? 'text-sky-700 font-bold'
+                                    : 'text-gray-500'
+                                }
+                              >
+                                <span>{child.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
                 </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+              </Collapsible>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
-        <SidebarGroup
-          className={role === 'admin' || role === 'pengunjung' ? 'hidden' : ''}
-        >
-          <SidebarGroupLabel
-            className={'text-sm font-bold text-slate-400 mb-3'}
-          >
-            SUPER ADMINISTRATOR
+
+        {/* GROUP SUPER ADMIN */}
+        <SidebarGroup className={role !== 'super admin' ? 'hidden' : ''}>
+          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
+            SUPER ADMIN
           </SidebarGroupLabel>
-          <SidebarGroupContent className={'pe-2'}>
-            <SidebarMenu>
-              {itemFeaturesSuperAdmin.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className={
-                      'hover:bg-gray-100 !text-black !my-0 !font-semibold'
-                    }
-                  >
-                    <Link
-                      href={item.url}
-                      className={
-                        pathname === item.url
-                          ? 'ms-2 flex items-center h-12  gap-2 active:!bg-sky-600/10 bg-sky-600/10 !text-sky-700'
-                          : 'ms-2 flex items-center gap-2 h-12 !text-gray-500 active:!bg-sky-600/10'
-                      }
-                      onClick={() => setPathname(item.url)}
-                    >
-                      <div className="flex items-center justify-between gap-2 w-full">
-                        <div className="flex items-center gap-2">
-                          <item.icon size={20} />
-                          <span className="line-clamp-1">{item.title}</span>
-                        </div>
-                        {pathname == item.url && (
-                          <div className="w-2 h-2 rounded-full bg-sky-600"></div>
-                        )}
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarMenu>
+            {itemFeaturesSuperAdmin.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  className="hover:bg-sky-100 hover:text-slate-900 !font-semibold"
+                >
+                  <Link href={item.url} onClick={() => setPathname(item.url)}>
+                    <item.icon size={20} />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter className="pb-2 px-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              {/* === TRIGGER UTAMA YANG LEBIH MODERN === */}
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  // Perubahan: Hover state yang lebih halus dengan sedikit sentuhan warna dan transisi
-                  className=" data-[state=open]:text-sidebar-accent-foreground hover:bg-slate-100/80 hover:text-slate-900  transition-all duration-300 ease-in-out active:bg-gray-100 border border-transparent hover:border-green-200 rounded-xl"
+                  className="data-[state=open]:text-sidebar-accent-foreground hover:bg-slate-100/80 hover:text-slate-900 transition-all duration-300 ease-in-out active:bg-gray-100 border border-transparent hover:border-green-200 rounded-xl"
                 >
-                  {/* Avatar dengan border halus */}
                   <div className="h-9 w-9 rounded-lg border-2 border-white/50 shadow-sm overflow-hidden transition-transform duration-300 group-hover:scale-105">
                     <img
-                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.fullname.replace(' ', '+')}`}
+                      src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.fullname?.replace(' ', '+')}`}
                       alt={user?.fullname}
                       className="h-full w-full object-cover bg-slate-50"
                     />
                   </div>
-                  {/* Teks dengan hierarki yang lebih baik */}
                   <div className="grid flex-1 text-left leading-tight ml-1">
                     <span className="truncate font-bold text-[13px] text-slate-800">
                       {user?.fullname}
@@ -465,20 +449,17 @@ export default function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
-              {/* === KONTEN DROPDOWN DENGAN EFEK GLASSMORPHISM ("WOW" FACTOR) === */}
               <DropdownMenuContent
-                // Perubahan Besar di sini: Glassmorphism effect (backdrop-blur), shadow besar, dan border halus
                 className="w-[--radix-dropdown-menu-trigger-width] min-w-60 rounded-xl p-1.5 mb-2 bg-white/85 backdrop-blur-xl shadow-2xl border-white/20 ring-1 ring-black/5"
                 side="bottom"
                 align="end"
                 sideOffset={8}
               >
-                {/* Header Menu yang sedikit lebih menonjol */}
                 <DropdownMenuLabel className="p-0 font-normal mb-1">
                   <div className="flex items-center gap-3 px-2 py-2.5 text-left text-sm bg-gradient-to-br from-slate-50/50 to-transparent rounded-lg border border-white/40">
                     <div className="h-10 w-10 rounded-full border-2 border-white shadow-sm overflow-hidden">
                       <img
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.fullname.replace(' ', '+')}`}
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.fullname?.replace(' ', '+')}`}
                         alt={user?.fullname}
                         className="h-full w-full bg-slate-50"
                       />
@@ -503,7 +484,6 @@ export default function AppSidebar() {
 
                   {/* SUBMENU: UBAH NAMA */}
                   <DropdownMenu>
-                    {/* Item menu dengan hover yang lebih 'hidup' */}
                     <DropdownMenuTrigger className="flex w-full cursor-pointer select-none items-center rounded-lg px-2 py-2 text-[13px] font-medium outline-none text-slate-600 hover:bg-blue-50/50 hover:text-blue-700 focus:bg-blue-50/50 focus:text-blue-700 transition-colors data-[state=open]:bg-blue-50/50 data-[state=open]:text-blue-700">
                       <div className="mr-3 p-1 rounded-md bg-blue-100/50 text-blue-600">
                         <User className="h-3.5 w-3.5" />
@@ -511,7 +491,6 @@ export default function AppSidebar() {
                       <span>Ubah Nama</span>
                       <ChevronRight className="ml-auto h-4 w-4 text-slate-300" />
                     </DropdownMenuTrigger>
-                    {/* Submenu content juga menggunakan glass effect agar konsisten */}
                     <DropdownMenuContent className="p-3 w-64 ml-2 shadow-2xl border-white/20 ring-1 ring-black/5 bg-white/90 backdrop-blur-xl rounded-xl">
                       <div className="space-y-3">
                         <div className="space-y-1.5">
@@ -632,7 +611,6 @@ export default function AppSidebar() {
 
                 <DropdownMenuSeparator className="bg-slate-200/50 mx-1 my-1.5" />
 
-                {/* LOGOUT ITEM - Lebih menonjol tapi tetap bersih */}
                 <div className="px-1 pb-1">
                   <DropdownMenuItem
                     onClick={handleLogout}
