@@ -76,3 +76,8 @@ export async function emailCheck(email) {
     throw err;
   }
 }
+
+export async function updateLoginHostory(id) {
+  const resp = await axios.post('/api/auth/activity', {id})
+  return resp.data
+} 

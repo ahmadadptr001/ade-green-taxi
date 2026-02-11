@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
-import { login } from '@/services/auth';
+import { login, updateLoginHostory } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPaeg() {
@@ -65,6 +65,8 @@ export default function LoginPaeg() {
         });
         return;
       }
+
+      await updateLoginHostory(dataUser.data.id);
       Swal.fire({
         icon: 'success',
         title: 'Login Berhasil!',

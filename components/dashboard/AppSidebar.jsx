@@ -19,6 +19,7 @@ import {
   Zap,
   Users2,
   LayoutDashboardIcon,
+  Activity,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -118,6 +119,11 @@ const itemFeaturesSuperAdmin = [
     title: 'Manajemen Pengguna',
     url: '/dashboard/pengguna',
     icon: Users2,
+  },
+  {
+    title: 'Aktivitas Pengguna',
+    url: '/dashboard/aktivitas',
+    icon: Activity,
   },
 ];
 
