@@ -191,3 +191,8 @@ export async function removeCategory(id) {
   const response = await axios.post('/api/articles/category/remove', {id})
   return response.data
 }
+
+export async function updateContentArticle(id, content) {
+  const response = await axios.post('/api/article/update/content', { id, content })
+  return response.data;
+}
