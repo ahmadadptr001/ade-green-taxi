@@ -641,7 +641,7 @@ export default function AppSidebar() {
                     <div className="mr-3 p-1 rounded-md bg-slate-100/50 text-slate-500 group-hover:bg-red-100/50 group-hover:text-red-600 transition-colors">
                       <LogOut className="h-3.5 w-3.5" />
                     </div>
-                    <span className="font-semibold">Keluar Aplikasi</span>
+                    <span className="font-semibold">Keluar</span>
                   </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
