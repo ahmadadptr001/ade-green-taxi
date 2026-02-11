@@ -196,3 +196,8 @@ export async function updateContentArticle(id, content) {
   const response = await axios.post('/api/article/update/content', { id, content })
   return response.data;
 }
+
+export async function deleteArticle(id) {
+  const response = await axios.post('/api/article/delete', { id })
+  return response.data;
+}

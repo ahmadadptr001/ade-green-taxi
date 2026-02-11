@@ -75,7 +75,11 @@ import {
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
-import { getArticles, updateContentArticle } from '@/services/articles';
+import {
+  deleteArticle,
+  getArticles,
+  updateContentArticle,
+} from '@/services/articles';
 
 // --- KOMPONEN EDITOR TIPTAP ---
 const MenuBar = ({ editor }) => {
@@ -271,10 +275,30 @@ export default function ArticleManager() {
     setIsAlertOpen(true);
   };
 
-  const handleDelete = () => {
-    setArticles((prev) => prev.filter((a) => a.id !== deleteId));
-    setIsAlertOpen(false);
-    console.log(`Article ${deleteId} deleted`);
+  const handleDelete = async () => {
+    Swal.fire({
+      icon: 'info',
+      text: 'Sedang diproses..',
+      didOpen: () => Swal.showLoading(),
+    });
+
+    try {
+      const respDeleteArticle = await deleteArticle(deleteId);
+      Swal.fire({
+        icon: 'success',
+        title: respDeleteArticle.message,
+        didOpen: () => Swal.hideLoading(),
+      });
+      setIsAlertOpen(false);
+      console.log(`Article ${deleteId} deleted`);
+      handleReload();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: err.message,
+        didOpen: () => Swal.hideLoading(),
+      });
+    }
   };
 
   const handleExportCSV = () => {
