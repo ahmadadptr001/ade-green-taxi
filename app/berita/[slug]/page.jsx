@@ -887,7 +887,7 @@ export default function BeritaContent({ params }) {
           </div>
           <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
             <div>
-              &copy; {new Date().getFullYear()} AdeGreen. All rights reserved.
+              &copy; {new Date().getFullYear()} AdeGreenTX. All rights reserved.
             </div>
             <div className="flex gap-6">
               <Link href="/privacy" className="hover:text-slate-600">

@@ -179,7 +179,7 @@ export default function BeritaKategori({ params }) {
 
           {/* Bottom */}
           <div className="mt-8 border-t pt-4 text-sm text-gray-500 flex justify-between">
-            <span>© {new Date().getFullYear()} AdeGreen</span>
+            <span>© {new Date().getFullYear()} AdeGreenTX</span>
           </div>
         </div>
       </footer>
