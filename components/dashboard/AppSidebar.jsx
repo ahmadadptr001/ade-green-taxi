@@ -442,7 +442,7 @@ export default function AppSidebar() {
                 <SidebarMenuButton
                   size="lg"
                   // Perubahan: Hover state yang lebih halus dengan sedikit sentuhan warna dan transisi
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-slate-100/80 hover:text-slate-900 transition-all duration-300 ease-in-out border border-transparent hover:border-slate-200/50 rounded-xl"
+                  className=" data-[state=open]:text-sidebar-accent-foreground hover:bg-slate-100/80 hover:text-slate-900  transition-all duration-300 ease-in-out active:bg-gray-100 border border-transparent hover:border-green-200 rounded-xl"
                 >
                   {/* Avatar dengan border halus */}
                   <div className="h-9 w-9 rounded-lg border-2 border-white/50 shadow-sm overflow-hidden transition-transform duration-300 group-hover:scale-105">
