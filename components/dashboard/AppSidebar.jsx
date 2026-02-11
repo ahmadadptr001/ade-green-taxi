@@ -82,7 +82,7 @@ const itemFeaturesAdmin = [
   {
     title: 'Dashboard',
     icon: LayoutDashboardIcon,
-    url: '/dashboard/berita/tulis',
+    url: '/dashboard/',
   },
   {
     title: 'Manajemen Konten',
