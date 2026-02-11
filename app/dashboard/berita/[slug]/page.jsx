@@ -540,7 +540,7 @@ export default function BeritaContent({ params }) {
                       [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
                       [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_ul]:marker:text-slate-400
                       [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-emerald-600 [&_ol]:marker:font-bold
-                      [&_li]:pl-2 [&_li]:mb-2
+                      [&_li]:ml-10 [&_li]:mb-2
                       [&_strong]:font-bold [&_strong]:text-slate-900
                       [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-10 [&_iframe]:shadow-lg
                     "

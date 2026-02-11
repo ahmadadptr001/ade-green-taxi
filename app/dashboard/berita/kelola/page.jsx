@@ -366,14 +366,14 @@ export default function ArticleManager() {
   // fetch data
   const fetchData = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const artResponse = await getArticles();
       setArticles(artResponse.articles);
       setLoading(false);
     } catch (err) {
       console.error(err);
       Swal.fire({ icon: 'error', title: err.message });
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -386,9 +386,13 @@ export default function ArticleManager() {
   };
 
   // Mobile Card component (presentation only, logic reused)
-  const ArticleCardMobile = ({ article }) => (
-    <div className="bg-white rounded-lg shadow-sm p-4 flex gap-4">
-      <div className="flex-shrink-0 w-20 h-14 rounded-md overflow-hidden bg-gray-50 border">
+ const ArticleCardMobile = ({ article }) => (
+  <div className="bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row gap-4 items-start md:items-center">
+    
+    {/* Section 1: Image & Title Group */}
+    <div className="flex gap-4 flex-1 w-full">
+      {/* Image */}
+      <div className="flex-shrink-0 w-24 h-16 md:w-32 md:h-20 rounded-md overflow-hidden bg-gray-50 border">
         {article.img ? (
           <img
             src={article.img}
@@ -401,82 +405,82 @@ export default function ArticleManager() {
           </div>
         )}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <h3 className="font-semibold text-sm text-gray-900 line-clamp-2">
-              {article.title}
-            </h3>
-            <div className="mt-1 flex flex-wrap gap-1">
-              {article.article_tags.map((t) => (
-                <span
-                  key={t.tags.id}
-                  className="text-[11px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
-                >
-                  #{t.tags.name}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs text-gray-500">
-              {article.views.toLocaleString()} views
-            </div>
-            <Badge className="mt-1">
-              {article.published_at ? 'Published' : 'Draft'}
-            </Badge>
-          </div>
-        </div>
 
-        <div className="mt-3 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <div title="Likes" className="flex items-center gap-1">
-              <Heart className="h-4 w-4 text-rose-500" />
-              <span className="text-sm">{article.article_likes.length}</span>
-            </div>
-            <div title="Bookmarks" className="flex items-center gap-1">
-              <Bookmark className="h-4 w-4 text-amber-500" />
-              <span className="text-sm">
-                {article.article_bookmarks.length}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleView(article)}
+      {/* Title & Tags */}
+      <div className="flex-1">
+        <h3 className="font-semibold text-sm md:text-base text-gray-900 line-clamp-2">
+          {article.title}
+        </h3>
+        <div className="mt-1 flex flex-wrap gap-1">
+          {article.article_tags.map((t) => (
+            <span
+              key={t.tags.id}
+              className="text-[10px] md:text-[11px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
             >
-              <Eye className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => openEditModal(article)}
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => confirmDelete(article.id)}
-              className="text-red-600"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
+              #{t.tags.name}
+            </span>
+          ))}
         </div>
       </div>
     </div>
-  );
+
+    {/* Section 2: Stats & Actions */}
+    <div className="flex flex-row md:flex-row items-center justify-between w-full md:w-auto md:gap-8 border-t md:border-t-0 pt-3 md:pt-0">
+      
+      {/* Stats (Views, Likes, Bookmarks) */}
+      <div className="flex gap-4 items-center">
+        <div className="hidden sm:block md:text-left mr-2">
+           <div className="text-xs text-gray-500 whitespace-nowrap">
+            {article.views.toLocaleString()} views
+          </div>
+          <Badge className="mt-0.5 scale-90 origin-left md:origin-center">
+            {article.published_at ? 'Published' : 'Draft'}
+          </Badge>
+        </div>
+
+        <div className="flex items-center gap-3 border-l md:border-l-0 pl-3 md:pl-0">
+          <div title="Likes" className="flex items-center gap-1">
+            <Heart className="h-4 w-4 text-rose-500" />
+            <span className="text-sm font-medium">{article.article_likes.length}</span>
+          </div>
+          <div title="Bookmarks" className="flex items-center gap-1">
+            <Bookmark className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-medium">{article.article_bookmarks.length}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center gap-1 md:gap-2">
+        <button
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          onClick={() => handleView(article)}
+        >
+          <Eye className="w-4 h-4 text-gray-600" />
+        </button>
+        <button
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          onClick={() => openEditModal(article)}
+        >
+          <Edit className="w-4 h-4 text-gray-600" />
+        </button>
+        <button
+          className="p-2 hover:bg-red-50 rounded-full transition-colors text-red-600"
+          onClick={() => confirmDelete(article.id)}
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
   if (loading) {
     return <ArticleSkeleton />;
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 min-h-screen">
+    <div className="p-6 max-w-7xl mx-auto w-full space-y-6 min-h-screen">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -506,7 +510,7 @@ export default function ArticleManager() {
       </div>
 
       {/* SEARCH & FILTER */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-white p-4 rounded-lg border shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-white p-2 sm:p-4 rounded-lg border shadow-sm">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
           <Input
@@ -579,8 +583,8 @@ export default function ArticleManager() {
                             </div>
                           )}
                         </div>
-                        <div className="space-y-1 min-w-0">
-                          <span className="font-semibold text-gray-900 line-clamp-2 leading-tight">
+                        <div className="space-y-1 max-w-[220px]">
+                          <span className="font-semibold text-gray-900 line-clamp-2 leading-tight text-wrap">
                             {article.title}
                           </span>
                           <div className="flex flex-wrap gap-1">
@@ -790,7 +794,20 @@ export default function ArticleManager() {
                 </div>
               )}
 
-              <div className="prose px-4 prose-sm prose-slate max-w-none dark:prose-invert">
+              <div
+                className="px-6 font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
+                      [&>p]:mb-8 [&>p]:text-slate-700
+                      [&>h1]:text-4xl [&>h1]:font-black [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
+                      [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-14 [&>h2]:mb-6 [&>h2]:tracking-tight [&>h2]:leading-snug
+                      [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-slate-900 [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:tracking-tight
+                      [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
+                      [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_ul]:marker:text-slate-400
+                      [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-emerald-600 [&_ol]:marker:font-bold
+                      [&_li]:ml-10 [&_li]:mb-2
+                      [&_strong]:font-bold [&_strong]:text-slate-900
+                      [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-10 [&_iframe]:shadow-lg
+                    "
+              >
                 <div
                   dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                 />
