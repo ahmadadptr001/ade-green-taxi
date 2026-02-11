@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   MoreHorizontal,
   Eye,
@@ -261,6 +262,7 @@ export default function ArticleManager() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const filteredArticles = articles.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -364,11 +366,14 @@ export default function ArticleManager() {
   // fetch data
   const fetchData = async () => {
     try {
+      setLoading(true)
       const artResponse = await getArticles();
       setArticles(artResponse.articles);
+      setLoading(false);
     } catch (err) {
       console.error(err);
       Swal.fire({ icon: 'error', title: err.message });
+      setLoading(false)
     }
   };
 
@@ -465,6 +470,10 @@ export default function ArticleManager() {
       </div>
     </div>
   );
+
+  if (loading) {
+    return <ArticleSkeleton />;
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 min-h-screen">
@@ -826,6 +835,142 @@ export default function ArticleManager() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+    </div>
+  );
+}
+
+function ArticleSkeleton() {
+  return (
+    <div className="p-6 max-w-7xl mx-auto space-y-6 min-h-screen">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-48 rounded-md" />
+          <Skeleton className="h-4 w-64 rounded-md" />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-10 w-24 hidden sm:block rounded-md" />
+          <Skeleton className="h-10 w-32 rounded-md" />
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-white p-4 rounded-lg border shadow-sm">
+        <div className="flex-1">
+          <Skeleton className="h-10 w-full rounded-lg" />
+        </div>
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-10 w-10 sm:w-20 rounded-md" />
+        </div>
+      </div>
+
+      <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+        <div className="md:hidden p-4 space-y-3">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg border p-4 flex gap-4"
+            >
+              {/* Image Box */}
+              <Skeleton className="flex-shrink-0 w-20 h-14 rounded-md" />
+
+              <div className="flex-1 min-w-0 space-y-2">
+                {/* Title Line */}
+                <div className="flex justify-between items-start gap-2">
+                  <Skeleton className="h-4 w-3/4 rounded" />
+                  <Skeleton className="h-3 w-8 rounded" /> {/* Views */}
+                </div>
+
+                {/* Tags */}
+                <div className="flex gap-1">
+                  <Skeleton className="h-3 w-12 rounded" />
+                  <Skeleton className="h-3 w-10 rounded" />
+                </div>
+
+                {/* Footer Actions */}
+                <div className="flex justify-between items-center mt-2 pt-2">
+                  <div className="flex gap-2">
+                    <Skeleton className="h-3 w-8 rounded" />
+                    <Skeleton className="h-3 w-8 rounded" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Skeleton className="h-6 w-6 rounded-full" />
+                    <Skeleton className="h-6 w-6 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 2. DESKTOP TABLE SKELETON (hidden md:block) */}
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader className="bg-gray-50/80">
+              <TableRow>
+                <TableHead className="w-[420px]">Artikel</TableHead>
+                <TableHead>Status & Kategori</TableHead>
+                <TableHead>Statistik</TableHead>
+                <TableHead>Tanggal</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <TableRow key={index}>
+                  {/* Column 1: Image & Title */}
+                  <TableCell>
+                    <div className="flex items-center gap-4">
+                      {/* Image Thumbnail */}
+                      <Skeleton className="h-16 w-24 rounded-md" />
+                      <div className="space-y-2 flex-1">
+                        {/* Title */}
+                        <Skeleton className="h-4 w-full max-w-[200px]" />
+                        <Skeleton className="h-4 w-2/3" />
+                        {/* Tags */}
+                        <div className="flex gap-1">
+                          <Skeleton className="h-3 w-10" />
+                          <Skeleton className="h-3 w-12" />
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  {/* Column 2: Status */}
+                  <TableCell>
+                    <div className="space-y-2">
+                      <Skeleton className="h-5 w-20 rounded-full" />{' '}
+                      {/* Badge */}
+                      <Skeleton className="h-3 w-24" /> {/* Category Text */}
+                    </div>
+                  </TableCell>
+
+                  {/* Column 3: Stats */}
+                  <TableCell>
+                    <div className="flex gap-3">
+                      <Skeleton className="h-4 w-12" />
+                      <Skeleton className="h-4 w-8" />
+                      <Skeleton className="h-4 w-8" />
+                    </div>
+                  </TableCell>
+
+                  {/* Column 4: Date */}
+                  <TableCell>
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-3 w-12" />
+                    </div>
+                  </TableCell>
+
+                  {/* Column 5: Actions */}
+                  <TableCell className="text-right">
+                    <Skeleton className="h-8 w-8 rounded-md ml-auto" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 }
