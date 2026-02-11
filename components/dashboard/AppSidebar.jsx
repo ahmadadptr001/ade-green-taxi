@@ -374,7 +374,7 @@ export default function AppSidebar() {
                           <SidebarMenuSubItem key={child.title}>
                             <SidebarMenuSubButton
                               asChild
-                              className="hover:bg-sky-100 active:bg-sky-100 text-gray-600 active:text-slate-900 hover:text-slate-900 !font-semibold"
+                              className="hover:bg-sky-100 active:bg-sky-100 text-gray-600 active:text-slate-900 hover:text-slate-900"
                             >
                               <Link
                                 href={child.url}
