@@ -1,96 +1,109 @@
-# ⚡ AdeGreenTX
+# Ade Green Taxi - Web Platform 🌱🚖
 
-**ADE GREEN TX** is a modern, eco‑friendly ride‑hailing platform powered entirely by electric vehicles. Designed for sustainable urban mobility, it combines clean energy, cost efficiency, and a premium user experience.
+![Ade Green Taxi Banner](https://adegreentx.id/banner-about.png)
 
----
+**Ade Green TX** adalah platform web modern yang mendukung ekosistem transportasi taksi listrik ramah lingkungan pertama di Kendari, Sulawesi Tenggara. Proyek ini mencakup *landing page* informatif, portal berita terintegrasi (**Ade Green Berita**), serta sistem manajemen konten (CMS) internal untuk administrator.
 
-## 🌱 Why AdeGreenTX?
+Website ini dibangun menggunakan **Next.js** dengan arsitektur yang responsif, performa tinggi, dan antarmuka pengguna yang elegan.
 
-- 🚗 **Electric Fleet** — 100% electric vehicles for zero emissions and quiet rides.
-- 💸 **Cost‑Efficient** — Lower operational costs mean affordable fares for everyone.
-- 🛡️ **Trusted Safety** — Trained drivers, secure systems, and real‑time monitoring.
-- 📱 **Smart App** — Intuitive UI, instant booking, and bilingual support.
-- 🕒 **24/7 Availability** — Request rides anytime, with cash payment always supported.
+🔗 **Link Akses:**
+- **Beranda:** [https://adegreentx.id/beranda](https://adegreentx.id/beranda)
+- **Portal Berita:** [https://adegreentx.id/berita](https://adegreentx.id/berita)
 
 ---
 
-## ✨ Features
+## 🚀 Fitur Utama
 
-| Feature              | Description                                                               |
-| -------------------- | ------------------------------------------------------------------------- |
-| Electric Vehicles    | All rides use electric taxis for clean, quiet, and efficient travel.      |
-| Bilingual Support    | Instantly switch between English and Indonesian via Zustand store.        |
-| Real‑Time UI         | Live ride status, map tracking, and responsive design across all devices. |
-| Modular Components   | Built with composable React architecture for rapid iteration and scaling. |
-| Cash‑Only Simplicity | No wallet setup required — just book and pay in cash.                     |
+### 1. Public Landing Page (`/beranda`)
+Halaman presentasi layanan untuk calon penumpang dan mitra.
+- **Informasi Layanan:** Penjelasan armada nol emisi dan keunggulan taksi listrik.
+- **Cara Pemesanan:** Panduan langkah-langkah menggunakan aplikasi mobile Ade Green.
+- **FAQ:** Tanya jawab interaktif untuk bantuan cepat pengguna.
+
+### 2. Portal Berita & Artikel (`/berita`)
+Media informasi seputar teknologi hijau, update perusahaan, dan berita lokal.
+- **Kategori & Tags:** Pengelompokan berita (Tech, Transportasi, Inovasi).
+- **Interaksi:** Fitur *Likes*, *Bookmarks*, dan penghitung jumlah tayangan (*Views*).
+- **Responsive Design:** Pengalaman membaca yang optimal di mobile maupun desktop.
+
+### 3. Admin CMS (Article Manager)
+Dashboard khusus pengelola konten dengan fitur manajemen tingkat lanjut:
+- **Rich Text Editor:** Menggunakan **Tiptap Editor** untuk kustomisasi konten artikel (Bold, Italic, Heading, Quote, dll).
+- **CRUD Operations:** Kelola artikel secara penuh (Create, Read, Update, Delete).
+- **Analytics Snapshot:** Pantau statistik performa tiap artikel langsung dari tabel utama.
+- **Export Data:** Fitur ekspor daftar artikel ke format **CSV** untuk kebutuhan laporan.
+- **Preview & Draft System:** Melihat tampilan artikel sebelum diterbitkan atau menyimpannya sebagai draf.
 
 ---
 
-## 🧩 Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend:** React, Next.js, Tailwind CSS, Zustand
-- **Infrastructure:** Nginx, PM2
-- **Design System:** ShadCN UI, Lucide Icons, AOS animations
+Daftar teknologi utama yang digunakan dalam pengembangan:
+
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components:** [Shadcn UI](https://ui.shadcn.com/) (Radix UI)
+- **Editor:** [Tiptap](https://tiptap.dev/) (Headless Rich Text Editor)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Notifications:** [SweetAlert2](https://sweetalert2.github.io/)
+- **Date Handling:** [date-fns](https://date-fns.org/)
+- **State Management:** React Hooks (useState, useEffect)
 
 ---
 
-## 🚀 Getting Started
+## 📂 Struktur Folder Utama
 
 ```bash
-# Clone the repo
-git clone https://github.com/ahmadadptr001/ade-green-taxi.git
-
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
+ade-green-taxi/
+├── app/                    # Next.js App Router (Pages & Layouts)
+│   ├── beranda/            # Halaman Landing Page
+│   ├── berita/             # Halaman Portal Berita Publik
+│   └── dashboard/          # Area Admin (Manajemen Konten)
+├── components/             # Reusable UI Components
+│   ├── ui/                 # Komponen dasar Shadcn (Button, Table, Dialog, dll)
+│   ├── ArticleManager.jsx  # Komponen utama pengelola artikel
+│   └── TiptapEditor.jsx    # Implementasi Rich Text Editor
+├── services/               # Integrasi API (getArticles, deleteArticle, dsb)
+├── public/                 # Aset statis (Gambar, Logo, Ikon)
+├── lib/                    # Fungsi utilitas (cn, formatters)
+└── tailwind.config.js      # Konfigurasi tema Tailwind
 ```
 
----
+## 💻 Instalasi Lokal
+Ingin menjalankan project ini di komputer Anda? Ikuti langkah berikut:
 
-## 📁 Project Structure
+**Clone Repository:**
+```bash
+$ git clone https://github.com/ahmadadptr001/ade-green-taxi.git
+$ cd ade-green-taxi
 
 ```
-├── app/                 # Next.js app directory
-├── components/          # UI components (accordion, modal, hex cards, etc.)
-├── locales/             # Bilingual JSON content (id.json, en.json)
-├── store/               # Zustand language and UI state
-├── public/              # Assets (logo, loading.gif, etc.)
-└── pages/               # Static pages (terms, privacy, landing)
+**Install Dependensi:**
+
+```bash
+$ npm install
+# atau
+$ yarn install
+
 ```
+Buka http://localhost:3000 di browser Anda.
 
----
 
-## 📄 Legal & Privacy
+###
+# 🤝 Kontribusi
+Kami sangat terbuka untuk kontribusi. Jika Anda menemukan bug atau ingin menambahkan fitur:
 
-- [Terms & Conditions](https://adebgs.com/ade-green-taxi/terms)
-- [Privacy Policy](https://adebgs.com/ade-green-taxi/privacy)
-- [Legal Notices](https://adebgs.com/ade-green-taxi/legal)
+Fork repository ini.
 
----
+Buat branch fitur (git checkout -b fitur/FiturBaru).
 
-## 🧠 Built by
+Commit perubahan (git commit -m 'Menambahkan fitur baru').
 
-**Ahmad Bagas Adiputra**  
-Product Owner, UI/UX Designer, and Fullstack Architect  
-Specialized in real‑time systems, premium component design, and electric mobility platforms.
+Push ke branch (git push origin fitur/FiturBaru).
 
----
+Buka Pull Request.
 
-## 🟢 License
+📝 Lisensi
+Hak Cipta © 2026 Ade Green Taxi. Seluruh hak cipta dilindungi undang-undang.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-## 💬 Feedback & Support
-
-For feature requests, bug reports, or partnership inquiries, contact:  
-📧 support@adegreentx.id  
-📍 Kendari, Sulawesi Tenggara
-
----
-
-> “Clean rides. Smart design. Electric future.”  
-> — AdeGreenTX
+Dibuat dengan ❤️ untuk masa depan Kendari yang lebih bersih dan modern.
