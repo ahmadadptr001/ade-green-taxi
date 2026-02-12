@@ -6,6 +6,9 @@ body {
 hh {
   color: #126bb0;
 }
+.swal2-container {
+  backdrop-filter: blur(6px);
+}
 
 div[data-state='collapsed'] span.line-clamp-1 {
   width: 0 !important;

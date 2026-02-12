@@ -82,6 +82,8 @@ import {
   getArticles,
   updateContentArticle,
 } from '@/services/articles';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 // --- KOMPONEN EDITOR TIPTAP ---
 const MenuBar = ({ editor }) => {
@@ -253,6 +255,8 @@ const MOCK_DATA = [
 ];
 
 export default function ArticleManager() {
+  const user = useUser();
+  const router = useRouter();
   const [articles, setArticles] = useState(MOCK_DATA);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -366,6 +370,16 @@ export default function ArticleManager() {
   // fetch data
   const fetchData = async () => {
     try {
+      if (user.role !== 'admin' && user.role !== 'super admin') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.replace('/dashboard/berita');
+          }
+        });
+      }
       setLoading(true);
       const artResponse = await getArticles();
       setArticles(artResponse.articles);
@@ -386,94 +400,96 @@ export default function ArticleManager() {
   };
 
   // Mobile Card component (presentation only, logic reused)
- const ArticleCardMobile = ({ article }) => (
-  <div className="bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row gap-4 items-start md:items-center">
-    
-    {/* Section 1: Image & Title Group */}
-    <div className="flex gap-4 flex-1 w-full">
-      {/* Image */}
-      <div className="flex-shrink-0 w-24 h-16 md:w-32 md:h-20 rounded-md overflow-hidden bg-gray-50 border">
-        {article.img ? (
-          <img
-            src={article.img}
-            alt={article.title}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <ImageIcon />
+  const ArticleCardMobile = ({ article }) => (
+    <div className="bg-white rounded-lg shadow-sm p-4 flex flex-col md:flex-row gap-4 items-start md:items-center">
+      {/* Section 1: Image & Title Group */}
+      <div className="flex gap-4 flex-1 w-full">
+        {/* Image */}
+        <div className="flex-shrink-0 w-24 h-16 md:w-32 md:h-20 rounded-md overflow-hidden bg-gray-50 border">
+          {article.img ? (
+            <img
+              src={article.img}
+              alt={article.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <ImageIcon />
+            </div>
+          )}
+        </div>
+
+        {/* Title & Tags */}
+        <div className="flex-1">
+          <h3 className="font-semibold text-sm md:text-base text-gray-900 line-clamp-2">
+            {article.title}
+          </h3>
+          <div className="mt-1 flex flex-wrap gap-1">
+            {article.article_tags.map((t) => (
+              <span
+                key={t.tags.id}
+                className="text-[10px] md:text-[11px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
+              >
+                #{t.tags.name}
+              </span>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Title & Tags */}
-      <div className="flex-1">
-        <h3 className="font-semibold text-sm md:text-base text-gray-900 line-clamp-2">
-          {article.title}
-        </h3>
-        <div className="mt-1 flex flex-wrap gap-1">
-          {article.article_tags.map((t) => (
-            <span
-              key={t.tags.id}
-              className="text-[10px] md:text-[11px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
-            >
-              #{t.tags.name}
-            </span>
-          ))}
+      {/* Section 2: Stats & Actions */}
+      <div className="flex flex-row md:flex-row items-center justify-between w-full md:w-auto md:gap-8 border-t md:border-t-0 pt-3 md:pt-0">
+        {/* Stats (Views, Likes, Bookmarks) */}
+        <div className="flex gap-4 items-center">
+          <div className="hidden sm:block md:text-left mr-2">
+            <div className="text-xs text-gray-500 whitespace-nowrap">
+              {article.views.toLocaleString()} views
+            </div>
+            <Badge className="mt-0.5 scale-90 origin-left md:origin-center">
+              {article.published_at ? 'Published' : 'Draft'}
+            </Badge>
+          </div>
+
+          <div className="flex items-center gap-3 border-l md:border-l-0 pl-3 md:pl-0">
+            <div title="Likes" className="flex items-center gap-1">
+              <Heart className="h-4 w-4 text-rose-500" />
+              <span className="text-sm font-medium">
+                {article.article_likes.length}
+              </span>
+            </div>
+            <div title="Bookmarks" className="flex items-center gap-1">
+              <Bookmark className="h-4 w-4 text-amber-500" />
+              <span className="text-sm font-medium">
+                {article.article_bookmarks.length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-1 md:gap-2">
+          <button
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            onClick={() => handleView(article)}
+          >
+            <Eye className="w-4 h-4 text-gray-600" />
+          </button>
+          <button
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            onClick={() => openEditModal(article)}
+          >
+            <Edit className="w-4 h-4 text-gray-600" />
+          </button>
+          <button
+            className="p-2 hover:bg-red-50 rounded-full transition-colors text-red-600"
+            onClick={() => confirmDelete(article.id)}
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
-
-    {/* Section 2: Stats & Actions */}
-    <div className="flex flex-row md:flex-row items-center justify-between w-full md:w-auto md:gap-8 border-t md:border-t-0 pt-3 md:pt-0">
-      
-      {/* Stats (Views, Likes, Bookmarks) */}
-      <div className="flex gap-4 items-center">
-        <div className="hidden sm:block md:text-left mr-2">
-           <div className="text-xs text-gray-500 whitespace-nowrap">
-            {article.views.toLocaleString()} views
-          </div>
-          <Badge className="mt-0.5 scale-90 origin-left md:origin-center">
-            {article.published_at ? 'Published' : 'Draft'}
-          </Badge>
-        </div>
-
-        <div className="flex items-center gap-3 border-l md:border-l-0 pl-3 md:pl-0">
-          <div title="Likes" className="flex items-center gap-1">
-            <Heart className="h-4 w-4 text-rose-500" />
-            <span className="text-sm font-medium">{article.article_likes.length}</span>
-          </div>
-          <div title="Bookmarks" className="flex items-center gap-1">
-            <Bookmark className="h-4 w-4 text-amber-500" />
-            <span className="text-sm font-medium">{article.article_bookmarks.length}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex items-center gap-1 md:gap-2">
-        <button
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          onClick={() => handleView(article)}
-        >
-          <Eye className="w-4 h-4 text-gray-600" />
-        </button>
-        <button
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          onClick={() => openEditModal(article)}
-        >
-          <Edit className="w-4 h-4 text-gray-600" />
-        </button>
-        <button
-          className="p-2 hover:bg-red-50 rounded-full transition-colors text-red-600"
-          onClick={() => confirmDelete(article.id)}
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-  </div>
-);
+  );
 
   if (loading) {
     return <ArticleSkeleton />;

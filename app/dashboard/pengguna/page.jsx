@@ -20,15 +20,30 @@ import {
   XCircle,
   Users,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export default function UserManagementPage() {
+  const userLocal = useUser();
+  const router = useRouter();
   const currentUser = useUser();
   const [users, setUsers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    if (userLocal.role !== 'admin' && userLocal.role !== 'super admin') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.replace('/dashboard/berita');
+        }
+      });
+    }
+  }, []);
   useEffect(() => {
     (async () => {
       try {
@@ -143,7 +158,6 @@ export default function UserManagementPage() {
   return (
     <main className="min-h-screen w-full bg-slate-50/50 p-4 lg:p-8 pt-10 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
-        
         {/* HEADER AREA */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
           <div className="space-y-2">
@@ -151,16 +165,18 @@ export default function UserManagementPage() {
               Manajemen Pengguna
             </h2>
             <p className="text-slate-500 font-medium text-sm max-w-md">
-              Kelola akses tim, peran, dan status akun dalam satu tampilan terpusat.
+              Kelola akses tim, peran, dan status akun dalam satu tampilan
+              terpusat.
             </p>
             <div className="flex items-center gap-2 mt-2">
-               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">
-                 <Users size={14} /> 
-                 Total: {users ? users.length : 0}
-               </span>
-               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
-                 Aktif: {users ? users.filter(u => u.status === 'aktif').length : 0}
-               </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">
+                <Users size={14} />
+                Total: {users ? users.length : 0}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+                Aktif:{' '}
+                {users ? users.filter((u) => u.status === 'aktif').length : 0}
+              </span>
             </div>
           </div>
 
@@ -202,7 +218,6 @@ export default function UserManagementPage() {
                       className="group relative bg-white rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 hover:border-indigo-200 hover:shadow-[0_8px_24px_rgba(99,102,241,0.1)] transition-all duration-300"
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-5 lg:gap-6 items-center">
-                        
                         {/* 1. User Info */}
                         <div className="col-span-1 lg:col-span-4 flex items-center gap-4">
                           <div className="relative shrink-0">
@@ -213,7 +228,9 @@ export default function UserManagementPage() {
                             />
                             <span
                               className={`absolute bottom-0 right-0 w-3.5 h-3.5 border-2 border-white rounded-full ${
-                                user.status === 'aktif' ? 'bg-emerald-500' : 'bg-rose-500'
+                                user.status === 'aktif'
+                                  ? 'bg-emerald-500'
+                                  : 'bg-rose-500'
                               }`}
                             ></span>
                           </div>
@@ -229,12 +246,18 @@ export default function UserManagementPage() {
 
                         <div className="col-span-1 lg:col-span-3">
                           <div className="flex flex-col gap-1.5">
-                            <span className="lg:hidden text-xs font-bold text-slate-400 uppercase">Role Akses</span>
+                            <span className="lg:hidden text-xs font-bold text-slate-400 uppercase">
+                              Role Akses
+                            </span>
                             <div className="relative w-fit">
                               <select
                                 value={user?.role}
                                 onChange={(e) =>
-                                  onChangeRole(user?.id, e.target.value.toLowerCase(), user?.email)
+                                  onChangeRole(
+                                    user?.id,
+                                    e.target.value.toLowerCase(),
+                                    user?.email
+                                  )
                                 }
                                 disabled={user.id === currentUser.id}
                                 className={`w-full lg:w-48 appearance-none pl-10 pr-8 py-2.5 rounded-xl text-sm font-bold shadow-sm border outline-none transition-all cursor-pointer
@@ -242,8 +265,8 @@ export default function UserManagementPage() {
                                     user?.role === 'super admin'
                                       ? 'bg-indigo-50 text-indigo-700 border-indigo-100 focus:ring-2 focus:ring-indigo-200'
                                       : user?.role === 'admin'
-                                      ? 'bg-blue-50 text-blue-700 border-blue-100 focus:ring-2 focus:ring-blue-200'
-                                      : 'bg-slate-50 text-slate-600 border-slate-200 focus:ring-2 focus:ring-slate-200'
+                                        ? 'bg-blue-50 text-blue-700 border-blue-100 focus:ring-2 focus:ring-blue-200'
+                                        : 'bg-slate-50 text-slate-600 border-slate-200 focus:ring-2 focus:ring-slate-200'
                                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                               >
                                 <option value="pengunjung">Pengunjung</option>
@@ -253,7 +276,9 @@ export default function UserManagementPage() {
                               <Shield
                                 size={16}
                                 className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none ${
-                                  user?.role.includes('admin') ? 'text-current opacity-70' : 'text-slate-400'
+                                  user?.role.includes('admin')
+                                    ? 'text-current opacity-70'
+                                    : 'text-slate-400'
                                 }`}
                               />
                               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-current opacity-50 pointer-events-none" />
@@ -264,10 +289,15 @@ export default function UserManagementPage() {
                         {/* 3. Status Badge */}
                         <div className="col-span-1 lg:col-span-3">
                           <div className="flex flex-col gap-1.5">
-                            <span className="lg:hidden text-xs font-bold text-slate-400 uppercase">Status Akun</span>
+                            <span className="lg:hidden text-xs font-bold text-slate-400 uppercase">
+                              Status Akun
+                            </span>
                             {user.status === 'aktif' ? (
                               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100/50 border border-emerald-200 text-emerald-700 text-xs font-bold w-fit">
-                                <CheckCircle2 size={14} className="text-emerald-600" />
+                                <CheckCircle2
+                                  size={14}
+                                  className="text-emerald-600"
+                                />
                                 <span>Akun Aktif</span>
                               </div>
                             ) : (
@@ -291,7 +321,11 @@ export default function UserManagementPage() {
                                       ? 'bg-white border-slate-200 text-slate-400 hover:text-amber-600 hover:bg-amber-50 hover:border-amber-200'
                                       : 'bg-emerald-50 border-emerald-100 text-emerald-600 hover:bg-emerald-100'
                                   }`}
-                                title={user.status === 'aktif' ? 'Suspend User' : 'Activate User'}
+                                title={
+                                  user.status === 'aktif'
+                                    ? 'Suspend User'
+                                    : 'Activate User'
+                                }
                               >
                                 {user.status === 'aktif' ? (
                                   <ShieldAlert size={18} />
@@ -323,7 +357,9 @@ export default function UserManagementPage() {
                     <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                       <Search size={32} className="text-slate-300" />
                     </div>
-                    <h3 className="text-lg font-bold text-slate-800">Tidak ada pengguna ditemukan</h3>
+                    <h3 className="text-lg font-bold text-slate-800">
+                      Tidak ada pengguna ditemukan
+                    </h3>
                     <p className="text-slate-500 text-sm mt-1">
                       Coba cari dengan kata kunci nama atau email yang berbeda.
                     </p>
@@ -343,7 +379,10 @@ const CardSkeletonList = ({ rows = 5 }) => {
   return (
     <div className="space-y-3">
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+        <div
+          key={i}
+          className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="col-span-1 lg:col-span-4 flex items-center gap-4">
               <Skeleton className="w-14 h-14 rounded-full" />

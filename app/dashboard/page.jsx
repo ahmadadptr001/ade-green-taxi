@@ -15,11 +15,13 @@ import {
   Activity,
   Users,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export default function DashboardPage() {
   const user = useUser();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [dashboardItems, setDashboardItems] = useState([
     {
@@ -63,6 +65,17 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // cek permission role
+        if (user.role !== 'admin' || user.role !== 'super admin') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.replace('/dashboard/berita');
+            }
+          });
+        }
         const dataViewsResp = await getViewsAllArticle();
         const dataCountsResp = await getCountsAllArticle();
         const dataCountsUserActiveResp = await getCountsAllUserByActive();
@@ -151,7 +164,7 @@ export default function DashboardPage() {
                   </p>
                   <div className="mt-4 flex items-baseline gap-1">
                     {loading ? (
-                      <Skeleton className={'w-full h-5'}/>
+                      <Skeleton className={'w-full h-5'} />
                     ) : (
                       <h2 className="text-5xl font-extrabold tracking-tight text-slate-900">
                         {item.total.toLocaleString('id-ID')}

@@ -29,9 +29,12 @@ import Swal from 'sweetalert2';
 import { slugify } from '@/utils/slug';
 import { Capitalize } from '@/utils/text';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 export default function TagsPage() {
-  // Data Awal (Tanpa Count)
+  const user = useUser();
+  const router = useRouter();
   const [tags, setTags] = useState([
     {
       id: '1',
@@ -51,6 +54,16 @@ export default function TagsPage() {
   // fetch data
   const fetchTags = async () => {
     try {
+      if (user.role !== 'admin' && user.role !== 'super admin') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.replace('/dashboard/berita');
+          }
+        });
+      }
       const tagResponse = await getTags();
       setTags(tagResponse.tags);
       setLoading(false);
@@ -221,8 +234,8 @@ export default function TagsPage() {
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button className="opacity-100 transition-opacity p-2 bg-red-50 text-red-500 rounded-full">
-                                                  <Trash2 className="h-6 w-6 font-bold" />
-                                                </button>
+                          <Trash2 className="h-6 w-6 font-bold" />
+                        </button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>

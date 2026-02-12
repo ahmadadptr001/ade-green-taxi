@@ -107,7 +107,7 @@ export default function PremiumNewsPage() {
     const user = localStorage.getItem('user');
     setIsLogin(!!user);
   }, []);
-
+  
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -302,7 +302,7 @@ export default function PremiumNewsPage() {
 
               {isLogin ? (
                 <button
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/dashboard/berita')}
                   className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   <LayoutDashboard size={15} />

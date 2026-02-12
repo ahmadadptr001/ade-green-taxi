@@ -33,9 +33,12 @@ import {
 import { Capitalize } from '@/utils/text';
 import Swal from 'sweetalert2';
 import { slugify } from '@/utils/slug';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 export default function CategoryPage() {
-  // Data Awal (Tanpa Count)
+  const user = useUser();
+  const router = useRouter();
   const [categories, setCategories] = useState([
     {
       id: '1',
@@ -54,6 +57,16 @@ export default function CategoryPage() {
 
   const fetchCategories = async () => {
     try {
+      if (user.role !== 'admin' && user.role !== 'super admin') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.replace('/dashboard/berita');
+          }
+        });
+      }
       const categoryResponse = await getCategories();
       setCategories(categoryResponse.categories);
       setLoading(false);

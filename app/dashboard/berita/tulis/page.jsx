@@ -40,6 +40,8 @@ import {
   uploadMainImageArticle,
 } from '@/services/articles';
 import Swal from 'sweetalert2';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 const BASE_STYLE_MAP = {
   FONT_SIZE_SMALL: { fontSize: '12px' },
@@ -54,6 +56,8 @@ const BASE_STYLE_MAP = {
 };
 
 export default function RichEditorWithMeta() {
+  const user = useUser();
+  const router = useRouter();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -81,6 +85,16 @@ export default function RichEditorWithMeta() {
   const mainImageInputRef = useRef(null); // Ref untuk input gambar utama
 
   useEffect(() => {
+    if (user.role !== 'admin' && user.role !== 'super admin') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.replace('/dashboard/berita');
+        }
+      });
+    }
     (async () => {
       try {
         const respCategories = await getCategories();
@@ -525,7 +539,7 @@ export default function RichEditorWithMeta() {
         didOpen: () => Swal.hideLoading(),
       });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       Swal.fire({
         icon: 'error',
         title: err.message,

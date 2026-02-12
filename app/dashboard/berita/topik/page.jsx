@@ -28,8 +28,12 @@ import { addTopic, getTopics, removeTopic } from '@/services/articles';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Capitalize } from '@/utils/text';
 import { slugify } from '@/utils/slug';
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 export default function TopicsPage() {
+  const user = useUser();
+  const router = useRouter();
   const [topics, setTopics] = useState([
     {
       id: '1',
@@ -54,6 +58,16 @@ export default function TopicsPage() {
 
   const fetchTopics = async () => {
     try {
+      if (user.role !== 'admin' && user.role !== 'super admin') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.replace('/dashboard/berita');
+          }
+        });
+      }
       const topicsResponse = await getTopics();
       setTopics(topicsResponse.topics);
       setLoading(false);

@@ -19,8 +19,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { id } from 'date-fns/locale';
 import Swal from 'sweetalert2';
 import { getUsers } from '@/services/users';
-
-// --- UI COMPONENTS ---
+import { useUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
 
 const Badge = ({ children, variant = 'default', className = '' }) => {
   const variants = {
@@ -62,20 +62,17 @@ const StatCard = ({ title, value, icon, subtitle, colorClass }) => (
   </Card>
 );
 
-// --- MAIN COMPONENT ---
-
 export default function UserActivityManager() {
-  // State
+  const user = useUser();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all'); // State untuk filter
   const [isFilterOpen, setIsFilterOpen] = useState(false); // State dropdown filter
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Ref untuk click outside handler
   const filterRef = useRef(null);
 
-  // Logic Filtering (Search + Status)
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,6 +89,21 @@ export default function UserActivityManager() {
   const inActiveUsersCount = users.filter(
     (user) => user.status === 'ditangguhkan'
   ).length;
+
+  useEffect(() => {
+    setLoading(true)
+    if (user.role !== 'admin' && user.role !== 'super admin') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          router.replace('/dashboard/berita');
+        }
+      });
+    }
+    return
+  }, []);
 
   // Data Fetching
   const fetchData = async () => {

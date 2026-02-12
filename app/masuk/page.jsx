@@ -75,7 +75,7 @@ export default function LoginPaeg() {
       }).then((result) => {
         if (result.isConfirmed) {
           localStorage.setItem('user', JSON.stringify(dataUser.data));
-          router.replace('/dashboard');
+          router.replace('/dashboard/berita');
         }
       });
     } catch (err) {
