@@ -21,6 +21,7 @@ import {
   Globe,
   MenuIcon,
   LogIn,
+  LayoutDashboard,
 } from 'lucide-react';
 import {
   getArticles,
@@ -43,6 +44,7 @@ import {
 } from '@/components/ui/dialog';
 import { DialogContent } from '@radix-ui/react-dialog';
 import Lottie from 'lottie-react';
+import { useRouter } from 'next/navigation';
 
 const placeholderSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='500'><rect width='100%' height='100%' fill='%23f8fafc'/><g fill='%239ca3af' font-family='Arial, Helvetica, sans-serif' font-size='20'><text x='50%' y='48%' dominant-baseline='middle' text-anchor='middle'>No image</text><text x='50%' y='62%' dominant-baseline='middle' text-anchor='middle' font-size='14'>image unavailable</text></g></svg>`;
 const PLACEHOLDER = `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSvg)}`;
@@ -82,6 +84,8 @@ const CATEGORIES = [
 ];
 
 export default function PremiumNewsPage() {
+  const router = useRouter();
+
   const [activeCategory, setActiveCategory] = useState('Semua');
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -94,9 +98,15 @@ export default function PremiumNewsPage() {
   const [topics, setTopics] = useState(null);
   const [popularArticles, setPopularArticles] = useState(null);
   const [highlight, setHighlight] = useState('');
+  const [isLogin, setIsLogin] = useState(false);
 
   // Flag loading state derived from data existence
   const isLoading = articles === null;
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    setIsLogin(!!user);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -112,9 +122,9 @@ export default function PremiumNewsPage() {
         const tags_resp = await getTags();
         const topics_resp = await getTopics();
         const hightlight_ = await getHighlight();
-        
+
         if (hightlight_?.highlight?.[0]) {
-            setHighlight(hightlight_.highlight[0].text);
+          setHighlight(hightlight_.highlight[0].text);
         }
 
         // filter artikel jadi data yang lebih simpel
@@ -198,7 +208,7 @@ export default function PremiumNewsPage() {
             <div className="overflow-hidden whitespace-nowrap max-w-lg">
               {/* Skeleton for Highlight */}
               {!highlight ? (
-                 <Skeleton className="h-3 w-64 bg-slate-200" />
+                <Skeleton className="h-3 w-64 bg-slate-200" />
               ) : (
                 <div className="animate-marquee inline-block text-slate-900">
                   {highlight}
@@ -245,29 +255,27 @@ export default function PremiumNewsPage() {
 
             {/* Main Nav - Minimalist */}
             <nav className="hidden lg:flex items-center gap-8">
-              {!topics ? (
-                 // Skeleton for Nav Items
-                 [1, 2, 3, 4, 5].map((i) => (
+              {!topics
+                ? // Skeleton for Nav Items
+                  [1, 2, 3, 4, 5].map((i) => (
                     <Skeleton key={i} className="h-4 w-16 bg-slate-100" />
-                 ))
-              ) : (
-                topics.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveNav(item.name)}
-                    className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
-                      activeNav === item.name
-                        ? 'text-emerald-600'
-                        : 'text-slate-500'
-                    }`}
-                  >
-                    {item.name}
-                    {activeNav === item.name && (
-                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
-                    )}
-                  </button>
-                ))
-              )}
+                  ))
+                : topics.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveNav(item.name)}
+                      className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
+                        activeNav === item.name
+                          ? 'text-emerald-600'
+                          : 'text-slate-500'
+                      }`}
+                    >
+                      {item.name}
+                      {activeNav === item.name && (
+                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
+                      )}
+                    </button>
+                  ))}
             </nav>
 
             {/* Header Actions */}
@@ -292,12 +300,22 @@ export default function PremiumNewsPage() {
 
               <div className="h-6 w-px bg-slate-200 mx-2 hidden md:block"></div>
 
-              <button
-                onClick={() => setShowModal(true)}
-                className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Sign In
-              </button>
+              {isLogin ? (
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                  <LayoutDashboard size={15} />
+                  Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900 hover:bg-emerald-600 text-white text-xs font-bold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                  Sign In
+                </button>
+              )}
 
               <button
                 className="flex items-center justify-center lg:hidden p-2 text-slate-900"
@@ -319,7 +337,10 @@ export default function PremiumNewsPage() {
           onClick={() => setShowModal(false)}
         ></div>
         <div className="absolute inset-0 flex items-center justify-center p-4">
-          <div id='modal-berita' className="relative bg-white w-full h-fit sm:max-h-[80%] md:max-h-[90%] max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 animate-in zoom-in-95 duration-200">
+          <div
+            id="modal-berita"
+            className="relative bg-white w-full h-fit sm:max-h-[80%] md:max-h-[90%] max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 animate-in zoom-in-95 duration-200"
+          >
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 p-2 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-900 transition-colors"
@@ -388,29 +409,47 @@ export default function PremiumNewsPage() {
               </button>
             </div>
             <div className="flex flex-col gap-6">
-              {topics &&
-                topics.map((item) => (
-                  <button
-                    key={item.id}
-                    className={`text-left text-lg font-bold tracking-tight ${activeNav === item.name ? 'text-emerald-600' : 'text-slate-900'}`}
-                    onClick={() => {
-                      setActiveNav(item.name);
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    {item.name}
-                  </button>
-                ))}
+              {isLoading
+                ? [1, 2, 3, 4].map((item, key) => (
+                    <div className="flex flex-wrap gap-2">
+                      <Skeleton className={'w-full h-4'} key={item} />
+                    </div>
+                  ))
+                : topics &&
+                  topics.map((item) => (
+                    <button
+                      key={item.id}
+                      className={`text-left text-lg font-bold tracking-tight ${activeNav === item.name ? 'text-emerald-600' : 'text-slate-900'}`}
+                      onClick={() => {
+                        setActiveNav(item.name);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  ))}
               <hr className="border-slate-200 my-2" />
-              <button
-                onClick={() => {
-                  setShowModal(true);
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold"
-              >
-                Masuk / Daftar
-              </button>
+              {isLogin ? (
+                <button
+                  onClick={() => {
+                    router.push('/dashboard');
+                  }}
+                  className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold flex justify-center items-center gap-1"
+                >
+                  <LayoutDashboard size={15} />
+                  Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowModal(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold"
+                >
+                  Masuk / Daftar
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -425,12 +464,12 @@ export default function PremiumNewsPage() {
               {isLoading ? (
                 // Skeleton Main Hero
                 <div className="lg:col-span-8 relative aspect-[16/10] md:aspect-[2/1] lg:aspect-auto">
-                    <Skeleton className="h-full w-full rounded-2xl bg-slate-200" />
-                    <div className="absolute bottom-6 left-6 w-3/4 space-y-3">
-                        <Skeleton className="h-4 w-24 bg-slate-300" />
-                        <Skeleton className="h-10 w-full bg-slate-300" />
-                        <Skeleton className="h-4 w-1/2 bg-slate-300" />
-                    </div>
+                  <Skeleton className="h-full w-full rounded-2xl bg-slate-200" />
+                  <div className="absolute bottom-6 left-6 w-3/4 space-y-3">
+                    <Skeleton className="h-4 w-24 bg-slate-300" />
+                    <Skeleton className="h-10 w-full bg-slate-300" />
+                    <Skeleton className="h-4 w-1/2 bg-slate-300" />
+                  </div>
                 </div>
               ) : hasNews ? (
                 <Link
@@ -449,12 +488,12 @@ export default function PremiumNewsPage() {
 
                   <div className="absolute bottom-0 left-0 p-6 lg:p-10 w-full max-w-4xl">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="bg-white/10 backdrop-blur-md text-white border border-white/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                      <p className="bg-white/10 backdrop-blur-md text-white border border-white/20 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
                         {primary.category}
-                      </span>
-                      <span className="text-white/70 text-xs font-medium tracking-wide">
+                      </p>
+                      <p className="text-white/70 text-xs font-medium tracking-wide">
                         {primary.date}
-                      </span>
+                      </p>
                     </div>
 
                     <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4 group-hover:text-emerald-400 transition-colors">
@@ -479,48 +518,51 @@ export default function PremiumNewsPage() {
 
               {/* Side Articles (Right Column) */}
               <div className="lg:col-span-4 flex flex-col gap-6">
-                {isLoading ? (
-                    // Skeleton Side Items
+                {isLoading
+                  ? // Skeleton Side Items
                     [1, 2].map((i) => (
-                        <div key={i} className="flex-1 rounded-2xl bg-white border border-slate-100 p-6 flex flex-col justify-between">
-                            <div className="space-y-3">
-                                <div className="flex justify-between">
-                                    <Skeleton className="h-3 w-16 bg-slate-200" />
-                                    <Skeleton className="h-3 w-12 bg-slate-200" />
-                                </div>
-                                <Skeleton className="h-6 w-full bg-slate-200" />
-                                <Skeleton className="h-6 w-3/4 bg-slate-200" />
-                            </div>
-                            <Skeleton className="h-4 w-24 mt-4 bg-slate-200" />
-                        </div>
-                    ))
-                ) : hasNews
-                  ? sideItems.map((item) => (
-                      <Link
-                        href={`/berita/${item.slug}`}
-                        key={item.id}
-                        className="group relative flex-1 rounded-2xl bg-white border border-slate-100 p-6 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-slate-100 overflow-hidden flex flex-col justify-between"
+                      <div
+                        key={i}
+                        className="flex-1 rounded-2xl bg-white border border-slate-100 p-6 flex flex-col justify-between"
                       >
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
-                              {item.category}
-                            </span>
-                            <span className="text-slate-400 text-[10px]">
-                              {item.date}
-                            </span>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <Skeleton className="h-3 w-16 bg-slate-200" />
+                            <Skeleton className="h-3 w-12 bg-slate-200" />
                           </div>
-                          <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
-                            {item.title}
-                          </h3>
+                          <Skeleton className="h-6 w-full bg-slate-200" />
+                          <Skeleton className="h-6 w-3/4 bg-slate-200" />
                         </div>
-                        <div className="mt-4 flex items-center text-xs font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
-                          Baca Selengkapnya{' '}
-                          <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </Link>
+                        <Skeleton className="h-4 w-24 mt-4 bg-slate-200" />
+                      </div>
                     ))
-                  : [0, 1].map((i) => <div key={i}></div>)}
+                  : hasNews
+                    ? sideItems.map((item) => (
+                        <Link
+                          href={`/berita/${item.slug}`}
+                          key={item.id}
+                          className="group relative flex-1 rounded-2xl bg-white border border-slate-100 p-6 hover:border-emerald-500/30 transition-all hover:shadow-lg hover:shadow-slate-100 overflow-hidden flex flex-col justify-between"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
+                                {item.category}
+                              </span>
+                              <span className="text-slate-400 text-[10px]">
+                                {item.date}
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <div className="mt-4 flex items-center text-xs font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">
+                            Baca Selengkapnya{' '}
+                            <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </Link>
+                      ))
+                    : [0, 1].map((i) => <div key={i}></div>)}
               </div>
             </div>
           </section>
@@ -532,49 +574,53 @@ export default function PremiumNewsPage() {
           <div className="lg:col-span-8">
             {/* Filter Tabs - Clean Pill Style */}
             <div className="flex items-center gap-2 mb-10 overflow-x-auto no-scrollbar pb-2">
-              {!categories ? (
-                // Skeleton Categories
-                [1,2,3,4,5].map((i) => (
-                    <Skeleton key={i} className="h-8 w-24 rounded-full bg-slate-200 flex-shrink-0" />
-                ))
-              ) : (
-                categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.name)}
-                    className={`whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all border ${
-                      activeCategory === cat.name
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-900'
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))
-              )}
+              {!categories
+                ? // Skeleton Categories
+                  [1, 2, 3, 4, 5].map((i) => (
+                    <Skeleton
+                      key={i}
+                      className="h-8 w-24 rounded-full bg-slate-200 flex-shrink-0"
+                    />
+                  ))
+                : categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.name)}
+                      className={`whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all border ${
+                        activeCategory === cat.name
+                          ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                          : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-900'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
             </div>
 
             {/* List Artikel - Editorial Layout */}
             <div className="space-y-12">
               {isLoading ? (
-                 // Skeleton Feed List
-                 [1, 2, 3].map((i) => (
-                    <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start border-b border-slate-100 pb-12">
-                         <div className="md:col-span-5 relative rounded-xl aspect-[16/10] overflow-hidden">
-                             <Skeleton className="h-full w-full bg-slate-200" />
-                         </div>
-                         <div className="md:col-span-7 flex flex-col gap-4">
-                             <div className="flex gap-2">
-                                <Skeleton className="h-4 w-16 bg-slate-200" />
-                                <Skeleton className="h-4 w-20 bg-slate-200" />
-                             </div>
-                             <Skeleton className="h-8 w-full bg-slate-200" />
-                             <Skeleton className="h-4 w-full bg-slate-200" />
-                             <Skeleton className="h-4 w-3/4 bg-slate-200" />
-                             <Skeleton className="h-3 w-20 bg-slate-200 mt-2" />
-                         </div>
+                // Skeleton Feed List
+                [1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start border-b border-slate-100 pb-12"
+                  >
+                    <div className="md:col-span-5 relative rounded-xl aspect-[16/10] overflow-hidden">
+                      <Skeleton className="h-full w-full bg-slate-200" />
                     </div>
-                 ))
+                    <div className="md:col-span-7 flex flex-col gap-4">
+                      <div className="flex gap-2">
+                        <Skeleton className="h-4 w-16 bg-slate-200" />
+                        <Skeleton className="h-4 w-20 bg-slate-200" />
+                      </div>
+                      <Skeleton className="h-8 w-full bg-slate-200" />
+                      <Skeleton className="h-4 w-full bg-slate-200" />
+                      <Skeleton className="h-4 w-3/4 bg-slate-200" />
+                      <Skeleton className="h-3 w-20 bg-slate-200 mt-2" />
+                    </div>
+                  </div>
+                ))
               ) : filteredNews?.length > 0 ? (
                 filteredNews.map((news) => (
                   <article
@@ -668,16 +714,16 @@ export default function PremiumNewsPage() {
 
               <div className="flex flex-col gap-6">
                 {isLoading ? (
-                    // Skeleton Popular
-                    [1, 2, 3, 4].map((i) => (
-                        <div key={i} className="flex gap-5 items-start">
-                            <Skeleton className="w-10 h-10 rounded-md bg-slate-200 shrink-0" />
-                            <div className="flex-1 space-y-2">
-                                <Skeleton className="h-4 w-full bg-slate-200" />
-                                <Skeleton className="h-3 w-1/2 bg-slate-200" />
-                            </div>
-                        </div>
-                    ))
+                  // Skeleton Popular
+                  [1, 2, 3, 4].map((i) => (
+                    <div key={i} className="flex gap-5 items-start">
+                      <Skeleton className="w-10 h-10 rounded-md bg-slate-200 shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-4 w-full bg-slate-200" />
+                        <Skeleton className="h-3 w-1/2 bg-slate-200" />
+                      </div>
+                    </div>
+                  ))
                 ) : popularArticles?.length > 0 ? (
                   popularArticles.slice(0, 4).map((item, index) => (
                     <Link
@@ -711,34 +757,37 @@ export default function PremiumNewsPage() {
 
             {/* Tags Cloud (Optional visual filler) */}
             <div>
-                 <div className="flex items-center gap-4 mb-6">
-                  <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">
-                    Topik Hangat
-                  </h4>
-                  <div className="h-px bg-slate-200 flex-1"></div>
+              <div className="flex items-center gap-4 mb-6">
+                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">
+                  Topik Hangat
+                </h4>
+                <div className="h-px bg-slate-200 flex-1"></div>
+              </div>
+              {!tags ? (
+                // Skeleton Tags
+                <div className="flex flex-wrap gap-2">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <Skeleton
+                      key={i}
+                      className="h-8 w-16 rounded-md bg-slate-200"
+                    />
+                  ))}
                 </div>
-                {!tags ? (
-                    // Skeleton Tags
-                    <div className="flex flex-wrap gap-2">
-                        {[1,2,3,4,5,6].map(i => (
-                            <Skeleton key={i} className="h-8 w-16 rounded-md bg-slate-200" />
-                        ))}
-                    </div>
-                ) : (
-                    tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {tags.slice(0, 8).map((tag) => (
-                            <Link
-                              href={'/berita/tag/' + tag.slug}
-                              key={tag.id}
-                              className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
-                            >
-                              #{tag.name}
-                            </Link>
-                          ))}
-                        </div>
-                    )
-                )}
+              ) : (
+                tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {tags.slice(0, 8).map((tag) => (
+                      <Link
+                        href={'/berita/tag/' + tag.slug}
+                        key={tag.id}
+                        className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-md text-slate-600 font-medium"
+                      >
+                        #{tag.name}
+                      </Link>
+                    ))}
+                  </div>
+                )
+              )}
             </div>
           </aside>
         </section>
