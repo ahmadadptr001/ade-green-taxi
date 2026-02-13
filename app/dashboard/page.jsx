@@ -66,7 +66,7 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         // cek permission role
-        if (user.role !== 'admin' || user.role !== 'super admin') {
+        if (user.role !== 'admin' && user.role !== 'super admin') {
           Swal.fire({
             icon: 'warning',
             title: 'Anda tidak memiliki izin untuk mengakses halaman ini!',
