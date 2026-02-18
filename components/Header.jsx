@@ -182,6 +182,7 @@ export default function Header() {
                   onClick={() => setSearchOpen(false)}
                   className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition"
                 >
+                  <p className='hidden'>Tutup</p>
                   <X size={20} />
                 </button>
               </div>
