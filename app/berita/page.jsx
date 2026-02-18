@@ -585,7 +585,7 @@ export default function PremiumNewsPage() {
                       className="h-8 w-24 rounded-full bg-slate-200 flex-shrink-0"
                     />
                   ))
-                : categories.map((cat) => (
+                : [{id: 0, name:'Semua'}, ...categories].map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => setActiveCategory(cat.name)}
@@ -752,7 +752,7 @@ export default function PremiumNewsPage() {
                   ))
                 ) : (
                   <div className="text-slate-400 text-sm text-center py-4">
-                    Memuat data populer...
+                    Tidak ada berita terpopuler saat ini...
                   </div>
                 )}
               </div>
