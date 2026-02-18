@@ -27,6 +27,12 @@ export async function getArticles() {
   return response.data;
 }
 
+export async function getArticlesByKeyword(keyword) {
+  const response = await axios.get('/api/articles/' + keyword);
+  if (!response) throw new Error(response.message);
+  return response.data;
+}
+
 export async function uploadMainImageArticle(file) {
   try {
     console.log('file debug: ', file);
@@ -168,36 +174,42 @@ export async function getHighlight() {
 }
 
 export async function addTag(name, slug) {
-  const response = await axios.post('/api/articles/tag/add', {name, slug})
-  return response.data
+  const response = await axios.post('/api/articles/tag/add', { name, slug });
+  return response.data;
 }
 export async function removeTag(id) {
-  const response = await axios.post('/api/articles/tag/remove', {id})
-  return response.data
+  const response = await axios.post('/api/articles/tag/remove', { id });
+  return response.data;
 }
 export async function addTopic(name, slug) {
-  const response = await axios.post('/api/articles/topic/add', {name, slug})
-  return response.data
+  const response = await axios.post('/api/articles/topic/add', { name, slug });
+  return response.data;
 }
 export async function removeTopic(id) {
-  const response = await axios.post('/api/articles/topic/remove', {id})
-  return response.data
+  const response = await axios.post('/api/articles/topic/remove', { id });
+  return response.data;
 }
 export async function addCategory(name, slug) {
-  const response = await axios.post('/api/articles/category/add', {name, slug})
-  return response.data
+  const response = await axios.post('/api/articles/category/add', {
+    name,
+    slug,
+  });
+  return response.data;
 }
 export async function removeCategory(id) {
-  const response = await axios.post('/api/articles/category/remove', {id})
-  return response.data
+  const response = await axios.post('/api/articles/category/remove', { id });
+  return response.data;
 }
 
 export async function updateContentArticle(id, content) {
-  const response = await axios.post('/api/article/update/content', { id, content })
+  const response = await axios.post('/api/article/update/content', {
+    id,
+    content,
+  });
   return response.data;
 }
 
 export async function deleteArticle(id) {
-  const response = await axios.post('/api/article/delete', { id })
+  const response = await axios.post('/api/article/delete', { id });
   return response.data;
 }

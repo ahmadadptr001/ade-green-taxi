@@ -22,8 +22,10 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { DropdownMenuArrow } from '@radix-ui/react-dropdown-menu';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInputRef = useRef(null);
@@ -54,6 +56,15 @@ export default function Header() {
   useEffect(() => {
     document.body.style.overflow = open || searchOpen ? 'hidden' : 'auto';
   }, [open, searchOpen]);
+
+  const handleSubmitSearch = async (e) => {
+    e.preventDefault();
+    if (!searchInputRef.current?.value) return;
+
+    const query = searchInputRef.current.value;
+    localStorage.setItem('query-search', query)
+    router.push('/beranda/pencarian')
+  };
 
   return (
     <>
@@ -141,7 +152,7 @@ export default function Header() {
         >
           <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-6">
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmitSearch}
               className="relative flex items-center w-full"
             >
               <Search
@@ -188,7 +199,6 @@ export default function Header() {
         />
       )}
 
-      {/* MOBILE MENU (Existing logic preserved with style tweaks) */}
       <div
         className={`fixed inset-0 z-40 bg-white transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1) ${
           open ? 'translate-y-0' : '-translate-y-full'
@@ -196,7 +206,6 @@ export default function Header() {
         style={{ top: '0', paddingTop: '80px' }}
       >
         <div className="flex flex-col h-full w-full pb-10 px-6 overflow-y-auto">
-          {/* ... (Konten Menu Mobile sama seperti revisi sebelumnya) ... */}
           <div className="flex flex-col items-center justify-between h-full max-w-md mx-auto w-full gap-8">
             <nav className="flex flex-col items-center gap-6 w-full text-center">
               {[

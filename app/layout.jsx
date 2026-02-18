@@ -1,6 +1,8 @@
 import './globals.css';
 import './app.css';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { SearchProvider } from '@/context/SearchContext';
+import LayoutSearch from './LayoutSearch';
 
 export const metadata = {
   title: {
@@ -58,7 +60,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <TooltipProvider>{children}</TooltipProvider>
+        <LayoutSearch children={children}>
+          <TooltipProvider>{children}</TooltipProvider>
+        </LayoutSearch>
       </body>
     </html>
   );
