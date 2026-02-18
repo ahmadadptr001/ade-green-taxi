@@ -63,7 +63,7 @@ export default function Header() {
 
     const query = searchInputRef.current.value;
     localStorage.setItem('query-search', query)
-    router.push('/beranda/pencarian')
+    window.location.href = '/beranda/pencarian'
   };
 
   return (

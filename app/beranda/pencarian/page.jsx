@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export default function PencarianPage() {
-  const query = useSearch();
   const lang = useLanguageStore();
   const isID = lang.language === 'id';
 
@@ -21,16 +20,41 @@ export default function PencarianPage() {
   const [resultSearchData, setResultSearchData] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
+    const query = localStorage.getItem('query-search');
     setThisQuerySearch(query ?? '');
     setTimeout(() => {
       localStorage.removeItem('query-search');
     }, 1000);
+    setLoading(false);
   }, []);
+
+  let mount = 1
+  useEffect(() => {
+    mount++
+    console.log(mount)
+    if (mount === 3) return;
+    if (!thisQuerySearch) return;
+    (async () => {
+      try {
+        setLoading(true);
+        const resp = await getArticlesByKeyword(thisQuerySearch);
+        setResultSearchData(resp.articles);
+        setLoading(false);
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: err.message,
+        });
+        setLoading(false);
+      }
+    })();
+  }, [thisQuerySearch]);
 
   // handle data pencarian
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!thisQuerySearch) returnl;
+    if (!thisQuerySearch) return;
 
     setLoading(true);
     try {

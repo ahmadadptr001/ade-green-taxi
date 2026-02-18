@@ -60,9 +60,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <LayoutSearch children={children}>
-          <TooltipProvider>{children}</TooltipProvider>
-        </LayoutSearch>
+        <LayoutSearch children={children}></LayoutSearch>
       </body>
     </html>
   );
