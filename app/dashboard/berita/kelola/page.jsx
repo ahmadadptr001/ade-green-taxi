@@ -732,7 +732,7 @@ export default function ArticleManager() {
         </div>
       </div>
 
-      {/* EDIT DIALOG */}
+    {/* EDIT DIALOG */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-full sm:max-w-3xl md:max-w-4xl h-full flex flex-col">
           <DialogHeader>
@@ -741,7 +741,7 @@ export default function ArticleManager() {
 
           <div className="space-y-4 flex-1 overflow-y-auto pr-2">
             <div>
-              <label className="text-sm font-medium">Judul</label>
+              <label className="font-medium">Judul</label>
               <Input
                 value={editingArticle?.title || ''}
                 onChange={(e) =>
@@ -757,10 +757,24 @@ export default function ArticleManager() {
               <label className="text-sm font-medium mb-2 block">
                 Konten (Rich Text)
               </label>
-              <TiptapEditor
-                content={editorContentHtml}
-                onChange={setEditorContentHtml}
-              />
+              <div
+                className="font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
+                      [&>p]:mb-8 [&>p]:text-slate-700
+                      [&>h1]:text-4xl [&>h1]:font-black [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
+                      [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-14 [&>h2]:mb-6 [&>h2]:tracking-tight [&>h2]:leading-snug
+                      [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-slate-900 [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:tracking-tight
+                      [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
+                      [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-8 [&_ul]:marker:text-slate-400
+                      [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-8 [&_ol]:marker:text-emerald-600 [&_ol]:marker:font-bold
+                      [&_li]:ml-10 [&_li]:mb-2
+                      [&_strong]:font-bold [&_strong]:text-slate-900
+                      [&_iframe]:w-full [&_iframe]:aspect-video [&_iframe]:rounded-xl [&_iframe]:my-10 [&_iframe]:shadow-lg"
+              >
+                <TiptapEditor
+                  content={editorContentHtml}
+                  onChange={setEditorContentHtml}
+                />
+              </div>
             </div>
           </div>
 

@@ -130,7 +130,7 @@ export default function TutorialSection() {
               src={STEPS[activeStep].image}
               alt=""
               loading='lazy'
-              className="relative w-full rounded-3xl shadow-xl transition-all duration-500"
+              className="relative w-full rounded-3xlshadow-xl transition-all duration-500"
             />
 
             <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur px-4 py-1 rounded-full text-xs font-medium shadow-sm">

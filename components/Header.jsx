@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Globe, LifeBuoy, Kanban } from 'lucide-react';
+import { Menu, X, Globe, LifeBuoy, Kanban, Search } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
@@ -20,37 +20,40 @@ export default function Header() {
   return (
     <>
       {/* HEADER BAR */}
-      <header className="fixed top-0 z-100 w-full bg-white/100  border-b border-black/5">
+      <header className="fixed py-2 top-0 z-100 w-full bg-white/100  border-b border-black/5">
         <div className="mx-auto max-w-screen-xl px-6 h-16 flex items-center justify-between">
           <a href="/beranda">
-            <p className="text-2xl font-semibold">
+            <p className="text-2xl font-black">
               ADE<span className="text-emerald-500">GREEN</span>
               <sub className="text-sm">TX</sub>
             </p>
           </a>
 
-          <div className="flex items-center gap-2">
-            {/* Baca Berita – HIDDEN di mobile */}
-            <div className="hidden md:block">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href="/berita"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 bg-gray-100"
-                  >
-                    <img
-                      className="h-5 w-5"
-                      src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000"
-                      alt="newspaper"
-                      loading='lazy'
-                    />
-                    <span className='font-bold'>Baca Berita</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent className="!z-150">Berita</TooltipContent>
-              </Tooltip>
+          {/* navbar center */}
+          <nav className="w-full flex px-4 items-center justify-between gap-4">
+            <div className="group flex items-center gap-2 rounded-full bg-gray-100 px-3 py-2 border border-transparent transition-all duration-800 ease-in-out focus-within:w-[400px] focus-within:bg-white focus-within:border-emerald-500 w-[44px] hover:w-[400px] hover:bg-white hover:border-emerald-500 w-[44px] overflow-hidden cursor-text">
+              {/* Ikon Search (shrink-0 agar tidak gepeng saat animasi) */}
+              <Search
+                size={20}
+                className="text-gray-500 group-hover:text-emerald-500 group-focus-within:text-emerald-500 shrink-0"
+              />
+
+              <input
+                type="text"
+                placeholder={language === 'id' ? 'Cari...' : 'Search...'}
+                className="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
+              />
             </div>
 
+            {/* MENU LAINNYA */}
+            <ul className="uppercase font-semibold flex items-center justify-end w-full">
+              <li className="p-4 py-2 rounded-md cursor-pointer">
+                <Link href={'/perusahaan'} className='hover:underline hover:text-emerald-500 underline-offset-4'>{language === 'id' ? 'Perusaahan' : 'Company'}</Link>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-2">
             {/* Hamburger */}
             <button
               onClick={() => setOpen((v) => !v)}
@@ -80,11 +83,8 @@ export default function Header() {
               {t.mainNavbar.service}
             </a>
 
-            <a
-              onClick={() => setOpen(false)}
-              href="/berita"
-            >
-              Baca Berita
+            <a onClick={() => setOpen(false)} href="/berita">
+              Blog
             </a>
 
             <a onClick={() => setOpen(false)} href="/beranda#tentang">
@@ -125,7 +125,12 @@ export default function Header() {
               className="flex items-center justify-center gap-2 py-3 rounded-xl
               bg-green-600 text-white font-semibold"
             >
-              <img src="/icon-playstore.png" alt="playstore icon" className="h-5 w-5" loading='lazy' />
+              <img
+                src="/icon-playstore.png"
+                alt="playstore icon"
+                className="h-5 w-5"
+                loading="lazy"
+              />
               {t.semiNavbar.buttonInstall}
             </a>
 

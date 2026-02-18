@@ -66,6 +66,9 @@ const mapArticlesToNews = (articles = []) => {
   }));
 };
 
+const handleDashboard = async () => {
+  
+}
 const getPopularArticles = (articles = [], minViews = 100) => {
   if (!Array.isArray(articles)) return [];
 
@@ -242,11 +245,11 @@ export default function PremiumNewsPage() {
           <div className="flex items-center justify-between">
             {/* Logo - Lebih Clean */}
             <a href="/beranda" className="flex items-center gap-2 group">
-              <div className="flex items-center justify-center h-9 w-9 bg-slate-900 rounded-lg text-white group-hover:bg-emerald-600 transition-colors duration-300">
+              <div className="flex items-center justify-center h-7 w-7 bg-slate-900 rounded-lg text-white group-hover:bg-emerald-600 transition-colors duration-300">
                 <span className="font-serif font-black italic text-lg">A</span>
               </div>
               <div className="flex flex-col leading-none">
-                <span className="text-lg font-black tracking-tighter text-slate-900">
+                <span className="text-xl font-bold tracking-tighter text-slate-900">
                   ADE<span className="text-emerald-600">GREEN</span>
                   <span>BERITA</span>
                 </span>
@@ -697,7 +700,7 @@ export default function PremiumNewsPage() {
                   placeholder="Alamat Email"
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-colors placeholder:text-slate-500"
                 />
-                <button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 rounded-lg transition-colors">
+                <button onClick={() => router.push('/daftar')} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 rounded-lg transition-colors">
                   Langganan
                 </button>
               </div>
