@@ -266,7 +266,7 @@ export default function PremiumNewsPage() {
                 : topics.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => router.push('/berita/kategori/'+item.slug)}
+                      onClick={() => router.push('/berita/topik/'+item.slug)}
                       className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
                         activeNav === item.name
                           ? 'text-emerald-600'
