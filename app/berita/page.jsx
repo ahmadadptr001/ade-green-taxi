@@ -266,7 +266,7 @@ export default function PremiumNewsPage() {
                 : topics.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => setActiveNav(item.name)}
+                      onClick={() => router.push('/berita/kategori/'+item.slug)}
                       className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
                         activeNav === item.name
                           ? 'text-emerald-600'
@@ -576,7 +576,7 @@ export default function PremiumNewsPage() {
           {/* Main Feed */}
           <div className="lg:col-span-8">
             {/* Filter Tabs - Clean Pill Style */}
-            <div className="flex items-center gap-2 mb-10 overflow-x-auto no-scrollbar pb-2">
+            <div className="flex items-center mb-10 overflow-x-auto no-scrollbar pb-2">
               {!categories
                 ? // Skeleton Categories
                   [1, 2, 3, 4, 5].map((i) => (
@@ -589,7 +589,7 @@ export default function PremiumNewsPage() {
                     <button
                       key={cat.id}
                       onClick={() => setActiveCategory(cat.name)}
-                      className={`whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all border ${
+                      className={`whitespace-nowrap px-5 py-2 text-xs font-bold transition-all border ${
                         activeCategory === cat.name
                           ? 'bg-slate-900 text-white border-slate-900 shadow-md'
                           : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-900'

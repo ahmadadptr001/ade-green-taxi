@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Menu, X, Globe, LifeBuoy, Kanban, Search } from 'lucide-react';
+import { Menu, X, Globe, LifeBuoy, Kanban, Search, MenuIcon } from 'lucide-react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../locales/id.json';
 import EN from '../locales/en.json';
@@ -63,7 +63,7 @@ export default function Header() {
               {open ? (
                 <X size={22} />
               ) : (
-                <Kanban size={22} className="-rotate-90" />
+                <MenuIcon size={22} />
               )}
             </button>
           </div>
