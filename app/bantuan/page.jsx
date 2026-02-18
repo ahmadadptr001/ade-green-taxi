@@ -125,7 +125,7 @@ export default function BantuanPage() {
         ? 'Tell us your issue and our team will assist you as soon as possible.'
         : 'Sampaikan kendala Anda dan tim kami akan segera membantu.',
     formTitle:
-      language === 'en' ? 'Support Request Form' : 'Form Permintaan Bantuan',
+      language === 'en' ? 'Support Request Form' : 'Form Kontak / Permintaan Bantuan',
     desc:
       language === 'en'
         ? 'Fill out the form below with accurate information.'

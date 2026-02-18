@@ -517,7 +517,7 @@ export default function BeritaContent({ params }) {
                   </button>
                   <a
                     aria-label="Share on Facebook"
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://www.adegreentx.id/berita/' + article?.slug)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
@@ -615,7 +615,7 @@ export default function BeritaContent({ params }) {
                         <Share2 className="w-5 h-5" />
                       </button>
                       <a
-                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://www.adegreentx.id/berita/' + article?.slug)}`}
                         target="_blank"
                         rel="noreferrer"
                         className="p-2 bg-slate-100 rounded-lg text-slate-600"
@@ -653,7 +653,7 @@ export default function BeritaContent({ params }) {
                         className="bg-white/10 border border-white/20 text-white placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full md:w-64 backdrop-blur-sm"
                       />
                       <button
-                        onClick={() => router.push('/masuk')}
+                        onClick={() => router.push('/daftar')}
                         className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20"
                       >
                         Daftar
@@ -831,10 +831,10 @@ export default function BeritaContent({ params }) {
       {/* Modern Footer */}
       <footer className="bg-slate-50 border-t border-slate-200 mt-20">
         <div className="container mx-auto px-4 lg:px-8 py-12 lg:py-16">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
             <div className="max-w-sm">
               <div className="font-black text-2xl tracking-tighter mb-4">
-                ADE<span className="text-emerald-600">GREEN</span>
+                ADE<span className="text-emerald-600">GREEN</span>BERITA
               </div>
               <p className="text-slate-500 text-sm leading-relaxed">
                 Platform jurnalisme independen yang menyajikan perspektif
@@ -842,48 +842,23 @@ export default function BeritaContent({ params }) {
               </p>
             </div>
 
-            <div className="flex gap-12 lg:gap-24">
-              <div>
-                <h6 className="font-bold text-slate-900 mb-4">Editorial</h6>
-                <ul className="space-y-3 text-sm text-slate-500">
-                  <li>
-                    <Link href="/berita" className="hover:text-emerald-600">
-                      Berita Utama
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/analisis" className="hover:text-emerald-600">
-                      Analisis Mendalam
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/opini" className="hover:text-emerald-600">
-                      Opini & Esai
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h6 className="font-bold text-slate-900 mb-4">Perusahaan</h6>
-                <ul className="space-y-3 text-sm text-slate-500">
-                  <li>
-                    <Link href="/tentang" className="hover:text-emerald-600">
-                      Tentang Kami
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/karir" className="hover:text-emerald-600">
-                      Karir
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/kontak" className="hover:text-emerald-600">
-                      Kontak
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <ul className="flex items-center gap-12 space-y-3 text-sm text-slate-500">
+              <li>
+                <Link href="/beranda#tentang" className="hover:text-emerald-600">
+                  Tentang Kami
+                </Link>
+              </li>
+              <li>
+                <Link href="/bantuan" className="hover:text-emerald-600">
+                  Bantuan
+                </Link>
+              </li>
+              <li>
+                <Link href="/kontak" className="hover:text-emerald-600">
+                  Kontak
+                </Link>
+              </li>
+            </ul>
           </div>
           <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
             <div>

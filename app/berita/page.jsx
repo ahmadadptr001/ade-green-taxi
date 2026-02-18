@@ -796,7 +796,7 @@ export default function PremiumNewsPage() {
         </section>
       </main>
 
-      <Footer topics={topics} categories={categories} tags={tags} />
+      <Footer topics={topics} categories={categories} />
 
       <style jsx global>{`
         @keyframes marquee {
