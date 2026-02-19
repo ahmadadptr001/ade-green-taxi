@@ -20,7 +20,6 @@ export default function HomePage() {
   return (
     <main>
       <IklanModal />
-      <ScrollToTop />
 
       <Header />
       <Hero />

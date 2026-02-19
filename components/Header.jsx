@@ -144,7 +144,7 @@ export default function Header() {
         {/* Tombol Utama (Trigger) */}
         <button 
           onClick={() => setFabOpen(!fabOpen)}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 ${
             fabOpen ? 'bg-slate-900 rotate-45' : 'bg-emerald-600'
           } text-white`}
         >
