@@ -75,7 +75,7 @@ export default function PencarianPage() {
     <main className="p-4 min-h-screen bg-sky-50 w-full h-full ">
       <Header />
 
-      <div className="max-w-3xl">
+      <div className="max-w-3xl mt-20">
         {/* brand */}
         <BrandSearch />
 
