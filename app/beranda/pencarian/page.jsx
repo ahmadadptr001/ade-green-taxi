@@ -1,6 +1,7 @@
 'use client';
 
 import Header from '@/components/Header';
+import Footer from '@/components/home/Footer';
 import BrandSearch from '@/components/home/search/BrandSearch';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSearch } from '@/context/SearchContext';
@@ -8,7 +9,7 @@ import { getArticles, getArticlesByKeyword } from '@/services/articles';
 import { useLanguageStore } from '@/store/languageStore';
 import { ChevronRight, Image, Search, SearchX } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 
 export default function PencarianPage() {
@@ -29,13 +30,14 @@ export default function PencarianPage() {
     setLoading(false);
   }, []);
 
-  let mount = 1
+  const mountRef = useRef(1);
   useEffect(() => {
-    mount++
-    console.log(mount)
-    if (mount === 3) return;
-    if (!thisQuerySearch) return;
     (async () => {
+      mountRef.current++;
+      console.log(mountRef.current);
+      if (mountRef.current >= 4) return;
+      console.log('testing')
+      if (!thisQuerySearch) return;
       try {
         setLoading(true);
         const resp = await getArticlesByKeyword(thisQuerySearch);
@@ -72,10 +74,10 @@ export default function PencarianPage() {
   };
 
   return (
-    <main className="p-4 min-h-screen bg-sky-50 w-full h-full ">
+    <main className=" min-h-screen bg-sky-50 w-full h-full ">
       <Header />
 
-      <div className="max-w-3xl mt-20">
+      <div className="max-w-3xl mt-20 p-4">
         {/* brand */}
         <BrandSearch />
 
@@ -165,6 +167,10 @@ export default function PencarianPage() {
             )}
           </>
         )}
+      </div>
+
+      <div className="mt-20">
+        <Footer />
       </div>
     </main>
   );
