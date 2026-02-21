@@ -83,10 +83,11 @@ export default function FAQ() {
           {faqs.map((f, i) => {
             const isActive = i === active;
             return (
-              <div
+              <button
+                title={language === 'en' ? f.qEN : f.qID}
                 key={i}
                 onClick={() => setActive(i)}
-                className={`cursor-pointer rounded-2xl border transition-all duration-500 p-6
+                className={`cursor-pointer text-start rounded-2xl border transition-all duration-500 p-6
                   ${
                     isActive
                       ? 'border-green-500 bg-green-50 shadow-lg'
@@ -112,7 +113,7 @@ export default function FAQ() {
                     {language === 'en' ? f.aEN : f.aID}
                   </p>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
