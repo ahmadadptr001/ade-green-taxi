@@ -81,13 +81,13 @@ export default function IklanModal() {
             <a
               href="/"
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl 
-                         bg-green-600 text-white font-semibold 
+                         bg-slate-700 text-white font-semibold 
                          hover:bg-green-700 active:scale-[0.98] transition"
             >
               <img
                 src="/icon-playstore.png"
                 alt="playstore icon"
-                className="h-5 w-5"
+                className="h-5 w-auto"
                 loading="lazy"
               />
               Download App

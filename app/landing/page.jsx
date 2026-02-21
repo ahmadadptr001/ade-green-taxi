@@ -25,7 +25,6 @@ export default function LandingPage() {
             : 'Perjalanan ramah lingkungan dengan taksi listrik. Hemat biaya, aman, dan selalu tersedia.'}
         </p>
 
-        {/* CTA button */}
         <Link
           href="/beranda"
           className="flex animate-bounce justify-center items-center gap-2 px-8 py-4 rounded-lg bg-green-600 hover:bg-green-500 text-white font-semibold shadow-lg transition text-lg"
