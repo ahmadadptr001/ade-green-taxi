@@ -18,32 +18,40 @@ export default function TutorialSection() {
     {
       titleEN: 'Open App & Tap Search',
       titleID: 'Masuk Aplikasi & Klik Pencarian',
-      descEN: 'Open the app and tap the search feature.',
-      descID: 'Masuk ke aplikasi lalu klik fitur pencarian.',
+      descEN:
+        'Launch the app and tap the search field to start — you can type an address, place name, or choose from recent/favorite locations to begin finding routes or available drivers.',
+      descID:
+        'Buka aplikasi lalu ketuk kolom pencarian untuk memulai — ketik alamat atau nama tempat, atau pilih dari riwayat/favorit untuk mencari rute dan driver yang tersedia.',
       image: '/tutorial/step-1.png',
       Icon: Search,
     },
     {
       titleEN: 'Set Pickup & Destination',
       titleID: 'Masukkan Lokasi Jemput & Tujuan',
-      descEN: 'Enter pickup and destination locations.',
-      descID: 'Masukkan lokasi penjemputan dan tujuan.',
+      descEN:
+        'Enter or pick your pickup point and destination using the map or address input. Adjust the map pin if needed and set a pickup time or options (e.g., wheelchair access) before proceeding.',
+      descID:
+        'Masukkan atau pilih titik jemput dan tujuan lewat peta atau kolom alamat. Geser pin jika lokasinya kurang tepat dan atur waktu penjemputan atau opsi tambahan sebelum melanjutkan.',
       image: '/tutorial/step-2.png',
       Icon: MapPin,
     },
     {
       titleEN: 'Confirm Pickup Location',
       titleID: 'Konfirmasi Lokasi Penjemputan',
-      descEN: 'Review and confirm your pickup point.',
-      descID: 'Periksa dan konfirmasi lokasi penjemputan.',
+      descEN:
+        'Carefully review the pickup location on the map: move the pin to the exact spot, add a short note or landmark for the driver, then confirm so the driver knows where to meet you.',
+      descID:
+        'Periksa lokasi penjemputan pada peta: geser pin ke posisi yang tepat, tambahkan catatan atau landmark singkat untuk pengemudi, lalu konfirmasi agar pengemudi tahu tempat penjemputan.',
       image: '/tutorial/step-3.png',
       Icon: MapPinned,
     },
     {
       titleEN: 'Confirm Payment & Enjoy',
       titleID: 'Konfirmasi Pembayaran & Nikmati Perjalanan',
-      descEN: 'Confirm payment and enjoy the ride.',
-      descID: 'Konfirmasi pembayaran dan nikmati perjalanan.',
+      descEN:
+        'Choose your payment method, review the fare breakdown (estimate, fees, discounts), confirm payment or pay on arrival if allowed, then wait for driver assignment and enjoy your trip.',
+      descID:
+        'Pilih metode pembayaran, periksa rincian tarif (estimasi, biaya, potongan), konfirmasi pembayaran atau pilih bayar di tempat jika tersedia, lalu tunggu penugasan pengemudi dan nikmati perjalanan.',
       image: '/tutorial/step-4.png',
       Icon: CreditCard,
     },
@@ -130,7 +138,7 @@ export default function TutorialSection() {
               key={activeStep}
               src={STEPS[activeStep].image}
               alt=""
-              loading='lazy'
+              loading="lazy"
               className="relative w-full rounded-3xlshadow-xl transition-all duration-500"
             />
 
