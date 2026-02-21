@@ -80,6 +80,7 @@ export default function TutorialSection() {
               return (
                 <button
                   key={i}
+                  title={language === 'en' ? s.titleEN : s.titleID}
                   onClick={() => setActiveStep(i)}
                   className="w-full text-left focus:outline-none"
                 >
