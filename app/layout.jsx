@@ -7,7 +7,6 @@ import LayoutSearch from './LayoutSearch';
 export const metadata = {
   title: {
     default: 'Ade Green TX',
-    template: '%s | Ade Green TX',
   },
   description:
     'Ade Green TX adalah layanan transportasi hijau yang ramah lingkungan dan informatif di Kota Kendari.',

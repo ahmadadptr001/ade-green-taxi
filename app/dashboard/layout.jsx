@@ -2,13 +2,12 @@ import LayoutSidebar from '@/components/dashboard/LayoutSidebar';
 
 export const metadata = {
   title: {
-    default: 'DASHBOARD - ADEGREENTX ',
-    template: '%s | Ade Green TX',
+    default: 'Dashboard - Ade Green TX ',
   },
   description: 'Anlisis dan dapatkan akses berita terupdate.',
 
   openGraph: {
-    title: 'DASHBOARD - ADEGREENTX',
+    title: 'Dashboard - Ade Green TX',
     description: 'Analisis dan dapatkan akses berita terupdate',
     url: 'https://adegreentx.id/dashboard',
     siteName: 'Ade Green TX',
@@ -26,7 +25,7 @@ export const metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'DASHBOARD - ADEGREENTX',
+    title: 'Dashboard - Ade Green TX',
     description: 'Analisis dan dapatkan akses berita terupdate',
     images: ['https://adegreentx.id/odgr.png'],
   },
