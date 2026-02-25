@@ -86,7 +86,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <h4 className="text-xs font-bold tracking-widest text-gray-400 mb-6 uppercase">
-              {language === 'en' ? 'Menu' : 'Menu'}
+              {language === 'en' ? 'Quick Access' : 'Akses Cepat'}
             </h4>
             <ul className="space-y-3">
               {quickLinks.map((link, idx) => (
