@@ -160,7 +160,9 @@ export default function PencarianPage() {
             ) : (
               <div className="flex items-center flex-col gap-2 mt-5 md:mt-10">
                 <SearchX size={50} className="text-red-300 font-light" />
-                <p className="text-slate-500">Pencarian tidak ditemukan</p>
+                <p className="text-slate-500">
+                  {isID ? 'Pencarian tidak ditemukan' : 'No results found'}
+                </p>
               </div>
             )}
           </>
