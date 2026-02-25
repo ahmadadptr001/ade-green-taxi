@@ -14,6 +14,7 @@ export async function GET(req, { params }) {
         '[ERROR] Gagal mendapatkan artikel by keyword: ',
         error.message
       );
+      console.log(error)
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
     return NextResponse.json(

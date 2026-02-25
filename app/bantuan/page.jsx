@@ -100,7 +100,9 @@ export default function BantuanPage() {
         name: '',
         email: '',
       }));
+      return;
     } catch (error) {
+      console.log('Error sending report:', error);
       setAlert({
         open: true,
         type: 'error',

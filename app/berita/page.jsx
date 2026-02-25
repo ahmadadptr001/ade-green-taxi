@@ -66,9 +66,7 @@ const mapArticlesToNews = (articles = []) => {
   }));
 };
 
-const handleDashboard = async () => {
-  
-}
+const handleDashboard = async () => {};
 const getPopularArticles = (articles = [], minViews = 100) => {
   if (!Array.isArray(articles)) return [];
 
@@ -110,7 +108,7 @@ export default function PremiumNewsPage() {
     const user = localStorage.getItem('user');
     setIsLogin(!!user);
   }, []);
-  
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -202,11 +200,11 @@ export default function PremiumNewsPage() {
         <div className="container mx-auto flex items-center justify-between px-6 lg:px-8">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 text-emerald-700">
-              <span className="relative flex h-2 w-2">
+              <p className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
-              </span>
-              <span>Trending</span>
+              </p>
+              <p>Trending</p>
             </div>
             <div className="overflow-hidden whitespace-nowrap max-w-lg">
               {/* Skeleton for Highlight */}
@@ -220,9 +218,9 @@ export default function PremiumNewsPage() {
             </div>
           </div>
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-600 transition-colors">
+            <p className="flex items-center gap-1.5 cursor-pointer hover:text-emerald-600 transition-colors">
               <Globe className="h-3 w-3" /> ID / EN
-            </span>
+            </p>
             <div className="h-3 w-px bg-slate-200"></div>
             <div className="flex gap-4 text-slate-400">
               <Facebook className="h-3.5 w-3.5 cursor-pointer hover:text-blue-600 transition-colors" />
@@ -246,13 +244,13 @@ export default function PremiumNewsPage() {
             {/* Logo - Lebih Clean */}
             <a href="/beranda" className="flex items-center gap-2 group">
               <div className="flex items-center justify-center h-7 w-7 bg-slate-900 rounded-lg text-white group-hover:bg-emerald-600 transition-colors duration-300">
-                <span className="font-serif font-black italic text-lg">A</span>
+                <p className="font-serif font-black italic text-lg">A</p>
               </div>
               <div className="flex flex-col leading-none">
-                <span className="text-xl font-bold tracking-tighter text-slate-900">
+                <p className="text-xl font-bold tracking-tighter text-slate-900">
                   ADE<span className="text-emerald-600">GREEN</span>
                   <span>BERITA</span>
-                </span>
+                </p>
               </div>
             </a>
 
@@ -266,7 +264,7 @@ export default function PremiumNewsPage() {
                 : topics.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => router.push('/berita/topik/'+item.slug)}
+                      onClick={() => router.push('/berita/topik/' + item.slug)}
                       className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-emerald-600 py-1 ${
                         activeNav === item.name
                           ? 'text-emerald-600'
@@ -275,7 +273,7 @@ export default function PremiumNewsPage() {
                     >
                       {item.name}
                       {activeNav === item.name && (
-                        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
+                        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-600 rounded-full" />
                       )}
                     </button>
                   ))}
@@ -406,7 +404,7 @@ export default function PremiumNewsPage() {
           ></div>
           <div className="absolute right-0 top-0 bottom-0 w-3/4 max-w-sm bg-white p-8 shadow-2xl animate-in slide-in-from-right duration-300">
             <div className="flex justify-between items-center mb-8">
-              <span className="font-black text-xl">MENU</span>
+              <p className="font-black text-xl">MENU</p>
               <button onClick={() => setIsMobileMenuOpen(false)}>
                 <X className="h-6 w-6 text-slate-400" />
               </button>
@@ -548,12 +546,12 @@ export default function PremiumNewsPage() {
                         >
                           <div>
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
+                              <p className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
                                 {item.category}
-                              </span>
-                              <span className="text-slate-400 text-[10px]">
+                              </p>
+                              <p className="text-slate-400 text-[10px]">
                                 {item.date}
-                              </span>
+                              </p>
                             </div>
                             <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
                               {item.title}
@@ -585,7 +583,7 @@ export default function PremiumNewsPage() {
                       className="h-8 w-24 rounded-full bg-slate-200 flex-shrink-0"
                     />
                   ))
-                : [{id: 0, name:'Semua'}, ...categories].map((cat) => (
+                : [{ id: 0, name: 'Semua' }, ...categories].map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => setActiveCategory(cat.name)}
@@ -646,12 +644,10 @@ export default function PremiumNewsPage() {
 
                       <div className="md:col-span-7 flex flex-col h-full justify-center">
                         <div className="flex items-center gap-3 mb-3">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
-                            {news.category}
-                          </span>
-                          <span className="text-[11px] font-medium text-slate-400">
+                          <p>{news.category}</p>
+                          <p className="text-[11px] font-medium text-slate-400">
                             {news.date}
-                          </span>
+                          </p>
                         </div>
 
                         <h3 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-emerald-700 transition-colors">
@@ -665,8 +661,7 @@ export default function PremiumNewsPage() {
 
                         <div className="flex items-center gap-4 mt-auto">
                           <div className="flex items-center gap-1 text-slate-400 text-xs">
-                            <Clock className="h-3 w-3" />{' '}
-                            <span>3 min read</span>
+                            <Clock className="h-3 w-3" /> <p>3 min read</p>
                           </div>
                         </div>
                       </div>
@@ -700,7 +695,10 @@ export default function PremiumNewsPage() {
                   placeholder="Alamat Email"
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:bg-white/10 transition-colors placeholder:text-slate-500"
                 />
-                <button onClick={() => router.push('/daftar')} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 rounded-lg transition-colors">
+                <button
+                  onClick={() => router.push('/daftar')}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-3 rounded-lg transition-colors"
+                >
                   Langganan
                 </button>
               </div>
@@ -797,27 +795,6 @@ export default function PremiumNewsPage() {
       </main>
 
       <Footer topics={topics} categories={categories} />
-
-      <style jsx global>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
     </div>
   );
 }

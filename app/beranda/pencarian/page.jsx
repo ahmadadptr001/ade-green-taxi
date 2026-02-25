@@ -34,9 +34,7 @@ export default function PencarianPage() {
   useEffect(() => {
     (async () => {
       mountRef.current++;
-      console.log(mountRef.current);
       if (mountRef.current >= 4) return;
-      console.log('testing')
       if (!thisQuerySearch) return;
       try {
         setLoading(true);

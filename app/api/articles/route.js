@@ -25,7 +25,7 @@ export async function GET() {
       )
       `);
     if (error) {
-      return NextResponse.json({ message: error.message }, { status: 500 });
+      return NextResponse.json({ message: error.message }, { status: 400 });
     }
 
     return NextResponse.json(

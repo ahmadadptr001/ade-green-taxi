@@ -35,7 +35,8 @@ export default function IklanModal() {
             src="/banner.png"
             alt="Ade Green TX"
             className="absolute inset-0 w-full h-full object-cover"
-            loading="lazy"
+            loading="eager"
+            fetchpriority="high"
           />
 
           {/* Close */}

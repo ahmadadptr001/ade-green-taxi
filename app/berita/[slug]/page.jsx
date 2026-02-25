@@ -46,7 +46,7 @@ async function shareLink(title, description, url) {
 
 export default function BeritaContent({ params }) {
   const router = useRouter();
-  const user = useUser();
+  const [user, setUser] = useState(null);
   const [slug, setSlug] = useState(null);
   const [allArticles, setAllArticles] = useState([]);
   const [article, setArticle] = useState(null);
@@ -56,6 +56,17 @@ export default function BeritaContent({ params }) {
 
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const checkProfileLogin = () => {
+    const userStorage = localStorage.getItem('user');
+    if (userStorage) {
+      const dataUser = JSON.parse(userStorage);
+      setUser(dataUser);
+    }
+  };
+  useEffect(() => {
+    checkProfileLogin();
+  }, []);
 
   const contentParserOptions = {
     replace: (domNode) => {
@@ -161,7 +172,9 @@ export default function BeritaContent({ params }) {
     };
   }, [params]);
 
+  // fetching data
   const fetchData = async () => {
+    if (!user) return;
     setLoading(true);
     try {
       const data = await getArticles();
@@ -844,7 +857,10 @@ export default function BeritaContent({ params }) {
 
             <ul className="flex items-center gap-12 space-y-3 text-sm text-slate-500">
               <li>
-                <Link href="/beranda#tentang" className="hover:text-emerald-600">
+                <Link
+                  href="/beranda#tentang"
+                  className="hover:text-emerald-600"
+                >
                   Tentang Kami
                 </Link>
               </li>
