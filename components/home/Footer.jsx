@@ -20,9 +20,9 @@ export default function Footer() {
 
   // Data Menu Akses Cepat
   const quickLinks = [
-    { name: 'ADE GREEN TX', href: '/' },
-    { name: 'ADE GREEN NEWS', href: '/berita' },
-    { name: 'ADE GREEN SEARCH', href: '/beranda/pencarian' },
+    { name: 'Ade Green TX', href: '/' },
+    { name: 'Ade Green News', href: '/berita' },
+    { name: 'Ade Green Search', href: '/beranda/pencarian' },
     {
       name: language === 'en' ? 'Download App' : 'Unduh Aplikasi',
       href: '/beranda',
@@ -93,9 +93,9 @@ export default function Footer() {
                 <li key={idx}>
                   <a
                     href={link.href}
-                    className="group flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
+                    className="group flex hover:font-bold items-center gap-2 text-gray-600 hover:text-emerald-600 duration-300"
                   >
-                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-emerald-500 transition-colors opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 duration-300" />
+                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-emerald-500  opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 duration-300" />
                     <span className="group-hover:translate-x-1 transition-transform duration-300">
                       {link.name}
                     </span>
