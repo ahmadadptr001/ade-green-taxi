@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { X, Youtube, Smartphone, Leaf } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { X, Youtube, Smartphone, Leaf } from "lucide-react";
 
 export default function IklanModal() {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ export default function IklanModal() {
         <div
           className="
           relative w-full 
-          aspect-[4/3] sm:aspect-[16/9] 
+          aspect-4/3 sm:aspect-video 
           lg:aspect-auto lg:h-full
         "
         >
@@ -36,7 +36,7 @@ export default function IklanModal() {
             alt="Ade Green TX"
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
           />
 
           {/* Close */}
@@ -80,7 +80,8 @@ export default function IklanModal() {
           {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
             <a
-              href="/"
+              target="_blank"
+              href="https://play.google.com/store/apps/details?id=com.test211111.CustomerAdeTaxi&pcampaignid=web_share"
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl 
                          bg-slate-700 text-white font-semibold 
                          hover:bg-green-700 active:scale-[0.98] transition"

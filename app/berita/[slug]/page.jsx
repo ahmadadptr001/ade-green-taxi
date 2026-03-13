@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 import {
   Clock,
   Eye,
@@ -12,19 +12,19 @@ import {
   Quote,
   ExternalLink,
   Heart,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   getArticles,
   updateIsBookmarkedArticle,
   updateIsLikeArticle,
   updateViewArticle,
-} from '@/services/articles';
-import { formatDate } from '@/utils/date';
-import parse, { domToReact } from 'html-react-parser';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Swal from 'sweetalert2';
-import { useUser } from '@/context/UserContext';
+} from "@/services/articles";
+import { formatDate } from "@/utils/date";
+import parse, { domToReact } from "html-react-parser";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { useUser } from "@/context/UserContext";
 
 async function shareLink(title, description, url) {
   if (!url) return;
@@ -58,7 +58,7 @@ export default function BeritaContent({ params }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const checkProfileLogin = () => {
-    const userStorage = localStorage.getItem('user');
+    const userStorage = localStorage.getItem("user");
     if (userStorage) {
       const dataUser = JSON.parse(userStorage);
       setUser(dataUser);
@@ -71,7 +71,7 @@ export default function BeritaContent({ params }) {
   const contentParserOptions = {
     replace: (domNode) => {
       // Handle Blockquotes
-      if (domNode.name === 'blockquote') {
+      if (domNode.name === "blockquote") {
         return (
           <div className="my-8 pl-6 border-l-4 border-emerald-500 bg-slate-50 py-4 pr-4 rounded-r-lg relative overflow-hidden group">
             <Quote className="absolute top-2 left-2 w-6 h-6 text-emerald-100 -z-0 transform -scale-x-100" />
@@ -83,7 +83,7 @@ export default function BeritaContent({ params }) {
       }
 
       // Handle Images
-      if (domNode.name === 'img') {
+      if (domNode.name === "img") {
         return (
           <figure className="my-10 group">
             <div className="rounded-xl overflow-hidden shadow-lg border border-slate-100 bg-slate-50">
@@ -103,11 +103,11 @@ export default function BeritaContent({ params }) {
       }
 
       // Handle Links
-      if (domNode.name === 'a') {
-        const href = domNode.attribs.href || '#';
-        const isInternal = href.startsWith('/');
+      if (domNode.name === "a") {
+        const href = domNode.attribs.href || "#";
+        const isInternal = href.startsWith("/");
         const className =
-          'inline-flex items-center gap-0.5 text-emerald-600 font-semibold border-b border-emerald-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all decoration-0';
+          "inline-flex items-center gap-0.5 text-emerald-600 font-semibold border-b border-emerald-200 hover:border-emerald-600 hover:bg-emerald-50 transition-all decoration-0";
 
         if (isInternal) {
           return (
@@ -130,21 +130,21 @@ export default function BeritaContent({ params }) {
       }
 
       // Handle Lists
-      if (domNode.name === 'ul') {
+      if (domNode.name === "ul") {
         return (
           <ul className="my-6 pl-6 space-y-2 list-disc list-outside text-slate-700 marker:text-slate-400">
             {domToReact(domNode.children, contentParserOptions)}
           </ul>
         );
       }
-      if (domNode.name === 'ol') {
+      if (domNode.name === "ol") {
         return (
           <ol className="my-6 pl-6 space-y-2 list-decimal list-outside text-slate-700 marker:text-emerald-600 marker:font-bold">
             {domToReact(domNode.children, contentParserOptions)}
           </ol>
         );
       }
-      if (domNode.name === 'li') {
+      if (domNode.name === "li") {
         return (
           <li className="pl-1 leading-relaxed">
             {domToReact(domNode.children, contentParserOptions)}
@@ -162,7 +162,7 @@ export default function BeritaContent({ params }) {
         if (!mounted) return;
         setSlug(resolved?.slug ?? null);
       } catch (err) {
-        console.error('Failed to resolve params', err);
+        console.error("Failed to resolve params", err);
         if (mounted) setSlug(null);
       }
     };
@@ -174,7 +174,7 @@ export default function BeritaContent({ params }) {
 
   // fetching data
   const fetchData = async () => {
-    if (!user) return;
+    // if (!user) return;
     setLoading(true);
     try {
       const data = await getArticles();
@@ -185,12 +185,12 @@ export default function BeritaContent({ params }) {
         const found = articles.find((a) => a.slug === slug) || null;
         setArticle(found);
         setIsLiked(
-          found.article_likes.some((like) => like.profiles.id === user?.id)
+          found.article_likes.some((like) => like.profiles.id === user?.id),
         );
         setIsBookmarked(
           found.article_bookmarks.some(
-            (bookmark) => bookmark.profiles.id === user?.id
-          )
+            (bookmark) => bookmark.profiles.id === user?.id,
+          ),
         );
         if (!Boolean(found)) {
           setNotFound(false);
@@ -202,7 +202,7 @@ export default function BeritaContent({ params }) {
         setNotFound(true);
       }
     } catch (err) {
-      console.error('Failed fetching articles', err);
+      console.error("Failed fetching articles", err);
       setAllArticles([]);
       setArticle(null);
       setNotFound(true);
@@ -230,32 +230,32 @@ export default function BeritaContent({ params }) {
       const progress = Math.min(100, Math.round((scrollTop / height) * 100));
       setScrollProgress(progress);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const category = useMemo(
-    () => article?.article_categories?.[0]?.categories?.name ?? 'Politik',
-    [article]
+    () => article?.article_categories?.[0]?.categories?.name ?? "Politik",
+    [article],
   );
 
   const topics = useMemo(
     () => article?.article_topics?.map((t) => t.topics) ?? [],
-    [article]
+    [article],
   );
   const tags = useMemo(
     () => article?.article_tags?.map((t) => t.tags) ?? [],
-    [article]
+    [article],
   );
 
   const readingTime = useMemo(() => {
     if (!article?.content) return 1;
     const text = article.content
-      .replace(/<[^>]*>/g, ' ')
-      .replace(/\s+/g, ' ')
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
       .trim();
-    const words = text ? text.split(' ').length : 0;
+    const words = text ? text.split(" ").length : 0;
     return Math.max(1, Math.ceil(words / 200));
   }, [article]);
 
@@ -274,7 +274,7 @@ export default function BeritaContent({ params }) {
           a &&
           a.id !== article.id &&
           (a.article_categories?.some((c) => c.categories?.name === category) ??
-            false)
+            false),
       )
       .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
       .slice(0, 4);
@@ -289,7 +289,7 @@ export default function BeritaContent({ params }) {
         const matchCount =
           a.article_tags?.reduce(
             (acc, at) => acc + (tagIds.has(at.tags?.id) ? 1 : 0),
-            0
+            0,
           ) || 0;
         return { item: a, matchCount };
       })
@@ -303,7 +303,7 @@ export default function BeritaContent({ params }) {
   }, [allArticles, article, tags]);
 
   const shareUrl = useMemo(() => {
-    if (typeof window === 'undefined') return '';
+    if (typeof window === "undefined") return "";
     return window.location.href;
   }, []);
 
@@ -357,13 +357,13 @@ export default function BeritaContent({ params }) {
   const handleBookmarked = async () => {
     if (!user) {
       Swal.fire({
-        icon: 'warning',
-        text: 'Silhakan login terlebih dahulu!',
+        icon: "warning",
+        text: "Silhakan login terlebih dahulu!",
         showCancelButton: true,
-        confirmButtonText: 'Login',
+        confirmButtonText: "Login",
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push('/masuk');
+          router.push("/masuk");
         }
       });
       return;
@@ -373,7 +373,7 @@ export default function BeritaContent({ params }) {
       handleReload();
     } catch (err) {
       Swal.fire({
-        icon: 'error',
+        icon: "error",
         title: err.message,
       });
     }
@@ -381,13 +381,13 @@ export default function BeritaContent({ params }) {
   const handleIsLiked = async () => {
     if (!user) {
       Swal.fire({
-        icon: 'warning',
-        text: 'Silhakan login terlebih dahulu!',
+        icon: "warning",
+        text: "Silhakan login terlebih dahulu!",
         showCancelButton: true,
-        confirmButtonText: 'Login',
+        confirmButtonText: "Login",
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push('/masuk');
+          router.push("/masuk");
         }
       });
       return;
@@ -397,7 +397,7 @@ export default function BeritaContent({ params }) {
       handleReload();
     } catch (err) {
       Swal.fire({
-        icon: 'error',
+        icon: "error",
         title: err.message,
       });
     }
@@ -410,7 +410,7 @@ export default function BeritaContent({ params }) {
         <div
           style={{
             width: `${scrollProgress}%`,
-            transition: 'width 150ms ease-out',
+            transition: "width 150ms ease-out",
           }}
           className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
         />
@@ -487,13 +487,13 @@ export default function BeritaContent({ params }) {
                       onClick={handleIsLiked}
                       className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shadow-sm ${
                         isLiked
-                          ? 'bg-red-50 border-red-200 text-red-500'
-                          : 'bg-white border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200'
+                          ? "bg-red-50 border-red-200 text-red-500"
+                          : "bg-white border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200"
                       }`}
                       title="Suka artikel ini"
                     >
                       <Heart
-                        className={`w-5 h-5 ${isLiked ? 'fill-red-500' : ''}`}
+                        className={`w-5 h-5 ${isLiked ? "fill-red-500" : ""}`}
                       />
                     </button>
 
@@ -501,13 +501,13 @@ export default function BeritaContent({ params }) {
                       onClick={handleBookmarked}
                       className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shadow-sm ${
                         isBookmarked
-                          ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
-                          : 'bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200'
+                          ? "bg-indigo-50 border-indigo-200 text-indigo-600"
+                          : "bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200"
                       }`}
                       title="Simpan artikel"
                     >
                       <Bookmark
-                        className={`w-5 h-5 ${isBookmarked ? 'fill-indigo-600' : ''}`}
+                        className={`w-5 h-5 ${isBookmarked ? "fill-indigo-600" : ""}`}
                       />
                     </button>
                   </div>
@@ -521,7 +521,7 @@ export default function BeritaContent({ params }) {
                       shareLink(
                         article.title,
                         article.description,
-                        window.location.href
+                        window.location.href,
                       )
                     }
                     className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-black hover:text-white hover:border-black transition-all shadow-sm"
@@ -530,7 +530,7 @@ export default function BeritaContent({ params }) {
                   </button>
                   <a
                     aria-label="Share on Facebook"
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://www.adegreentx.id/berita/' + article?.slug)}`}
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://www.adegreentx.id/berita/" + article?.slug)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
@@ -586,24 +586,24 @@ export default function BeritaContent({ params }) {
                         onClick={handleIsLiked}
                         className={`flex items-center gap-2 px-2 sm:px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
                           isLiked
-                            ? 'bg-red-50 text-red-600'
-                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                            ? "bg-red-50 text-red-600"
+                            : "bg-slate-50 text-slate-600 hover:bg-slate-100"
                         }`}
                       >
                         <Heart
-                          className={`w-5 h-5 ${isLiked ? 'fill-red-600' : ''}`}
+                          className={`w-5 h-5 ${isLiked ? "fill-red-600" : ""}`}
                         />
                       </button>
                       <button
                         onClick={handleBookmarked}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
                           isBookmarked
-                            ? 'bg-emerald-50 text-emerald-600'
-                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                            ? "bg-emerald-50 text-emerald-600"
+                            : "bg-slate-50 text-slate-600 hover:bg-slate-100"
                         }`}
                       >
                         <Bookmark
-                          className={`w-5 h-5 ${isBookmarked ? 'fill-emerald-600' : ''}`}
+                          className={`w-5 h-5 ${isBookmarked ? "fill-emerald-600" : ""}`}
                         />
                       </button>
                     </div>
@@ -620,7 +620,7 @@ export default function BeritaContent({ params }) {
                           shareLink(
                             article.title,
                             article.description,
-                            window.location.href
+                            window.location.href,
                           )
                         }
                         className="p-2 bg-slate-100 rounded-lg text-slate-600"
@@ -628,7 +628,7 @@ export default function BeritaContent({ params }) {
                         <Share2 className="w-5 h-5" />
                       </button>
                       <a
-                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://www.adegreentx.id/berita/' + article?.slug)}`}
+                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://www.adegreentx.id/berita/" + article?.slug)}`}
                         target="_blank"
                         rel="noreferrer"
                         className="p-2 bg-slate-100 rounded-lg text-slate-600"
@@ -666,7 +666,7 @@ export default function BeritaContent({ params }) {
                         className="bg-white/10 border border-white/20 text-white placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 w-full md:w-64 backdrop-blur-sm"
                       />
                       <button
-                        onClick={() => router.push('/daftar')}
+                        onClick={() => router.push("/daftar")}
                         className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-lg shadow-emerald-900/20"
                       >
                         Daftar

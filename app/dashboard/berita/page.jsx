@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   Search,
   CalendarDays,
@@ -13,9 +13,9 @@ import {
   TrendingUp,
   X,
   ChevronDown,
-} from 'lucide-react';
-import Swal from 'sweetalert2';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "lucide-react";
+import Swal from "sweetalert2";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   getArticles,
   getCategories,
@@ -24,9 +24,9 @@ import {
   getTopics,
   updateIsBookmarkedArticle,
   updateIsLikeArticle,
-} from '@/services/articles';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/context/UserContext';
+} from "@/services/articles";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 // --- Helper Components ---
 const FilterSelect = ({
@@ -65,12 +65,12 @@ export default function FeedBeritaComponent() {
   const [categories, setCategories] = useState([]);
   const [topics, setTopics] = useState([]);
   const [tags, setTags] = useState([]);
-  const [highlight, setHighlight] = useState('');
+  const [highlight, setHighlight] = useState("");
   const [loading, setLoading] = useState(true);
 
   // --- Filter State ---
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({ category: '', topic: '', tag: '' });
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({ category: "", topic: "", tag: "" });
 
   // --- Fetch Data ---
   const fetchData = async () => {
@@ -89,14 +89,14 @@ export default function FeedBeritaComponent() {
       setTopics(resTop.topics ?? []);
       setTags(resTag.tags ?? []);
       setHighlight(
-        resHigh.highlight?.[0]?.text || 'Selamat Datang di Portal Berita'
+        resHigh.highlight?.[0]?.text || "Selamat Datang di Portal Berita",
       );
     } catch (err) {
       Swal.fire({
-        icon: 'error',
-        title: 'Gagal',
-        text: 'Gagal memuat data berita.',
-        confirmButtonColor: '#4f46e5',
+        icon: "error",
+        title: "Gagal",
+        text: "Gagal memuat data berita.",
+        confirmButtonColor: "#4f46e5",
       });
     } finally {
       setLoading(false);
@@ -119,8 +119,8 @@ export default function FeedBeritaComponent() {
         article.article_topics?.map((t) => t.topics?.name) ?? [];
       const tagNames = article.article_tags?.map((t) => t.tags?.name) ?? [];
 
-      const matchSearch = (article.title?.toLowerCase() || '').includes(
-        search.toLowerCase()
+      const matchSearch = (article.title?.toLowerCase() || "").includes(
+        search.toLowerCase(),
       );
       const matchCategory = filters.category
         ? catNames.includes(filters.category)
@@ -134,12 +134,12 @@ export default function FeedBeritaComponent() {
   }, [search, filters, articles]);
 
   const resetFilters = () => {
-    setSearch('');
-    setFilters({ category: '', topic: '', tag: '' });
+    setSearch("");
+    setFilters({ category: "", topic: "", tag: "" });
   };
 
   const handleImgError = (e) => {
-    e.currentTarget.src = 'https://via.placeholder.com/800x600?text=No+Image';
+    e.currentTarget.src = "https://via.placeholder.com/800x600?text=No+Image";
   };
 
   const handleIsBookmarked = async (article) => {
@@ -149,8 +149,8 @@ export default function FeedBeritaComponent() {
       handleReload();
     } catch (err) {
       Swal.fire({
-        icon: 'error',
-        title: 'Gagal Update Bookmark',
+        icon: "error",
+        title: "Gagal Update Bookmark",
         text: err.message,
       });
     }
@@ -162,8 +162,8 @@ export default function FeedBeritaComponent() {
       handleReload();
     } catch (err) {
       Swal.fire({
-        icon: 'error',
-        title: 'Gagal Update Favorit',
+        icon: "error",
+        title: "Gagal Update Favorit",
         text: err.message,
       });
     }
@@ -197,7 +197,7 @@ export default function FeedBeritaComponent() {
         {/* --- Title & Search Section --- */}
         <div className="mb-10">
           <h1 className="text-4xl font-extrabold text-slate-900 mb-2 tracking-tight">
-            Berita{' '}
+            Berita{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
               Terkini
             </span>
@@ -283,11 +283,10 @@ export default function FeedBeritaComponent() {
               const categoryName =
                 article.article_categories?.[0]?.categories?.name;
               const isLiked = article.article_likes.some(
-                (like) => like.profiles.id === user.id
+                (like) => like.profiles.id === user.id,
               );
-              console.log(article.article_bookmarks);
               const isBookmarked = article.article_bookmarks.some(
-                (bookmark) => bookmark.profiles.id === user.id
+                (bookmark) => bookmark.profiles.id === user.id,
               );
               console.log(isLiked, isBookmarked);
               return (
@@ -320,26 +319,26 @@ export default function FeedBeritaComponent() {
                         onClick={async (e) => await handleIsBookmarked(article)}
                         className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/20 shadow-lg ${
                           isBookmarked
-                            ? 'bg-indigo-500 text-white shadow-indigo-500/40'
-                            : 'bg-black/20 text-white hover:bg-white hover:text-indigo-600'
+                            ? "bg-indigo-500 text-white shadow-indigo-500/40"
+                            : "bg-black/20 text-white hover:bg-white hover:text-indigo-600"
                         }`}
                       >
                         <Bookmark
                           size={18}
-                          className={isBookmarked ? 'fill-current' : ''}
+                          className={isBookmarked ? "fill-current" : ""}
                         />
                       </button>
                       <button
                         onClick={async (e) => await handleIsLiked(article)}
                         className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border border-white/20 shadow-lg ${
                           isLiked
-                            ? 'bg-rose-500 text-white shadow-rose-500/40'
-                            : 'bg-black/20 text-white hover:bg-white hover:text-rose-600'
+                            ? "bg-rose-500 text-white shadow-rose-500/40"
+                            : "bg-black/20 text-white hover:bg-white hover:text-rose-600"
                         }`}
                       >
                         <Heart
                           size={18}
-                          className={isLiked ? 'fill-current' : ''}
+                          className={isLiked ? "fill-current" : ""}
                         />
                       </button>
                     </div>
@@ -351,8 +350,8 @@ export default function FeedBeritaComponent() {
                       <div className="flex items-center gap-1">
                         <CalendarDays size={14} />
                         {new Date(article.published_at).toLocaleDateString(
-                          'id-ID',
-                          { day: 'numeric', month: 'short', year: 'numeric' }
+                          "id-ID",
+                          { day: "numeric", month: "short", year: "numeric" },
                         )}
                       </div>
                       <span className="w-1 h-1 bg-slate-300 rounded-full" />

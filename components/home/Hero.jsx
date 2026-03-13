@@ -43,7 +43,8 @@ export default function Hero() {
 
         <div className="flex flex-wrap items-center gap-4 mt-12 w-full md:max-w-4xl">
           <a
-            href="/"
+            target='_blank'
+            href="https://play.google.com/store/apps/details?id=com.test211111.CustomerAdeTaxi&pcampaignid=web_share"
             data-aos="zoom-out"
             data-aos-duration="500"
             className="px-8 py-4 bg-white/10 text-lg cursor-pointer hover:scale-105 flex items-center gap-2 rounded-lg backdrop-blur-md border border-white/30 text-white transition-transform shadow-lg"

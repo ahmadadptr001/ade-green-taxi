@@ -259,7 +259,7 @@ export default function Header() {
             <nav className="flex flex-col items-center gap-6 w-full text-center">
               {[
                 { label: t.mainNavbar.service, href: '/beranda#layanan' },
-                { label: 'Blog', href: '/berita' },
+                { label: 'Berita', href: '/berita' },
                 { label: t.mainNavbar.about, href: '/beranda#tentang' },
                 { label: t.mainNavbar.feature, href: '/beranda#fitur' },
                 { label: t.mainNavbar.faq, href: '/beranda#faq' },
