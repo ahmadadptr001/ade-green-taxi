@@ -1,56 +1,30 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import {
-  Smartphone,
-  ArrowRight,
-  Leaf,
-  Loader2,
-  Lock,
-  Mail,
-  Eye,
-  EyeOff,
-  ChevronLeft,
-} from 'lucide-react';
+import { ArrowRight, Leaf, Loader2, Lock, Mail, Eye, EyeOff, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
 import { login, updateLoginHostory } from '@/services/auth';
 import { useRouter } from 'next/navigation';
 
-export default function LoginPaeg() {
+export default function LoginPage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState(null);
   const [isValid, setIsValid] = useState(false);
 
-  // Validasi Login: Email valid & Password minimal 6 karakter
   useEffect(() => {
-    const isEmailValid =
-      formData.email.includes('@') && formData.email.includes('.');
-    const isPasswordValid = formData.password.length >= 6;
-    setIsValid(isEmailValid && isPasswordValid);
+    const emailOk = formData.email.includes('@') && formData.email.includes('.');
+    setIsValid(emailOk && formData.password.length >= 6);
   }, [formData]);
 
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  const handleChange = (field, value) => setFormData((p) => ({ ...p, [field]: value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValid) return;
-
     setIsLoading(true);
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Sedang Masuk',
-      didOpen: () => Swal.showLoading(),
-    });
-
+    Swal.fire({ icon: 'info', title: 'Sedang Masuk', didOpen: () => Swal.showLoading() });
     try {
       const dataUser = await login(formData.email, formData.password);
       setIsLoading(false);
@@ -65,7 +39,6 @@ export default function LoginPaeg() {
         });
         return;
       }
-
       await updateLoginHostory(dataUser.data.id);
       Swal.fire({
         icon: 'success',
@@ -90,153 +63,110 @@ export default function LoginPaeg() {
   };
 
   return (
-    <div className="fixed inset-0 bg-white flex flex-col md:flex-row font-sans text-slate-900">
-      {/* Sisi Visual: Menampilkan gambar penuh di desktop */}
-      <div className="hidden relative md:flex md:w-1/2 bg-slate-100 items-center justify-center overflow-hidden border-r border-slate-100">
+    <div className="flex min-h-screen flex-col bg-white text-slate-900 md:flex-row">
+      {/* Visual side */}
+      <div className="relative hidden items-center justify-center overflow-hidden border-r border-slate-100 bg-slate-100 md:flex md:w-1/2">
         <img
           src="/bg-auth.jpg"
-          alt="Environmental Background"
-          className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-10000 hover:scale-105"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/60 to-transparent"></div>
-        <div className="relative z-10 text-center p-12">
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 mx-auto border border-white/30">
-            <Leaf className="w-8 h-8 text-white fill-white" />
-          </div>
-          <h2 className="text-3xl font-bold text-white tracking-tight">
-            ADE<span className="text-emerald-500">GREEN</span>TX
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-emerald-900/20 to-transparent" />
+        <div className="relative z-10 max-w-xs px-12 text-center">
+          <Leaf className="mx-auto mb-6 h-10 w-10 text-white" />
+          <h2 className="font-display text-3xl font-bold tracking-tight text-white">
+            Ade<span className="text-emerald-400">Green</span> TX
           </h2>
-          <p className="text-emerald-50 mt-2 max-w-xs mx-auto opacity-90">
-            Masuk untuk mendapatkan pembaruan eksklusif tentang ekosistem
-            lingkungan.
+          <p className="mt-3 leading-relaxed text-emerald-50/80">
+            Masuk untuk mengelola konten dan mendapatkan pembaruan ekosistem hijau.
           </p>
         </div>
       </div>
 
-      {/* Sisi Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 bg-white overflow-y-auto">
-        <div className="w-full max-w-[360px] space-y-8">
-          <div>
-            <h3 className="text-3xl font-black tracking-tight text-slate-900">
-              Selamat Datang
-            </h3>
-            <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-              Silakan masukkan email dan kata sandi Anda untuk melanjutkan
-              akses.
-            </p>
-          </div>
+      {/* Form side */}
+      <div className="flex flex-1 flex-col justify-center px-6 py-16 md:px-16">
+        <div className="mx-auto w-full max-w-sm">
+          <Link
+            href="/beranda"
+            className="mb-12 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-emerald-600"
+          >
+            <ChevronLeft size={16} /> Kembali
+          </Link>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Input Email */}
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                Alamat Email
-              </label>
-              <div
-                className={`flex items-center border rounded-2xl px-4 py-4 transition-all duration-300 ${
-                  focusedField === 'email'
-                    ? 'border-emerald-500 ring-4 ring-emerald-50 bg-white'
-                    : 'border-slate-100 bg-slate-50'
-                }`}
-              >
-                <Mail
-                  className={`w-5 h-5 mr-3 transition-colors ${focusedField === 'email' ? 'text-emerald-500' : 'text-slate-300'}`}
-                />
+          <h1 className="font-display text-3xl font-bold tracking-tight">Selamat Datang</h1>
+          <p className="mt-3 text-slate-500">
+            Masukkan email dan kata sandi Anda untuk melanjutkan.
+          </p>
+
+          <form onSubmit={handleSubmit} className="mt-10 space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-600">Alamat Email</label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
+                <Mail className="h-5 w-5 shrink-0 text-slate-400" />
                 <input
                   type="email"
                   placeholder="nama@email.com"
-                  className="flex-1 bg-transparent outline-none text-sm font-bold text-slate-800 placeholder-slate-300"
+                  className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
-                  onFocus={() => setFocusedField('email')}
-                  onBlur={() => setFocusedField(null)}
                 />
               </div>
             </div>
 
-            {/* Input Password */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center px-1">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                  Kata Sandi
-                </label>
-                <Link
-                  href={'/lupa'}
-                  type="button"
-                  className="text-[10px] font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-widest"
-                >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-600">Kata Sandi</label>
+                <Link href="/lupa" className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
                   Lupa?
                 </Link>
               </div>
-              <div
-                className={`flex items-center border rounded-2xl px-4 py-4 transition-all duration-300 ${
-                  focusedField === 'password'
-                    ? 'border-emerald-500 ring-4 ring-emerald-50 bg-white'
-                    : 'border-slate-100 bg-slate-50'
-                }`}
-              >
-                <Lock
-                  className={`w-5 h-5 mr-3 transition-colors ${focusedField === 'password' ? 'text-emerald-500' : 'text-slate-300'}`}
-                />
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
+                <Lock className="h-5 w-5 shrink-0 text-slate-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="flex-1 bg-transparent outline-none text-sm font-bold text-slate-800 placeholder-slate-300"
+                  className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
                   value={formData.password}
                   onChange={(e) => handleChange('password', e.target.value)}
-                  onFocus={() => setFocusedField('password')}
-                  onBlur={() => setFocusedField(null)}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-slate-300 hover:text-slate-500 p-1"
+                  className="text-slate-400 hover:text-slate-600"
+                  aria-label={showPassword ? 'Sembunyikan' : 'Tampilkan'}
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 mt-4
-                ${
-                  isValid && !isLoading
-                    ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-xl shadow-slate-200 active:scale-95'
-                    : 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                }
-              `}
+              className={`group flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-semibold transition-all ${
+                isValid && !isLoading
+                  ? 'bg-slate-900 text-white hover:bg-emerald-600'
+                  : 'cursor-not-allowed bg-slate-100 text-slate-400'
+              }`}
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <>
-                  <span>Masuk Sekarang</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  Masuk Sekarang
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Footer Form */}
-          <div className="pt-8 border-t border-slate-50 text-center">
-            <p className="text-sm text-slate-400 font-medium">
-              Belum memiliki akun?{' '}
-              <Link
-                href={'/daftar'}
-                className="text-emerald-600 font-bold hover:text-emerald-700 underline underline-offset-8 decoration-2 decoration-emerald-100 transition-all"
-              >
-                Daftar Akun Baru
-              </Link>
-            </p>
-          </div>
+          <p className="mt-12 text-center text-sm text-slate-500">
+            Belum memiliki akun?{' '}
+            <Link href="/daftar" className="font-semibold text-emerald-600 hover:text-emerald-700">
+              Daftar Akun Baru
+            </Link>
+          </p>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ export const metadata = {
   title: {
     default: 'Dashboard - Ade Green TX ',
   },
-  description: 'Anlisis dan dapatkan akses berita terupdate.',
+  description: 'Analisis dan dapatkan akses berita terupdate.',
 
   openGraph: {
     title: 'Dashboard - Ade Green TX',
@@ -30,9 +30,8 @@ export const metadata = {
     images: ['https://adegreentx.id/odgr.png'],
   },
   robots: {
-    index: true,
-    follow: true,
-    'max-image-preview': 'large',
+    index: false,
+    follow: false,
   },
 };
 

@@ -1,6 +1,9 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
+// skipHydration keeps server + first client render identical ('id'); the stored
+// language is applied after mount via rehydrate() (see LayoutSearch), avoiding
+// hydration mismatches on language-dependent text.
 export const useLanguageStore = create(
   persist(
     (set) => ({
@@ -9,7 +12,8 @@ export const useLanguageStore = create(
     }),
     {
       name: 'language-storage',
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
     }
   )
 );

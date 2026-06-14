@@ -36,7 +36,7 @@ export default function LayoutSidebar({ children }) {
     <UserProvider user={user}>
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">
+        <main className="w-full min-h-screen bg-slate-50">
           <CustomSidebarTrigger />
           {user && user !== "undefined" && children}
         </main>

@@ -96,7 +96,7 @@ const MenuBar = ({ editor }) => {
         variant="ghost"
         size="sm"
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={editor.isActive('bold') ? 'bg-gray-100' : ''}
+        className={editor.isActive('bold') ? 'bg-slate-100' : ''}
       >
         <Bold className="w-4 h-4" />
       </Button>
@@ -105,7 +105,7 @@ const MenuBar = ({ editor }) => {
         variant="ghost"
         size="sm"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={editor.isActive('italic') ? 'bg-gray-100' : ''}
+        className={editor.isActive('italic') ? 'bg-slate-100' : ''}
       >
         <Italic className="w-4 h-4" />
       </Button>
@@ -115,7 +115,7 @@ const MenuBar = ({ editor }) => {
         size="sm"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={
-          editor.isActive('heading', { level: 2 }) ? 'bg-gray-100' : ''
+          editor.isActive('heading', { level: 2 }) ? 'bg-slate-100' : ''
         }
       >
         <Heading2 className="w-4 h-4" />
@@ -125,7 +125,7 @@ const MenuBar = ({ editor }) => {
         variant="ghost"
         size="sm"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'bg-gray-100' : ''}
+        className={editor.isActive('bulletList') ? 'bg-slate-100' : ''}
       >
         <List className="w-4 h-4" />
       </Button>
@@ -134,7 +134,7 @@ const MenuBar = ({ editor }) => {
         variant="ghost"
         size="sm"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive('orderedList') ? 'bg-gray-100' : ''}
+        className={editor.isActive('orderedList') ? 'bg-slate-100' : ''}
       >
         <ListOrdered className="w-4 h-4" />
       </Button>
@@ -143,11 +143,11 @@ const MenuBar = ({ editor }) => {
         variant="ghost"
         size="sm"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive('blockquote') ? 'bg-gray-100' : ''}
+        className={editor.isActive('blockquote') ? 'bg-slate-100' : ''}
       >
         <Quote className="w-4 h-4" />
       </Button>
-      <div className="w-[1px] h-6 bg-gray-200 mx-1 self-center" />
+      <div className="w-[1px] h-6 bg-slate-200 mx-1 self-center" />
       <Button
         type="button"
         variant="ghost"
@@ -297,7 +297,6 @@ export default function ArticleManager() {
         didOpen: () => Swal.hideLoading(),
       });
       setIsAlertOpen(false);
-      console.log(`Article ${deleteId} deleted`);
       handleReload();
     } catch (err) {
       Swal.fire({
@@ -356,7 +355,6 @@ export default function ArticleManager() {
         didOpen: () => Swal.hideLoading(),
       });
       setIsEditDialogOpen(false);
-      console.log('Saved HTML:', htmlContent);
       handleReload();
     } catch (err) {
       Swal.fire({
@@ -405,7 +403,7 @@ export default function ArticleManager() {
       {/* Section 1: Image & Title Group */}
       <div className="flex gap-4 flex-1 w-full">
         {/* Image */}
-        <div className="flex-shrink-0 w-24 h-16 md:w-32 md:h-20 rounded-md overflow-hidden bg-gray-50 border">
+        <div className="flex-shrink-0 w-24 h-16 md:w-32 md:h-20 rounded-md overflow-hidden bg-slate-50 border">
           {article.img ? (
             <img
               src={article.img}
@@ -413,7 +411,7 @@ export default function ArticleManager() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <div className="w-full h-full flex items-center justify-center text-slate-400">
               <ImageIcon />
             </div>
           )}
@@ -421,14 +419,14 @@ export default function ArticleManager() {
 
         {/* Title & Tags */}
         <div className="flex-1">
-          <h3 className="font-semibold text-sm md:text-base text-gray-900 line-clamp-2">
+          <h3 className="font-semibold text-sm md:text-base text-slate-900 line-clamp-2">
             {article.title}
           </h3>
           <div className="mt-1 flex flex-wrap gap-1">
             {article.article_tags.map((t) => (
               <span
                 key={t.tags.id}
-                className="text-[10px] md:text-[11px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
+                className="text-[10px] md:text-[11px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded"
               >
                 #{t.tags.name}
               </span>
@@ -442,7 +440,7 @@ export default function ArticleManager() {
         {/* Stats (Views, Likes, Bookmarks) */}
         <div className="flex gap-4 items-center">
           <div className="hidden sm:block md:text-left mr-2">
-            <div className="text-xs text-gray-500 whitespace-nowrap">
+            <div className="text-xs text-slate-500 whitespace-nowrap">
               {article.views.toLocaleString()} views
             </div>
             <Badge className="mt-0.5 scale-90 origin-left md:origin-center">
@@ -452,13 +450,13 @@ export default function ArticleManager() {
 
           <div className="flex items-center gap-3 border-l md:border-l-0 pl-3 md:pl-0">
             <div title="Likes" className="flex items-center gap-1">
-              <Heart className="h-4 w-4 text-rose-500" />
+              <Heart className="h-4 w-4 text-slate-400" />
               <span className="text-sm font-medium">
                 {article.article_likes.length}
               </span>
             </div>
             <div title="Bookmarks" className="flex items-center gap-1">
-              <Bookmark className="h-4 w-4 text-amber-500" />
+              <Bookmark className="h-4 w-4 text-slate-400" />
               <span className="text-sm font-medium">
                 {article.article_bookmarks.length}
               </span>
@@ -469,16 +467,16 @@ export default function ArticleManager() {
         {/* Action Buttons */}
         <div className="flex items-center gap-1 md:gap-2">
           <button
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
             onClick={() => handleView(article)}
           >
-            <Eye className="w-4 h-4 text-gray-600" />
+            <Eye className="w-4 h-4 text-slate-600" />
           </button>
           <button
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
             onClick={() => openEditModal(article)}
           >
-            <Edit className="w-4 h-4 text-gray-600" />
+            <Edit className="w-4 h-4 text-slate-600" />
           </button>
           <button
             className="p-2 hover:bg-red-50 rounded-full transition-colors text-red-600"
@@ -496,15 +494,15 @@ export default function ArticleManager() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto w-full space-y-6 min-h-screen">
+    <div className="mx-auto min-h-screen w-full max-w-7xl space-y-10 px-6 py-12 md:px-10 md:py-16">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
-            Articles
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-slate-900">
+            Kelola Berita
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Kelola, edit, dan pantau performa konten berita kamu.
+          <p className="text-sm text-slate-500 mt-1">
+            Kelola, edit, dan pantau performa konten berita Anda.
           </p>
         </div>
 
@@ -518,7 +516,7 @@ export default function ArticleManager() {
           </Button>
 
           <Link href={'/dashboard/berita/tulis'}>
-            <Button className="bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white">
+            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
               + Buat Artikel
             </Button>
           </Link>
@@ -526,12 +524,12 @@ export default function ArticleManager() {
       </div>
 
       {/* SEARCH & FILTER */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-white p-2 sm:p-4 rounded-lg border shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Cari judul artikel..."
-            className="pl-10 pr-10 h-10 rounded-lg shadow-sm"
+            className="pl-10 pr-10 h-11 rounded-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -551,7 +549,7 @@ export default function ArticleManager() {
       </div>
 
       {/* LIST: Table on md+, Cards on mobile */}
-      <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
         {/* Mobile cards */}
         <div className="md:hidden p-4 space-y-3">
           {filteredArticles.length > 0 ? (
@@ -559,16 +557,16 @@ export default function ArticleManager() {
               <ArticleCardMobile key={article.id} article={article} />
             ))
           ) : (
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-sm text-slate-500">
               Tidak ada artikel yang ditemukan.
             </div>
           )}
         </div>
 
         {/* Desktop table */}
-        <div className="hidden md:block">
+        <div className="hidden md:block [&_td]:py-5 [&_th]:h-12">
           <Table>
-            <TableHeader className="bg-gray-50/80">
+            <TableHeader className="bg-slate-50/60">
               <TableRow>
                 <TableHead className="w-[420px]">Artikel</TableHead>
                 <TableHead>Status & Kategori</TableHead>
@@ -582,11 +580,11 @@ export default function ArticleManager() {
                 filteredArticles.map((article) => (
                   <TableRow
                     key={article.id}
-                    className="hover:bg-gray-50/50 transition-colors"
+                    className="hover:bg-slate-50/50 transition-colors"
                   >
                     <TableCell>
                       <div className="flex items-start gap-4">
-                        <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-gray-100">
+                        <div className="relative h-20 w-32 flex-shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
                           {article.img ? (
                             <img
                               src={article.img}
@@ -594,20 +592,20 @@ export default function ArticleManager() {
                               className="h-full w-full object-cover transition-transform hover:scale-105"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center text-gray-400">
+                            <div className="flex h-full w-full items-center justify-center text-slate-400">
                               <ImageIcon size={24} />
                             </div>
                           )}
                         </div>
                         <div className="space-y-1 max-w-[220px]">
-                          <span className="font-semibold text-gray-900 line-clamp-2 leading-tight text-wrap">
+                          <span className="font-medium text-slate-900 line-clamp-2 leading-tight text-wrap">
                             {article.title}
                           </span>
                           <div className="flex flex-wrap gap-1">
                             {article.article_tags.map((t) => (
                               <span
                                 key={t.tags.id}
-                                className="text-[10px] text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded"
+                                className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded"
                               >
                                 #{t.tags.name}
                               </span>
@@ -629,7 +627,7 @@ export default function ArticleManager() {
                         ) : (
                           <Badge
                             variant="secondary"
-                            className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100 border-yellow-200"
+                            className="bg-slate-100 text-slate-600 hover:bg-slate-100 border-slate-200"
                           >
                             Draft
                           </Badge>
@@ -637,7 +635,7 @@ export default function ArticleManager() {
                         {article.article_categories.map((c) => (
                           <span
                             key={c.categories.id}
-                            className="text-xs font-medium text-gray-600"
+                            className="text-xs font-medium text-slate-600"
                           >
                             {c.categories.name}
                           </span>
@@ -646,20 +644,20 @@ export default function ArticleManager() {
                     </TableCell>
 
                     <TableCell>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-4 text-sm text-slate-600">
                         <div className="flex items-center gap-1" title="Views">
-                          <BarChart3 className="h-4 w-4 text-blue-500" />
+                          <BarChart3 className="h-4 w-4 text-slate-400" />
                           <span>{article.views.toLocaleString()}</span>
                         </div>
                         <div className="flex items-center gap-1" title="Likes">
-                          <Heart className="h-4 w-4 text-rose-500" />
+                          <Heart className="h-4 w-4 text-slate-400" />
                           <span>{article.article_likes.length}</span>
                         </div>
                         <div
                           className="flex items-center gap-1"
                           title="Bookmarks"
                         >
-                          <Bookmark className="h-4 w-4 text-amber-500" />
+                          <Bookmark className="h-4 w-4 text-slate-400" />
                           <span>{article.article_bookmarks.length}</span>
                         </div>
                       </div>
@@ -667,7 +665,7 @@ export default function ArticleManager() {
 
                     <TableCell>
                       <div className="flex flex-col text-sm">
-                        <div className="flex items-center gap-2 text-gray-700">
+                        <div className="flex items-center gap-2 text-slate-700">
                           <Calendar className="h-3.5 w-3.5" />
                           <span>
                             {article.published_at
@@ -691,7 +689,7 @@ export default function ArticleManager() {
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="h-8 w-8 p-0 hover:bg-gray-200"
+                            className="h-8 w-8 p-0 hover:bg-slate-200"
                           >
                             <span className="sr-only">Open menu</span>
                             <MoreHorizontal className="h-4 w-4" />
@@ -845,7 +843,7 @@ export default function ArticleManager() {
 
               <Separator />
 
-              <div className="bg-gray-50 p-4 rounded-lg text-sm text-gray-500 space-y-2">
+              <div className="bg-slate-50 p-4 rounded-lg text-sm text-slate-500 space-y-2">
                 <p>
                   <strong>Slug:</strong> {selectedArticle.slug}
                 </p>
@@ -910,7 +908,7 @@ function ArticleSkeleton() {
         </div>
       </div>
 
-      <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
         <div className="md:hidden p-4 space-y-3">
           {Array.from({ length: 5 }).map((_, index) => (
             <div
@@ -952,7 +950,7 @@ function ArticleSkeleton() {
         {/* 2. DESKTOP TABLE SKELETON (hidden md:block) */}
         <div className="hidden md:block">
           <Table>
-            <TableHeader className="bg-gray-50/80">
+            <TableHeader className="bg-slate-50/80">
               <TableRow>
                 <TableHead className="w-[420px]">Artikel</TableHead>
                 <TableHead>Status & Kategori</TableHead>

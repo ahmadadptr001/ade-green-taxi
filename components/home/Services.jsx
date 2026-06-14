@@ -1,4 +1,7 @@
 'use client';
+
+import gsap from 'gsap';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguageStore } from '@/store/languageStore';
 import ID from '../../locales/id.json';
 import EN from '../../locales/en.json';
@@ -6,101 +9,161 @@ import EN from '../../locales/en.json';
 export default function Services() {
   const { language } = useLanguageStore();
   const data = language === 'id' ? ID : EN;
+  const en = language === 'en';
 
-  const servicesVisual = [
+  // Our services + relevant, Indonesia-context images from /public.
+  const projects = [
     {
-      image: '/services/emisi-carbon.png',
-      title: language === 'en' ? 'Zero Emission Fleet' : 'Armada Nol Emisi',
-      desc:
-        language === 'en'
-          ? 'Electric vehicles for cleaner urban transport.'
-          : 'Kendaraan listrik untuk transportasi kota yang lebih bersih.',
+      color: '#052e16',
+      src: '/features/mobil-listrik.png',
+      title: en ? 'Zero-Emission Fleet' : 'Armada Nol Emisi',
+      tag: en ? 'Electric' : 'Listrik',
     },
     {
-      image: '/services/mobilitas.png',
-      title:
-        language === 'en'
-          ? 'Point-to-Point Ride'
-          : 'Perjalanan Langsung Tujuan',
-      desc:
-        language === 'en'
-          ? 'Direct routes without unnecessary stops.'
-          : 'Rute langsung tanpa pemberhentian tidak perlu.',
+      color: '#1e293b',
+      src: '/jakarta.png',
+      title: en ? 'Point-to-Point Ride' : 'Perjalanan Langsung',
+      tag: en ? 'City' : 'Perkotaan',
     },
     {
-      image: '/services/cash.png',
-      title:
-        language === 'en'
-          ? 'Pay After Ride'
-          : 'Bayar Setelah Perjalanan',
-      desc:
-        language === 'en'
-          ? 'Cash payment with clear fare.'
-          : 'Pembayaran tunai dengan tarif jelas.',
+      color: '#0f766e',
+      src: '/services/cash.png',
+      title: en ? 'Pay After Ride' : 'Bayar Setelah Perjalanan',
+      tag: en ? 'Fare' : 'Tarif',
     },
     {
-      image: '/services/pemesanan.png',
-      title:
-        language === 'en'
-          ? 'On-Demand Booking'
-          : 'Pemesanan Sesuai Kebutuhan',
-      desc:
-        language === 'en'
-          ? 'Available when you need it.'
-          : 'Tersedia saat Anda membutuhkannya.',
+      color: '#334155',
+      src: '/services/pemesanan.png',
+      title: en ? 'On-Demand Booking' : 'Pemesanan Mudah',
+      tag: en ? 'App' : 'Aplikasi',
     },
   ];
 
+  const [modal, setModal] = useState({ active: false, index: 0 });
+
   return (
-    <section id="layanan" className="py-28 bg-white text-gray-900">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-20" data-aos="fade-down">
-          <h2 className="text-4xl font-bold mb-4">
-            {data.servicesHeaderTitle}
+    <section id="layanan" className="overflow-hidden bg-[#f9f9f9] py-20 text-gray-900 md:py-28">
+      <div className="mx-auto max-w-7xl px-5 md:px-8">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <h2 className="font-display text-5xl font-bold tracking-tight md:text-7xl">
+            {en ? 'Services.' : 'Layanan.'}
           </h2>
-          <p className="text-gray-600 max-w-xl mx-auto">
+          <p className="max-w-md font-medium text-neutral-500">
             {data.servicesHeaderDesc}
           </p>
         </div>
 
-        {/* Services Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {servicesVisual.map((s, i) => (
-            <div
-              key={i}
-              data-aos="fade-up"
-              data-aos-delay={i * 150}
-              className="group relative h-[420px] rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
-            >
-              <img
-                src={s.image}
-                alt={s.title}
-                loading='lazy'
-                className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-
-              <div className="absolute bottom-0 p-6 text-white">
-                <h3 className="text-xl font-semibold mb-1">
-                  {s.title}
-                </h3>
-                <p className="text-sm text-white/80">
-                  {s.desc}
-                </p>
-              </div>
-            </div>
+        {/* List */}
+        <div className="mt-12 flex flex-col">
+          {projects.map((project, index) => (
+            <ProjectRow
+              key={project.title}
+              index={index}
+              project={project}
+              setModal={setModal}
+            />
           ))}
         </div>
 
-        {/* Note */}
-        <p className="mt-12 text-center text-sm text-gray-500">
-          {language === 'en'
-            ? 'Payment is currently accepted in cash. Digital payment options are in development.'
-            : 'Saat ini pembayaran dilakukan secara tunai. Opsi pembayaran digital sedang dalam pengembangan.'}
-        </p>
+        {/* Cursor-follow modal (desktop / hover devices only) */}
+        <div className="hidden md:block">
+          <Modal modal={modal} projects={projects} label={en ? 'View' : 'Lihat'} />
+        </div>
       </div>
     </section>
+  );
+}
+
+function ProjectRow({ index, project, setModal }) {
+  return (
+    <div
+      className="group flex cursor-pointer items-center justify-between gap-4 border-t border-neutral-300 py-6 transition-opacity duration-200 last:border-b hover:opacity-60 md:py-10"
+      onMouseEnter={() => setModal({ active: true, index })}
+      onMouseLeave={() => setModal({ active: false, index })}
+    >
+      {/* mobile thumbnail */}
+      <img
+        src={project.src}
+        alt={project.title}
+        loading="lazy"
+        className="h-14 w-20 shrink-0 rounded-lg object-cover md:hidden"
+        style={{ backgroundColor: project.color }}
+      />
+      <h3 className="m-0 flex-1 text-2xl font-normal transition-transform duration-300 group-hover:translate-x-2 sm:text-4xl md:text-6xl">
+        {project.title}
+      </h3>
+      <p className="shrink-0 text-sm font-light text-neutral-500 transition-transform duration-300 group-hover:translate-x-2">
+        {project.tag}
+      </p>
+    </div>
+  );
+}
+
+function Modal({ modal, projects, label }) {
+  const { active, index } = modal;
+  const modalContainer = useRef(null);
+  const cursor = useRef(null);
+  const cursorLabel = useRef(null);
+
+  useEffect(() => {
+    const xC = gsap.quickTo(modalContainer.current, 'left', { duration: 0.8, ease: 'power3' });
+    const yC = gsap.quickTo(modalContainer.current, 'top', { duration: 0.8, ease: 'power3' });
+    const xCur = gsap.quickTo(cursor.current, 'left', { duration: 0.5, ease: 'power3' });
+    const yCur = gsap.quickTo(cursor.current, 'top', { duration: 0.5, ease: 'power3' });
+    const xLab = gsap.quickTo(cursorLabel.current, 'left', { duration: 0.45, ease: 'power3' });
+    const yLab = gsap.quickTo(cursorLabel.current, 'top', { duration: 0.45, ease: 'power3' });
+
+    const onMove = (e) => {
+      const { clientX, clientY } = e;
+      xC(clientX); yC(clientY);
+      xCur(clientX); yCur(clientY);
+      xLab(clientX); yLab(clientY);
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  const scale = active ? 1 : 0;
+  const baseStyle = {
+    transform: `translate(-50%, -50%) scale(${scale})`,
+    transition: 'transform 0.4s cubic-bezier(0.76,0,0.24,1)',
+  };
+
+  return (
+    <>
+      <div
+        ref={modalContainer}
+        className="pointer-events-none fixed left-0 top-0 z-[60] flex h-[260px] w-[340px] items-center justify-center overflow-hidden rounded-lg bg-white shadow-2xl"
+        style={baseStyle}
+      >
+        <div
+          className="absolute h-full w-full transition-[top] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
+          style={{ top: `${index * -100}%` }}
+        >
+          {projects.map((project) => (
+            <div
+              key={project.title}
+              className="flex h-full w-full items-center justify-center"
+              style={{ backgroundColor: project.color }}
+            >
+              <img src={project.src} alt={project.title} className="h-full w-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div
+        ref={cursor}
+        className="pointer-events-none fixed left-0 top-0 z-[61] flex h-20 w-20 items-center justify-center rounded-full bg-emerald-600"
+        style={baseStyle}
+      />
+      <div
+        ref={cursorLabel}
+        className="pointer-events-none fixed left-0 top-0 z-[61] flex h-20 w-20 items-center justify-center rounded-full bg-transparent text-sm font-light text-white"
+        style={baseStyle}
+      >
+        {label}
+      </div>
+    </>
   );
 }

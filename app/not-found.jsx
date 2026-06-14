@@ -4,13 +4,8 @@ import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 export default function NotFoundPage() {
-  const language = 'id'; 
+  const language = 'id';
   const isEN = language === 'en';
-
-  const handleNavigateHome = (e) => {
-    e.preventDefault();
-    console.log("Navigasi ke /beranda");
-  };
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-white font-sans text-neutral-900 selection:bg-emerald-50 selection:text-emerald-900">
@@ -33,7 +28,6 @@ export default function NotFoundPage() {
         <div className="flex w-full mt-7 flex-col items-center gap-6">
           <a
             href="/beranda"
-            onClick={handleNavigateHome}
             className="group flex items-center gap-3 text-xs font-bold tracking-widest text-neutral-800 uppercase transition-colors hover:text-emerald-700"
           >
             <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />

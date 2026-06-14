@@ -50,7 +50,7 @@ export default function Page() {
         <div className="py-4">
           <Back />
         </div>
-        <h1 className="text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-teal-500">
+        <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
           {isEN ? 'Legal notices' : 'Pemberitahuan hukum'}
         </h1>
         <p className="text-lg text-gray-700 leading-relaxed mb-10">

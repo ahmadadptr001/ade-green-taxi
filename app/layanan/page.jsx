@@ -4,7 +4,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/home/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import { useLanguageStore } from '@/store/languageStore';
-import { Car, Leaf, Clock, ShieldCheck, Smartphone } from 'lucide-react';
+import { Car, Leaf, Clock, ShieldCheck, Smartphone, MapPin } from 'lucide-react';
+import Tilt from '@/components/ui/Tilt';
+import { Scribble, MarkText } from '@/components/ui/Typo';
+import ScrollReveal3D from '@/components/ui/ScrollReveal3D';
+
+const PLAYSTORE_URL =
+  'https://play.google.com/store/apps/details?id=com.test211111.CustomerAdeTaxi&pcampaignid=web_share';
 
 export default function LayananPage() {
   const { language } = useLanguageStore();
@@ -59,7 +65,7 @@ export default function LayananPage() {
             src="/services/hero-layanan.png"
             alt="Ade Green Tx Electric Service"
             className="absolute inset-0 w-full h-full object-cover"
-            loading='lazy'
+            fetchPriority="high"
           />
 
           {/* subtle overlay biar teks kebaca kalau perlu */}
@@ -68,14 +74,16 @@ export default function LayananPage() {
 
         {/* CONTENT */}
         <div className="max-w-4xl mx-auto px-6 pt-16 pb-24 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-6">
+          <span className="font-hand text-3xl text-emerald-600 block mb-2 -rotate-2">
             🌱 Ade Green TX
           </span>
 
-          <h1 className="text-4xl sm:text-5xl xl:text-6xl font-semibold leading-tight mb-6">
-            {language === 'en'
-              ? 'Smart & Eco-Friendly Urban Mobility'
-              : 'Mobilitas Perkotaan yang Cerdas & Ramah Lingkungan'}
+          <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-tight mb-6">
+            {language === 'en' ? (
+              <>Smart & <MarkText>Eco-Friendly</MarkText> Urban Mobility</>
+            ) : (
+              <>Mobilitas Perkotaan yang Cerdas & <MarkText>Ramah Lingkungan</MarkText></>
+            )}
           </h1>
 
           <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-10">
@@ -86,7 +94,9 @@ export default function LayananPage() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="#"
+              href={PLAYSTORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-6 py-3 rounded-xl bg-green-600 text-white font-medium shadow-lg hover:bg-green-700 transition"
             >
               {language === 'en' ? 'Download App' : 'Unduh Aplikasi'}
@@ -107,16 +117,18 @@ export default function LayananPage() {
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-14 items-start">
           {/* A — LEFT CONTENT */}
           <div className="lg:col-span-4 lg:sticky lg:top-32">
-            <span className="inline-block mb-4 px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+            <span className="mb-4 block text-sm font-semibold uppercase tracking-wide text-emerald-600">
               {language === 'en'
                 ? 'Our Capabilities'
                 : 'Kemampuan Layanan Kami'}
             </span>
 
-            <h2 className="text-3xl sm:text-4xl font-semibold leading-tight mb-6">
-              {language === 'en'
-                ? 'Designed for Clean, Modern Urban Mobility'
-                : 'Dirancang untuk Mobilitas Perkotaan yang Bersih & Modern'}
+            <h2 className="text-3xl sm:text-4xl font-bold leading-tight mb-6">
+              {language === 'en' ? (
+                <>Designed for <Scribble>Clean, Modern</Scribble> Urban Mobility</>
+              ) : (
+                <>Dirancang untuk Mobilitas Perkotaan yang <Scribble>Bersih & Modern</Scribble></>
+              )}
             </h2>
 
             <p className="text-gray-600 text-lg leading-relaxed">
@@ -127,14 +139,14 @@ export default function LayananPage() {
           </div>
 
           {/* B — RIGHT SERVICES */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <ScrollReveal3D className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
             {SERVICES.map((s, i) => {
               const Icon = s.icon;
               return (
-                <div
+                <Tilt
                   key={i}
-                  className="group rounded-3xl border border-gray-100 bg-white p-7 sm:p-8 transition
-              hover:shadow-xl hover:-translate-y-1"
+                  max={8}
+                  className="group rounded-lg border border-slate-200 bg-white p-7 sm:p-8 transition-colors hover:border-emerald-300"
                 >
                   <div
                     className="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center mb-6
@@ -143,53 +155,48 @@ export default function LayananPage() {
                     <Icon size={22} />
                   </div>
 
-                  <h3 className="text-lg font-medium mb-2">
+                  <h3 className="text-lg font-semibold mb-2">
                     {language === 'en' ? s.titleEN : s.titleID}
                   </h3>
 
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {language === 'en' ? s.descEN : s.descID}
                   </p>
-                </div>
+                </Tilt>
               );
             })}
-          </div>
+          </ScrollReveal3D>
         </div>
       </section>
 
       {/* SIMPLE FLOW */}
       <section className="py-24 bg-green-50/40">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl sm:text-4xl font-semibold text-center mb-12">
-            {language === 'en'
-              ? 'How Our Service Works'
-              : 'Cara Kerja Layanan Kami'}
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+            {language === 'en' ? (
+              <>How Our Service <MarkText>Works</MarkText></>
+            ) : (
+              <>Cara Kerja <MarkText>Layanan Kami</MarkText></>
+            )}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+          <div className="grid grid-cols-1 gap-12 text-center md:grid-cols-3">
             {[
-              {
-                en: 'Order via App',
-                id: 'Pesan Lewat Aplikasi',
-              },
-              {
-                en: 'Driver Picks You Up',
-                id: 'Pengemudi Menjemput',
-              },
-              {
-                en: 'Arrive Comfortably',
-                id: 'Tiba dengan Nyaman',
-              },
-            ].map((step, i) => (
-              <div key={i}>
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-green-600 text-white flex items-center justify-center font-medium">
-                  {i + 1}
+              { en: 'Order via App', id: 'Pesan Lewat Aplikasi', Icon: Smartphone },
+              { en: 'Driver Picks You Up', id: 'Pengemudi Menjemput', Icon: Car },
+              { en: 'Arrive Comfortably', id: 'Tiba dengan Nyaman', Icon: MapPin },
+            ].map((step, i) => {
+              const Icon = step.Icon;
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <Icon className="mb-5 h-10 w-10 text-emerald-600" strokeWidth={1.5} />
+                  <p className="text-sm font-semibold text-emerald-600">0{i + 1}</p>
+                  <p className="mt-1 text-lg font-medium text-slate-900">
+                    {language === 'en' ? step.en : step.id}
+                  </p>
                 </div>
-                <p className="font-medium">
-                  {language === 'en' ? step.en : step.id}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

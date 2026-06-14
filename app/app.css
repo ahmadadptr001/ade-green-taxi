@@ -3,9 +3,6 @@ body {
   scroll-behavior: smooth;
 }
 
-hh {
-  color: #126bb0;
-}
 .swal2-container {
   backdrop-filter: blur(6px);
 }
@@ -45,6 +42,20 @@ div[data-state='collapsed'] span.line-clamp-1 {
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
+
+/* Seamless loop for a duplicated (2x) track. */
+@keyframes marquee-loop {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee-loop {
+  animation: marquee-loop 28s linear infinite;
+}
+
 /* Custom scrollbar biar cantik */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -59,21 +70,19 @@ div[data-state='collapsed'] span.line-clamp-1 {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+
+/* Footer giant text self-drawing stroke */
+@keyframes footerDraw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
 }
-.animate-marquee {
-  animation: marquee 30s linear infinite;
+.footer-draw {
+  stroke-dasharray: 1000;
+  animation: footerDraw 4s ease-in-out forwards;
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+/* Film-grain noise overlay (used in the hero) */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }

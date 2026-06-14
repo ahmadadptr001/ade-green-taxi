@@ -25,14 +25,14 @@ import { useRouter } from 'next/navigation';
 const Badge = ({ children, variant = 'default', className = '' }) => {
   const variants = {
     default: 'bg-slate-100 text-slate-700 border-slate-200',
-    primary: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    primary: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     destructive: 'bg-rose-50 text-rose-700 border-rose-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
   };
   return (
     <span
-      className={`px-2.5 py-1 rounded-full text-[10px] md:text-xs font-semibold border ${variants[variant]} ${className}`}
+      className={`px-2.5 py-1 rounded-md text-[10px] md:text-xs font-medium border ${variants[variant]} ${className}`}
     >
       {children}
     </span>
@@ -40,23 +40,17 @@ const Badge = ({ children, variant = 'default', className = '' }) => {
 };
 
 const Card = ({ children, className = '' }) => (
-  <div
-    className={`bg-white rounded-xl border border-slate-200 shadow-sm ${className}`}
-  >
+  <div className={`bg-white rounded-xl border border-slate-200 ${className}`}>
     {children}
   </div>
 );
 
 const StatCard = ({ title, value, icon, subtitle, colorClass }) => (
-  <Card className="p-5 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+  <Card className="p-6 flex items-start justify-between">
     <div>
-      <p className="text-sm font-medium text-slate-500">{title}</p>
-      <h3 className="text-2xl font-bold mt-1 text-slate-800">{value}</h3>
-      {subtitle && (
-        <p className="text-[11px] text-slate-400 mt-1 font-medium">
-          {subtitle}
-        </p>
-      )}
+      <p className="text-sm text-slate-500">{title}</p>
+      <h3 className="font-display text-3xl font-semibold mt-2 text-slate-900">{value}</h3>
+      {subtitle && <p className="text-[11px] text-slate-400 mt-1.5">{subtitle}</p>}
     </div>
     <div className={`p-2.5 rounded-lg ${colorClass} bg-opacity-10`}>{icon}</div>
   </Card>
@@ -149,7 +143,7 @@ export default function UserActivityManager() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
+            <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-slate-900">
               Manajemen Aktivitas
             </h1>
             <p className="text-slate-500 text-sm mt-1">
@@ -161,7 +155,7 @@ export default function UserActivityManager() {
             <button
               onClick={handleReload}
               disabled={loading}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition shadow-sm disabled:opacity-70 w-full md:w-auto"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 active:bg-emerald-800 transition shadow-sm disabled:opacity-70 w-full md:w-auto"
             >
               {loading ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -178,8 +172,8 @@ export default function UserActivityManager() {
           <StatCard
             title="Total Pengguna"
             value={users.length}
-            icon={<Users className="text-blue-600 w-5 h-5" />}
-            colorClass="bg-blue-100"
+            icon={<Users className="text-emerald-600 w-5 h-5" />}
+            colorClass="bg-emerald-100"
           />
           <StatCard
             title="Pengguna Aktif"
@@ -203,11 +197,11 @@ export default function UserActivityManager() {
           <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row gap-3 justify-between bg-white items-center">
             {/* Search Input */}
             <div className="relative w-full md:w-96 group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Cari nama atau email..."
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-slate-200 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-slate-200 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400"
                 onChange={(e) => setSearchTerm(e.target.value)}
                 value={searchTerm}
               />
@@ -217,7 +211,7 @@ export default function UserActivityManager() {
             <div className="relative w-full md:w-auto" ref={filterRef}>
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={`flex w-full md:w-auto items-center justify-between gap-2 px-4 py-2.5 border rounded-lg text-sm font-medium transition-colors ${filterStatus !== 'all' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'}`}
+                className={`flex w-full md:w-auto items-center justify-between gap-2 px-4 py-2.5 border rounded-lg text-sm font-medium transition-colors ${filterStatus !== 'all' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'}`}
               >
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4" />
@@ -246,7 +240,7 @@ export default function UserActivityManager() {
                   >
                     Semua{' '}
                     {filterStatus === 'all' && (
-                      <span className="text-indigo-600">✓</span>
+                      <span className="text-emerald-600">✓</span>
                     )}
                   </button>
                   <button
@@ -258,7 +252,7 @@ export default function UserActivityManager() {
                   >
                     Aktif{' '}
                     {filterStatus === 'aktif' && (
-                      <span className="text-indigo-600">✓</span>
+                      <span className="text-emerald-600">✓</span>
                     )}
                   </button>
                   <button
@@ -270,7 +264,7 @@ export default function UserActivityManager() {
                   >
                     Ditangguhkan{' '}
                     {filterStatus === 'ditangguhkan' && (
-                      <span className="text-indigo-600">✓</span>
+                      <span className="text-emerald-600">✓</span>
                     )}
                   </button>
                 </div>
@@ -328,7 +322,7 @@ export default function UserActivityManager() {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-indigo-50 border border-indigo-100 flex-shrink-0">
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-emerald-50 border border-emerald-100 flex-shrink-0">
                             <img
                               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.fullname}`}
                               alt={user.fullname}
@@ -336,7 +330,7 @@ export default function UserActivityManager() {
                             />
                           </div>
                           <div>
-                            <p className="font-semibold text-sm text-slate-900 group-hover:text-indigo-700 transition-colors">
+                            <p className="font-semibold text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
                               {user.fullname}
                             </p>
                             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-slate-500 mt-0.5">
@@ -420,7 +414,7 @@ export default function UserActivityManager() {
                             setSearchTerm('');
                             setFilterStatus('all');
                           }}
-                          className="mt-4 text-indigo-600 font-medium text-sm hover:underline"
+                          className="mt-4 text-emerald-600 font-medium text-sm hover:underline"
                         >
                           Hapus Filter & Pencarian
                         </button>

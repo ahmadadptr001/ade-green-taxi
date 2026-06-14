@@ -24,7 +24,8 @@ import parse, { domToReact } from "html-react-parser";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { useUser } from "@/context/UserContext";
+import Header from "@/components/Header";
+import Footer from "@/components/home/Footer";
 
 async function shareLink(title, description, url) {
   if (!url) return;
@@ -184,18 +185,19 @@ export default function BeritaContent({ params }) {
       if (slug) {
         const found = articles.find((a) => a.slug === slug) || null;
         setArticle(found);
-        setIsLiked(
-          found.article_likes.some((like) => like.profiles.id === user?.id),
-        );
-        setIsBookmarked(
-          found.article_bookmarks.some(
-            (bookmark) => bookmark.profiles.id === user?.id,
-          ),
-        );
-        if (!Boolean(found)) {
-          setNotFound(false);
+        if (!found) {
+          setNotFound(true);
           return;
         }
+        setIsLiked(
+          found.article_likes?.some((like) => like.profiles?.id === user?.id) ??
+            false,
+        );
+        setIsBookmarked(
+          found.article_bookmarks?.some(
+            (bookmark) => bookmark.profiles?.id === user?.id,
+          ) ?? false,
+        );
         await updateViewArticle(found.views, found.slug);
       } else {
         setArticle(null);
@@ -236,7 +238,7 @@ export default function BeritaContent({ params }) {
   }, []);
 
   const category = useMemo(
-    () => article?.article_categories?.[0]?.categories?.name ?? "Politik",
+    () => article?.article_categories?.[0]?.categories?.name ?? "Umum",
     [article],
   );
 
@@ -323,24 +325,24 @@ export default function BeritaContent({ params }) {
 
   if (notFound || !article) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8 bg-slate-50">
-        <div className="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl text-center border border-slate-100">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-red-500 rounded-full mb-6">
-            <Bookmark className="w-8 h-8" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 p-8">
+        <div className="w-full max-w-md rounded-2xl border border-slate-100 bg-white p-10 text-center shadow-xl">
+          <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-500">
+            <Bookmark className="h-8 w-8" />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 mb-3">
+          <h2 className="mb-3 font-display text-2xl font-medium text-slate-900">
             Artikel Tidak Ditemukan
           </h2>
-          <p className="text-slate-500 mb-8 leading-relaxed">
+          <p className="mb-8 leading-relaxed text-slate-500">
             Halaman yang Anda cari mungkin telah dihapus atau tautannya
             kedaluwarsa.
           </p>
           <div className="flex flex-col gap-3">
             <Link
               href="/berita"
-              className="w-full inline-flex justify-center items-center px-6 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 px-6 py-3 font-bold text-white transition-colors hover:bg-emerald-600"
             >
-              Kembali ke Beranda
+              Kembali ke Berita
             </Link>
             <button
               onClick={() => window.location.reload()}
@@ -405,8 +407,10 @@ export default function BeritaContent({ params }) {
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
+      <Header />
+
       {/* Scroll Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 z-[100] bg-transparent">
+      <div className="fixed top-0 left-0 w-full h-1 z-[130] bg-transparent">
         <div
           style={{
             width: `${scrollProgress}%`,
@@ -416,7 +420,7 @@ export default function BeritaContent({ params }) {
         />
       </div>
 
-      <main className="container mx-auto px-4 lg:px-8 py-8 lg:py-16">
+      <main className="container mx-auto px-4 lg:px-8 pb-8 pt-24 lg:pb-16 lg:pt-28">
         {/* Navigation */}
         <div className="max-w-7xl mx-auto mb-12">
           <button
@@ -440,7 +444,7 @@ export default function BeritaContent({ params }) {
                 {category}
               </div>
 
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1] mb-8">
+              <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight text-slate-900 leading-[1.1] mb-8">
                 {article.title}
               </h1>
 
@@ -513,7 +517,7 @@ export default function BeritaContent({ params }) {
                   </div>
                   {/* ------------------------------------- */}
 
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest vertical-rl py-4">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest [writing-mode:vertical-rl] py-4">
                     Bagikan
                   </div>
                   <button
@@ -651,12 +655,12 @@ export default function BeritaContent({ params }) {
 
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 text-center md:text-left">
-                      <h3 className="text-2xl font-black tracking-tight mb-2">
-                        Briefing Pagi
+                      <h3 className="font-display text-2xl font-medium tracking-tight mb-2">
+                        Briefing Hijau
                       </h3>
                       <p className="text-slate-300">
-                        Dapatkan ringkasan berita politik terpanas langsung di
-                        inbox Anda. Tanpa spam.
+                        Dapatkan ringkasan berita transportasi hijau &
+                        lingkungan langsung di inbox Anda. Tanpa spam.
                       </p>
                     </div>
                     <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
@@ -680,7 +684,7 @@ export default function BeritaContent({ params }) {
             {/* Recommendations Section */}
             <div className="mt-20 lg:mt-32">
               <div className="flex items-end justify-between mb-8">
-                <h3 className="text-2xl font-black tracking-tight text-slate-900">
+                <h3 className="font-display text-2xl font-medium tracking-tight text-slate-900">
                   Bacaan Selanjutnya
                 </h3>
                 <div className="h-px flex-1 bg-slate-100 ml-6 hidden sm:block"></div>
@@ -708,7 +712,7 @@ export default function BeritaContent({ params }) {
                           {item.article_categories?.[0]?.categories?.name ??
                             category}
                         </div>
-                        <h4 className="text-lg font-bold text-slate-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors">
+                        <h4 className="font-display text-lg font-medium text-slate-900 leading-snug mb-3 group-hover:text-emerald-700 transition-colors">
                           {item.title}
                         </h4>
                         <div className="mt-auto pt-4 flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-50">
@@ -730,7 +734,7 @@ export default function BeritaContent({ params }) {
 
             {/* Related by Tags */}
             <div className="mt-16">
-              <h3 className="text-xl font-bold text-slate-900 mb-6">
+              <h3 className="font-display text-xl font-medium text-slate-900 mb-6">
                 Terkait Topik Ini
               </h3>
               <div className="space-y-4">
@@ -778,7 +782,7 @@ export default function BeritaContent({ params }) {
               <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 lg:p-8">
                 <div className="flex items-center gap-2 mb-6 text-slate-900">
                   <TrendingUp className="w-5 h-5 text-emerald-500" />
-                  <h4 className="font-black text-lg tracking-tight">
+                  <h4 className="font-display text-lg font-medium tracking-tight">
                     Terpopuler
                   </h4>
                 </div>
@@ -794,14 +798,14 @@ export default function BeritaContent({ params }) {
                         <img
                           className="w-12 h-12 rounded-md object-cover"
                           src={item.img}
-                          alt={item.name}
+                          alt={item.title}
                           loading="lazy"
                         />
                         <div>
-                          <h5 className="text-sm font-bold text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
+                          <h5 className="text-sm font-medium text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-3">
                             {item.title}
                           </h5>
-                          <div className="mt-2 flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wide">
+                          <div className="mt-2 flex items-center gap-2 text-[10px] font-medium text-slate-400 tracking-wide">
                             <span>
                               {(item.views ?? 0).toLocaleString()} Views
                             </span>
@@ -820,7 +824,7 @@ export default function BeritaContent({ params }) {
               {/* Tags Cloud */}
               {tags.length > 0 && (
                 <div>
-                  <h5 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                  <h5 className="text-xs font-medium uppercase tracking-wide text-slate-400 mb-4">
                     Tags
                   </h5>
                   <div className="flex flex-wrap gap-2">
@@ -841,56 +845,7 @@ export default function BeritaContent({ params }) {
         </div>
       </main>
 
-      {/* Modern Footer */}
-      <footer className="bg-slate-50 border-t border-slate-200 mt-20">
-        <div className="container mx-auto px-4 lg:px-8 py-12 lg:py-16">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
-            <div className="max-w-sm">
-              <div className="font-black text-2xl tracking-tighter mb-4">
-                ADE<span className="text-emerald-600">GREEN</span>BERITA
-              </div>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Platform jurnalisme independen yang menyajikan perspektif
-                mendalam tentang politik, kebijakan, dan masa depan demokrasi.
-              </p>
-            </div>
-
-            <ul className="flex items-center gap-12 space-y-3 text-sm text-slate-500">
-              <li>
-                <Link
-                  href="/beranda#tentang"
-                  className="hover:text-emerald-600"
-                >
-                  Tentang Kami
-                </Link>
-              </li>
-              <li>
-                <Link href="/bantuan" className="hover:text-emerald-600">
-                  Bantuan
-                </Link>
-              </li>
-              <li>
-                <Link href="/kontak" className="hover:text-emerald-600">
-                  Kontak
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
-            <div>
-              &copy; {new Date().getFullYear()} AdeGreenTX. All rights reserved.
-            </div>
-            <div className="flex gap-6">
-              <Link href="/privacy" className="hover:text-slate-600">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-slate-600">
-                Terms of Service
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -201,6 +201,19 @@ export async function removeCategory(id) {
   return response.data;
 }
 
+export async function updateCategory(id, name, slug) {
+  const response = await axios.post('/api/articles/category/update', { id, name, slug });
+  return response.data;
+}
+export async function updateTag(id, name, slug) {
+  const response = await axios.post('/api/articles/tag/update', { id, name, slug });
+  return response.data;
+}
+export async function updateTopic(id, name, slug) {
+  const response = await axios.post('/api/articles/topic/update', { id, name, slug });
+  return response.data;
+}
+
 export async function updateContentArticle(id, content) {
   const response = await axios.post('/api/article/update/content', {
     id,

@@ -1,15 +1,19 @@
-import { BluetoothIcon, Command } from "lucide-react";
+import { Command } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 
 export default function CustomSidebarTrigger() {
   return (
-    <header className="flex items-center gap-2 w-full py-2 bg-white sticky top-0 z-50">
-      <SidebarTrigger />
-      <p className="font-bold sm:text-sm line-clamp-1 text-[.7rem]">Tekan untuk menutup/membuka sidebar</p>
-      <div className="flex items-center p-0 px-2 sm:px-3 gap-1 rounded-full bg-gray-200 sm:p-1">
-      <Command className="w-2 h-2 sm:w-4 sm:h-4"/>
-      <span className="font-bold text-[.65rem] sm:text-sm flex items-center gap-1">+ B</span>
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 backdrop-blur-md">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger className="text-slate-600 hover:bg-slate-100" />
+        <div className="hidden h-5 w-px bg-slate-200 sm:block" />
+        <span className="hidden text-sm font-medium text-slate-500 sm:block">
+          Panel Manajemen
+        </span>
       </div>
+      <kbd className="hidden items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] font-medium text-slate-400 sm:flex">
+        <Command className="h-3 w-3" /> B
+      </kbd>
     </header>
-  )
+  );
 }

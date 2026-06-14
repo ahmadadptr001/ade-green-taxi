@@ -2,175 +2,193 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/home/Footer";
-import BrandSearch from "@/components/home/search/BrandSearch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSearch } from "@/context/SearchContext";
-import { getArticles, getArticlesByKeyword } from "@/services/articles";
+import { getArticlesByKeyword } from "@/services/articles";
 import { useLanguageStore } from "@/store/languageStore";
-import { ChevronRight, Image, Search, SearchX } from "lucide-react";
+import { ChevronRight, Search, SearchX, ArrowLeft, Newspaper } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function PencarianPage() {
-  const lang = useLanguageStore();
-  const isID = lang.language === "id";
+  const { language } = useLanguageStore();
+  const isID = language === "id";
 
   const [loading, setLoading] = useState(false);
-  const [thisQuerySearch, setThisQuerySearch] = useState("");
-  const [resultSearchData, setResultSearchData] = useState(null);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState(null);
+  const [searched, setSearched] = useState(false);
 
-  useEffect(() => {
+  const runSearch = async (keyword) => {
+    const k = (keyword ?? "").trim();
+    if (!k) return;
     setLoading(true);
-    const query = localStorage.getItem("query-search");
-    setThisQuerySearch(query ?? "");
-    setTimeout(() => {
-      localStorage.removeItem("query-search");
-    }, 1000);
-    setLoading(false);
-  }, []);
-
-  const mountRef = useRef(1);
-  useEffect(() => {
-    (async () => {
-      mountRef.current++;
-      if (mountRef.current >= 4) return;
-      if (!thisQuerySearch) return;
-      try {
-        setLoading(true);
-        const resp = await getArticlesByKeyword(thisQuerySearch);
-        setResultSearchData(resp.articles);
-        setLoading(false);
-      } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: err.message,
-        });
-        setLoading(false);
-      }
-    })();
-  }, [thisQuerySearch]);
-
-  // handle data pencarian
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!thisQuerySearch) return;
-
-    setLoading(true);
+    setSearched(true);
     try {
-      const respArticles = await getArticlesByKeyword(thisQuerySearch);
-      setResultSearchData(respArticles.articles);
-      setLoading(false);
+      const resp = await getArticlesByKeyword(k);
+      setResults(resp.articles || []);
     } catch (err) {
+      Swal.fire({ icon: "error", title: err.message });
+    } finally {
       setLoading(false);
-      Swal.fire({
-        icon: "error",
-        title: err.message,
-      });
     }
   };
 
+  // Pick up a query handed over from the header search (once).
+  const didInit = useRef(false);
+  useEffect(() => {
+    if (didInit.current) return;
+    didInit.current = true;
+    const q = localStorage.getItem("query-search") ?? "";
+    setQuery(q);
+    localStorage.removeItem("query-search");
+    if (q) runSearch(q);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    runSearch(query);
+  };
+
+  const getCategory = (c) => (typeof c === "object" && c ? c.name : c);
+
   return (
-    <main className=" min-h-screen bg-sky-50 w-full h-full ">
+    <main className="flex min-h-screen flex-col bg-[#f7faf8]">
       <Header />
 
-      <div className="max-w-3xl pt-20 p-4">
-        {/* brand */}
-        <BrandSearch />
+      {/* Search hero */}
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white">
+        <div className="pointer-events-none absolute -top-24 right-[-10%] h-72 w-72 rounded-full bg-emerald-200/30 blur-[100px]" />
+        <div className="mx-auto w-full max-w-3xl px-5 pb-10 pt-28 sm:pt-32">
+          <p className="font-hand mb-1 -rotate-2 text-2xl text-emerald-600">
+            {isID ? "telusuri" : "explore"}
+          </p>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            {isID ? "Cari Berita" : "Search News"}
+          </h1>
+          <p className="mt-2 text-slate-500">
+            {isID
+              ? "Temukan kabar terbaru seputar Ade Green TX dan lingkungan."
+              : "Find the latest stories about Ade Green TX and the environment."}
+          </p>
 
-        {/* form pencarian */}
-        <form onSubmit={handleSubmit} className="py-8">
-          <div className="flex flex-nowrap font-semibold items-center gap-3 border border-slate-300 justify-between">
-            <input
-              value={thisQuerySearch}
-              onChange={(e) => setThisQuerySearch(e.target?.value)}
-              className="w-full px-3 outline-none border-none"
-              placeholder={isID ? "Cari sesuatu..." : "Search something..."}
-            />
-            <button className="p-3 cursor-pointer bg-emerald-500 h-full">
-              <Search size={20} />
-            </button>
-          </div>
-        </form>
+          <form onSubmit={handleSubmit} className="mt-6">
+            <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 p-1.5 shadow-sm focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-100">
+              <Search size={20} className="ml-3 shrink-0 text-slate-400" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full min-w-0 bg-transparent px-1 py-2 text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                placeholder={isID ? "Cari sesuatu..." : "Search something..."}
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="shrink-0 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              >
+                {isID ? "Cari" : "Search"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* Results */}
+      <section className="mx-auto w-full max-w-3xl flex-1 px-5 py-10">
+        {searched && !loading && (
+          <p className="mb-5 text-sm text-slate-500">
+            {results && results.length > 0
+              ? isID
+                ? `${results.length} hasil untuk “${query}”`
+                : `${results.length} results for “${query}”`
+              : ""}
+          </p>
+        )}
 
         {loading ? (
-          <>
-            {[1, 2, 3].map((item) => (
-              <Skeleton
-                key={item}
-                className={
-                  "px-4 md:p-12 py-8 bg-slate-200 mt-3 w-full flex items-center gap-6 justify-between flex-nowrap"
-                }
-              >
-                <div className="w-full">
-                  <Skeleton className="h-4 max-w-[140px] bg-slate-300 rounded-0"></Skeleton>
-                  <Skeleton className="h-7 max-w-lg mt-2 bg-slate-300 rounded-0"></Skeleton>
-                  <div className="flex items-center gap-1 mt-2">
-                    <Skeleton className="h-4 w-full bg-slate-300 rounded-0"></Skeleton>
-                  </div>
-                  <div className="mt-1">
-                    <Skeleton className="h-4 w-full bg-slate-300 rounded-0"></Skeleton>
-                  </div>
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-4">
+                <Skeleton className="hidden h-24 w-32 shrink-0 rounded-xl bg-slate-200 sm:block" />
+                <div className="w-full space-y-2">
+                  <Skeleton className="h-3 w-40 bg-slate-200" />
+                  <Skeleton className="h-5 w-3/4 bg-slate-200" />
+                  <Skeleton className="h-4 w-full bg-slate-200" />
+                  <Skeleton className="h-4 w-2/3 bg-slate-200" />
                 </div>
-                <div className="hidden md:block">
-                  <Skeleton
-                    className={
-                      "w-40 h-30 bg-slate-300 flex items-center p-4 justify-center"
-                    }
-                  >
-                    <Image className="text-slate-500" />
-                  </Skeleton>
-                </div>
-              </Skeleton>
-            ))}
-          </>
-        ) : (
-          <>
-            {resultSearchData && resultSearchData.length > 0 ? (
-              <article>
-                {resultSearchData.map((item) => (
-                  <section
-                    key={item.id}
-                    className="p-3 border-t border-b border-slate-300 flex flex-col gap-2"
-                  >
-                    <Link
-                      href={`/berita/${item.slug}`}
-                      className="line-clamp-1 flex-nowrap flex text-sm gap-1 items-center"
-                    >
-                      <img
-                        src="/favicon.ico"
-                        alt="favicon"
-                        className="w-4 h-4 rounded-full object-cover"
-                      />{" "}
-                      www.adegreentx.id <ChevronRight size={20} /> berita{" "}
-                      <ChevronRight size={20} />
-                      <span className="line-clamp-1">{item.slug}</span>
-                    </Link>
-                    <Link
-                      href={`/berita/${item.slug}`}
-                      className="text-blue-500 font-normal text-xl"
-                    >
-                      {item.title}
-                    </Link>
-                    <p>{item.description}</p>
-                  </section>
-                ))}
-              </article>
-            ) : (
-              <div className="flex items-center flex-col gap-2 mt-5 md:mt-10">
-                <SearchX size={50} className="text-red-300 font-light" />
-                <p className="text-slate-500">
-                  {isID ? "Pencarian tidak ditemukan" : "No results found"}
-                </p>
               </div>
-            )}
-          </>
+            ))}
+          </div>
+        ) : results && results.length > 0 ? (
+          <div className="space-y-4">
+            {results.map((item) => (
+              <Link
+                key={item.id}
+                href={`/berita/${item.slug}`}
+                className="group flex gap-4 rounded-2xl border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md"
+              >
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    className="hidden h-24 w-32 shrink-0 rounded-xl object-cover sm:block"
+                  />
+                )}
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1 text-xs text-slate-400">
+                    <img src="/favicon.ico" alt="" className="h-3.5 w-3.5 rounded-full" />
+                    adegreentx.id <ChevronRight size={12} /> {isID ? "berita" : "news"}
+                  </div>
+                  {getCategory(item.category) && (
+                    <span className="mt-2 inline-block rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">
+                      {getCategory(item.category)}
+                    </span>
+                  )}
+                  <h3 className="mt-1.5 line-clamp-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-emerald-600">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 line-clamp-2 text-sm text-slate-500">{item.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : searched ? (
+          <div className="flex flex-col items-center gap-3 py-16 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
+              <SearchX size={28} className="text-slate-400" />
+            </div>
+            <p className="text-lg font-semibold text-slate-700">
+              {isID ? "Tidak ada hasil" : "No results found"}
+            </p>
+            <p className="max-w-sm text-sm text-slate-500">
+              {isID
+                ? "Coba kata kunci lain, atau jelajahi semua berita kami."
+                : "Try a different keyword, or browse all our news."}
+            </p>
+            <Link
+              href="/berita"
+              className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
+            >
+              <Newspaper size={16} /> {isID ? "Lihat Semua Berita" : "Browse All News"}
+            </Link>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-3 py-16 text-center text-slate-400">
+            <Search size={36} />
+            <p>{isID ? "Mulai dengan mengetik kata kunci." : "Start by typing a keyword."}</p>
+          </div>
         )}
-      </div>
 
-      <div className="mt-20">
-        <Footer />
-      </div>
+        <Link
+          href="/beranda"
+          className="mt-10 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-emerald-600"
+        >
+          <ArrowLeft size={16} /> {isID ? "Kembali ke Beranda" : "Back to Home"}
+        </Link>
+      </section>
+
+      <Footer />
     </main>
   );
 }

@@ -160,47 +160,41 @@ export default function BantuanPage() {
           <div className="absolute inset-0 bg-black/50" />
         </div>
 
-        <div className="relative -mt-32 pb-24">
-          <div className="max-w-3xl mx-auto px-6 text-center bg-white/90 backdrop-blur rounded-3xl shadow py-14">
-            <div className="w-14 h-14 mx-auto mb-6 rounded-full bg-green-600 text-white flex items-center justify-center">
-              <LifeBuoy size={28} />
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl font-semibold mb-4">
+        <div className="relative -mt-28 pb-24">
+          <div className="mx-auto max-w-3xl border border-slate-200 bg-white/95 px-6 py-16 text-center shadow-sm backdrop-blur">
+            <LifeBuoy size={40} className="mx-auto mb-6 text-emerald-600" />
+            <h1 className="mb-4 font-display text-4xl font-bold sm:text-5xl">
               {t.titlePage}
             </h1>
-            <p className="text-gray-600 text-lg">{t.subtitle}</p>
+            <p className="mx-auto max-w-xl text-lg text-slate-600">{t.subtitle}</p>
           </div>
         </div>
       </section>
 
       {/* FORM */}
-      <section className="py-24">
-        <div className="max-w-xl mx-auto px-6">
-          
-          {/* UI LINK KE HALAMAN HAPUS AKUN (New Section) */}
-          <Link href="/bantuan/akun" className="group block mb-12">
-            <div className="flex items-center justify-between p-4 rounded-2xl border border-gray-200 bg-white shadow-sm hover:border-green-600 hover:shadow-md transition-all duration-300">
+      <section className="pb-28">
+        <div className="mx-auto max-w-xl px-6">
+          {/* Link ke halaman hapus akun */}
+          <Link href="/bantuan/akun" className="group mb-14 block">
+            <div className="flex items-center justify-between gap-4 border border-slate-200 p-5 transition-colors hover:border-emerald-500">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center group-hover:bg-red-100 transition">
-                  <UserX size={22} />
-                </div>
+                <UserX size={22} className="shrink-0 text-red-500" />
                 <div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-green-700 transition">
+                  <h3 className="font-semibold text-slate-900 transition group-hover:text-emerald-700">
                     {t.delAccount}
                   </h3>
-                  <p className="text-sm text-gray-500">
-                    {t.delAccountDesc}
-                  </p>
+                  <p className="text-sm text-slate-500">{t.delAccountDesc}</p>
                 </div>
               </div>
-              <ChevronRight size={20} className="text-gray-300 group-hover:text-green-600 group-hover:translate-x-1 transition-all" />
+              <ChevronRight
+                size={20}
+                className="text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-emerald-600"
+              />
             </div>
           </Link>
-          {/* END NEW SECTION */}
 
-          <h2 className="text-2xl font-semibold mb-2">{t.formTitle}</h2>
-          <p className="text-gray-600 mb-8">{t.desc}</p>
+          <h2 className="mb-2 font-display text-2xl font-bold">{t.formTitle}</h2>
+          <p className="mb-10 text-slate-600">{t.desc}</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* NAME */}
@@ -215,7 +209,7 @@ export default function BantuanPage() {
                 onChange={handleChange}
                 required
                 placeholder={t.name}
-                className="w-full pl-11 rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-green-600"
+                className="w-full pl-11 rounded-lg border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
@@ -232,7 +226,7 @@ export default function BantuanPage() {
                 onChange={handleChange}
                 required
                 placeholder={t.email}
-                className="w-full pl-11 rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-green-600"
+                className="w-full pl-11 rounded-lg border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
@@ -243,7 +237,7 @@ export default function BantuanPage() {
               onChange={handleChange}
               required
               placeholder={t.title}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-green-600"
+              className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500"
             />
 
             {/* DESCRIPTION */}
@@ -254,13 +248,13 @@ export default function BantuanPage() {
               onChange={handleChange}
               required
               placeholder={t.description}
-              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm resize-none focus:ring-2 focus:ring-green-600"
+              className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm resize-none focus:ring-2 focus:ring-emerald-500"
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 text-white py-3 font-medium hover:bg-green-700 transition disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 text-white py-3.5 font-semibold hover:bg-emerald-700 transition disabled:opacity-60"
             >
               <Send size={18} />
               {loading ? 'Sending...' : t.send}

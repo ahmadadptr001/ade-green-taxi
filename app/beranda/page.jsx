@@ -1,34 +1,43 @@
-'use client';
-import Header from '@/components/Header';
-import Hero from '@/components/home/Hero';
-import IklanModal from '@/components/iklan/IklanModal';
-import { useEffect } from 'react';
-import AOS from 'aos';
-import Services from '@/components/home/Services';
-import ScrollToTop from '@/components/ScrollToTop';
-import Features from '@/components/home/Features';
-import About from '@/components/home/About';
-import FAQ from '@/components/home/FAQ';
-import Footer from '@/components/home/Footer';
-import TutorialSection from '@/components/home/TutorialSection';
-import 'aos/dist/aos.css';
+"use client";
+import Header from "@/components/Header";
+import Hero from "@/components/home/Hero";
+import dynamic from "next/dynamic";
+
+// Below-the-fold sections are split out of the initial bundle and streamed in
+// as the user scrolls, keeping the hero's first paint lean.
+const Marquee = dynamic(() => import("@/components/home/Marquee"));
+const Stats = dynamic(() => import("@/components/home/Stats"));
+const TutorialSection = dynamic(
+  () => import("@/components/home/TutorialSection"),
+);
+const Services = dynamic(() => import("@/components/home/Services"));
+const About = dynamic(() => import("@/components/home/About"));
+const FeaturesShowcase = dynamic(
+  () => import("@/components/home/FeaturesShowcase"),
+  { ssr: false },
+);
+const Features = dynamic(() => import("@/components/home/Features"));
+const FAQ = dynamic(() => import("@/components/home/FAQ"));
+const Footer = dynamic(() => import("@/components/home/Footer"));
+const ScrollToTop = dynamic(() => import("@/components/ScrollToTop"), {
+  ssr: false,
+});
 
 export default function HomePage() {
-  useEffect(() => {
-    AOS.init();
-  }, []);
   return (
     <main>
-      <IklanModal />
-
       <Header />
       <Hero />
-      <TutorialSection />
+      {/* <Marquee /> */}
+      <Stats />
       <Services />
+      <TutorialSection />
       <About />
-      <Features />
+      <FeaturesShowcase />
+      {/* <Features /> */}
       <FAQ />
       <Footer />
+      <ScrollToTop />
     </main>
   );
 }

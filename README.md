@@ -1,109 +1,160 @@
-# Ade Green Taxi - Web Platform 🌱🚖
+<div align="center">
 
-![Ade Green Taxi Banner](https://adegreentx.id/banner-about.png)
+<img src="https://adegreentx.id/banner-about.png" alt="Ade Green Taxi" width="100%" />
 
-**Ade Green TX** adalah platform web modern yang mendukung ekosistem transportasi taksi listrik ramah lingkungan pertama di Kendari, Sulawesi Tenggara. Proyek ini mencakup *landing page* informatif, portal berita terintegrasi (**Ade Green Berita**), serta sistem manajemen konten (CMS) internal untuk administrator.
+# Ade Green Taxi — Web Platform 🌱🚖
 
-Website ini dibangun menggunakan **Next.js** dengan arsitektur yang responsif, performa tinggi, dan antarmuka pengguna yang elegan.
+### _Taksi listrik ramah lingkungan pertama di Kendari, Sulawesi Tenggara_
 
-🔗 **Link Akses:**
-- **Beranda:** [https://adegreentx.id/beranda](https://adegreentx.id/beranda)
-- **Portal Berita:** [https://adegreentx.id/berita](https://adegreentx.id/berita)
+<br/>
 
----
+[![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
-## 🚀 Fitur Utama
+<br/>
 
-### 1. Public Landing Page (`/beranda`)
-Halaman presentasi layanan untuk calon penumpang dan mitra.
-- **Informasi Layanan:** Penjelasan armada nol emisi dan keunggulan taksi listrik.
-- **Cara Pemesanan:** Panduan langkah-langkah menggunakan aplikasi mobile Ade Green.
-- **FAQ:** Tanya jawab interaktif untuk bantuan cepat pengguna.
+![Status](https://img.shields.io/badge/status-production-success?style=flat-square)
+![Internal](https://img.shields.io/badge/akses-internal_perusahaan-0f172a?style=flat-square)
+![Made in](https://img.shields.io/badge/dibuat_di-Kendari-059669?style=flat-square)
 
-### 2. Portal Berita & Artikel (`/berita`)
-Media informasi seputar teknologi hijau, update perusahaan, dan berita lokal.
-- **Kategori & Tags:** Pengelompokan berita (Tech, Transportasi, Inovasi).
-- **Interaksi:** Fitur *Likes*, *Bookmarks*, dan penghitung jumlah tayangan (*Views*).
-- **Responsive Design:** Pengalaman membaca yang optimal di mobile maupun desktop.
+<br/>
 
-### 3. Admin CMS (Article Manager)
-Dashboard khusus pengelola konten dengan fitur manajemen tingkat lanjut:
-- **Rich Text Editor:** Menggunakan **Tiptap Editor** untuk kustomisasi konten artikel (Bold, Italic, Heading, Quote, dll).
-- **CRUD Operations:** Kelola artikel secara penuh (Create, Read, Update, Delete).
-- **Analytics Snapshot:** Pantau statistik performa tiap artikel langsung dari tabel utama.
-- **Export Data:** Fitur ekspor daftar artikel ke format **CSV** untuk kebutuhan laporan.
-- **Preview & Draft System:** Melihat tampilan artikel sebelum diterbitkan atau menyimpannya sebagai draf.
+🔗 **[ Beranda ](https://adegreentx.id/beranda)** &nbsp;•&nbsp; **[ Portal Berita ](https://adegreentx.id/berita)**
+
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+<div align="center">
 
-Daftar teknologi utama yang digunakan dalam pengembangan:
+> [!NOTE]
+> Repositori ini merupakan **properti internal Ade Green TX**.
+> Ditujukan untuk tim pengembang & pengelola perusahaan — bukan untuk distribusi publik.
 
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components:** [Shadcn UI](https://ui.shadcn.com/) (Radix UI)
-- **Editor:** [Tiptap](https://tiptap.dev/) (Headless Rich Text Editor)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **Notifications:** [SweetAlert2](https://sweetalert2.github.io/)
-- **Date Handling:** [date-fns](https://date-fns.org/)
-- **State Management:** React Hooks (useState, useEffect)
+</div>
 
 ---
 
-## 📂 Struktur Folder Utama
+## ✨ Tentang Platform
 
-```bash
-ade-green-taxi/
-├── app/                    # Next.js App Router (Pages & Layouts)
-│   ├── beranda/            # Halaman Landing Page
-│   ├── berita/             # Halaman Portal Berita Publik
-│   └── dashboard/          # Area Admin (Manajemen Konten)
-├── components/             # Reusable UI Components
-│   ├── ui/                 # Komponen dasar Shadcn (Button, Table, Dialog, dll)
-│   ├── ArticleManager.jsx  # Komponen utama pengelola artikel
-│   └── TiptapEditor.jsx    # Implementasi Rich Text Editor
-├── services/               # Integrasi API (getArticles, deleteArticle, dsb)
-├── public/                 # Aset statis (Gambar, Logo, Ikon)
-├── lib/                    # Fungsi utilitas (cn, formatters)
-└── tailwind.config.js      # Konfigurasi tema Tailwind
-```
-
-## 💻 Instalasi Lokal
-Ingin menjalankan project ini di komputer Anda? Ikuti langkah berikut:
-
-**Clone Repository:**
-```bash
-$ git clone https://github.com/ahmadadptr001/ade-green-taxi.git
-$ cd ade-green-taxi
+**Ade Green TX** adalah platform web modern yang mendukung ekosistem transportasi taksi listrik nol emisi di Kendari. Satu kode, tiga wajah produk:
 
 ```
-**Install Dependensi:**
+🚖  Landing Page  ───▶  Presentasi layanan untuk calon penumpang & mitra
+📰  Portal Berita ───▶  Media informasi teknologi hijau & kabar perusahaan
+🛠️  Admin CMS     ───▶  Pusat kendali konten, taksonomi, & pengguna
+```
+
+Dibangun di atas **Next.js 16 (App Router)** + **React 19** + **Tailwind v4**, dengan fokus pada performa, desain bersih & minimalis, dan sentuhan interaktif (hero 3D, bola dunia berita).
+
+---
+
+## 🎯 Fitur Unggulan
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
+### 🚖 Landing Page
+`/beranda`
+
+- Hero **3D interaktif** (three.js + GSAP)
+- Informasi armada nol emisi
+- Panduan pemesanan aplikasi
+- FAQ interaktif
+- Multi-bahasa **ID / EN**
+
+</td>
+<td width="33%" valign="top">
+
+### 📰 Portal Berita
+`/berita`
+
+- Kategori, Topik & Tag
+- Pencarian & arsip artikel
+- **Likes · Bookmarks · Views**
+- SEO siap produksi
+- Responsif di semua layar
+
+</td>
+<td width="33%" valign="top">
+
+### 🛠️ Admin CMS
+`/dashboard`
+
+- Editor **Tiptap v3**
+- Feed **List + Globe 3D**
+- Tabel taksonomi berpaginasi
+- Analytics **Recharts**
+- Manajemen peran & pengguna
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🧰 Tech Stack
+
+<div align="center">
+
+| Lapisan | Teknologi |
+| :---: | :--- |
+| 🏗️ **Framework** | Next.js 16 (App Router) · React 19 |
+| 🎨 **Styling & UI** | Tailwind CSS v4 · shadcn/ui (Radix) |
+| ✍️ **Editor** | Tiptap v3 _(seluruh paket di-pin `3.26.1`)_ |
+| 📊 **Charts** | Recharts |
+| 🌐 **3D & Animasi** | three.js · GSAP · cobe |
+| 🔌 **Backend & Auth** | Supabase |
+| 🧠 **State** | Zustand · React Context |
+| 🔗 **HTTP** | Axios |
+| 🛡️ **Sanitasi** | isomorphic-dompurify |
+| 🔔 **UX** | Lucide React · SweetAlert2 · date-fns |
+
+</div>
+
+---
+
+## 🗂️ Arsitektur Folder
 
 ```bash
-$ npm install
-# atau
-$ yarn install
-
+web-ade-green-taxi/
+│
+├── app/                      # 🧭 App Router — Pages, Layouts & API Routes
+│   ├── beranda/              #    Landing page publik
+│   ├── berita/               #    Portal berita (kategori · topik · tag · [slug])
+│   ├── dashboard/            #    Area admin (berita · taksonomi · pengguna · aktivitas)
+│   ├── api/                  #    Route handlers (articles · users · auth · otp · reports)
+│   ├── sitemap.js            #    Sitemap dinamis  ·  robots.js — SEO
+│   └── ...
+│
+├── components/
+│   ├── ui/                   # 🧩 Komponen dasar shadcn
+│   ├── dashboard/            # 🛠️ RichEditor · GlobeNews · TaxonomyManager · ...
+│   ├── home/                 # 🏠 Seksi landing (Hero · Services · FAQ · Footer)
+│   ├── three/                # 🎲 Komponen 3D
+│   └── berita/               # 📰 Komponen portal berita
+│
+├── services/                 # 🔌 Integrasi API (articles · users · auth · reports)
+├── config/                   # ⚙️ Konfigurasi Supabase
+├── context/ · store/         # 🧠 State global (User · Search · languageStore)
+├── locales/                  # 🌍 Terjemahan i18n (id · en)
+├── utils/ · hooks/ · lib/    # 🧮 Utilitas, custom hooks & helper
+└── public/                   # 🖼️ Aset statis
 ```
-Buka http://localhost:3000 di browser Anda.
 
+---
 
-###
-# 🤝 Kontribusi
-Kami sangat terbuka untuk kontribusi. Jika Anda menemukan bug atau ingin menambahkan fitur:
+<div align="center">
 
-Fork repository ini.
+### 🌿 Untuk masa depan Kendari yang lebih bersih & modern
 
-Buat branch fitur (git checkout -b fitur/FiturBaru).
+<br/>
 
-Commit perubahan (git commit -m 'Menambahkan fitur baru').
+**Hak Cipta © 2026 Ade Green Taxi** — Seluruh hak cipta dilindungi undang-undang.
 
-Push ke branch (git push origin fitur/FiturBaru).
+_Internal Project · Dibuat dengan ❤️ oleh Tim Ade Green TX_
 
-Buka Pull Request.
-
-📝 Lisensi
-Hak Cipta © 2026 Ade Green Taxi. Seluruh hak cipta dilindungi undang-undang.
-
-Dibuat dengan ❤️ untuk masa depan Kendari yang lebih bersih dan modern.
+</div>

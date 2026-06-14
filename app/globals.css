@@ -6,7 +6,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-hand: var(--font-hand), ui-serif, cursive;
+  --font-editorial: var(--font-playfair), ui-serif, Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -130,5 +133,69 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* ── Creative typography helpers ─────────────────────────────── */
+
+/* Handwritten accent ("coretan") */
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+/* Highlighter "mark text" — a marker swipe behind inline text. */
+.mark-text {
+  background-image: linear-gradient(
+    104deg,
+    rgba(52, 211, 153, 0) 0.9%,
+    rgba(52, 211, 153, 0.45) 2.4%,
+    rgba(16, 185, 129, 0.42) 95%,
+    rgba(16, 185, 129, 0) 98%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 65%;
+  background-position: 0 88%;
+  padding: 0 0.15em;
+  border-radius: 0.1em;
+  transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mark-text.is-marked {
+  background-size: 100% 65%;
+}
+
+/* Hand-drawn underline ("coretan") — animated SVG stroke. */
+.scribble-underline {
+  position: relative;
+  display: inline-block;
+}
+.scribble-underline > svg {
+  position: absolute;
+  left: -2%;
+  bottom: -0.45em;
+  width: 104%;
+  height: 0.5em;
+  overflow: visible;
+  pointer-events: none;
+}
+.scribble-underline > svg path {
+  fill: none;
+  stroke: #10b981;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  transition: stroke-dashoffset 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scribble-underline.is-drawn > svg path {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark-text { transition: none; }
+  .scribble-underline > svg path { transition: none; }
 }

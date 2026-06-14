@@ -1,32 +1,22 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  ArrowRight,
-  Leaf,
-  Loader2,
-  ChevronLeft,
-  CheckCircle2,
-  ShieldCheck,
-  SendToBack,
-} from 'lucide-react';
+import { ArrowRight, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { otpValidate, sendOTP } from '@/services/auth';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { getUserByEmail, getUserById, getUsers } from '@/services/users';
+import { getUserByEmail } from '@/services/users';
 
 export default function OTP() {
   const router = useRouter();
-
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [timer, setTimer] = useState(59);
-  const inputRefs = useRef([]);
   const [email, setEmail] = useState(null);
+  const inputRefs = useRef([]);
+  const sentRef = useRef(false);
 
-  // cek ketersediaan email
-  let mount = 0;
   useEffect(() => {
     const email_ = localStorage.getItem('email');
     if (!email_) {
@@ -35,22 +25,17 @@ export default function OTP() {
         title: 'Credential tidak valid!',
         text: 'Anda akan diarahkan ke halaman form email',
         confirmButtonText: 'Saya mengerti',
-      }).then((action) => {
-        if (action.isConfirmed) {
-          router.replace('/lupa');
-        }
-      });
+      }).then((action) => action.isConfirmed && router.replace('/lupa'));
+      return;
     }
     setEmail(email_);
-    if (mount > 0) return;
-    // kirim otp pada saat awal masuk halaman
+    if (sentRef.current) return;
+    sentRef.current = true;
     Swal.fire({
       title: 'Mohon tunggu..',
-      text: 'Kami sedang mengirim kode otp ke email Anda',
+      text: 'Kami sedang mengirim kode OTP ke email Anda',
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+      didOpen: () => Swal.showLoading(),
     });
     (async () => {
       try {
@@ -58,34 +43,18 @@ export default function OTP() {
         Swal.fire({
           icon: 'success',
           title: 'Berhasil mengirim kode OTP!',
-          text: 'Silahkan cek email Anda untuk melihat kode OTP yang kami kirimkan',
-          didOpen: () => {
-            Swal.hideLoading();
-          },
+          text: 'Silakan cek email Anda untuk melihat kode OTP.',
+          didOpen: () => Swal.hideLoading(),
         });
       } catch (err) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal menerima kode OTP',
-          text: err.message,
-          didOpen: () => {
-            Swal.hideLoading();
-          },
-        });
-        setIsLoading(false);
+        Swal.fire({ icon: 'error', title: 'Gagal menerima kode OTP', text: err.message, didOpen: () => Swal.hideLoading() });
       }
     })();
-    mount++;
-  }, []);
+  }, [router]);
 
-  // Countdown timer untuk kirim ulang OTP
   useEffect(() => {
-    let interval;
-    if (timer > 0 && !isVerified) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    }
+    if (timer <= 0 || isVerified) return;
+    const interval = setInterval(() => setTimer((p) => p - 1), 1000);
     return () => clearInterval(interval);
   }, [timer, isVerified]);
 
@@ -94,39 +63,27 @@ export default function OTP() {
     const newOtp = [...otp];
     newOtp[index] = value.substring(value.length - 1);
     setOtp(newOtp);
-
-    // Pindah k input berikutnya jika ada value
-    if (value && index < 5) {
-      inputRefs.current[index + 1].focus();
-    }
+    if (value && index < 5) inputRefs.current[index + 1]?.focus();
   };
 
   const handleKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputRefs.current[index - 1].focus();
-    }
+    if (e.key === 'Backspace' && !otp[index] && index > 0) inputRefs.current[index - 1]?.focus();
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const otpCode = otp.join('');
+    if (otpCode.length < 6) return;
     try {
-      e.preventDefault();
-      const otpCode = otp.join('');
-      if (otpCode.length < 6) return;
-
       setIsLoading(true);
       const result = await otpValidate(email, otpCode);
       setIsLoading(false);
       const dataUser = await getUserByEmail(email);
-      const user = dataUser.data;
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(dataUser.data));
       if (!result) return;
       setIsVerified(true);
-
     } catch (err) {
-      Swal.fire({
-        icon: 'error',
-        title: err.message,
-      });
+      Swal.fire({ icon: 'error', title: err.message });
       setIsLoading(false);
     }
   };
@@ -136,133 +93,99 @@ export default function OTP() {
       setTimer(59);
       await sendOTP(email);
     } catch (err) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Gagal menerima kode OTP',
-        text: err.message,
-      });
+      Swal.fire({ icon: 'error', title: 'Gagal menerima kode OTP', text: err.message });
     }
-    // Logika kirim ulang kode di sini
   };
 
-  return (
-    <div className="fixed inset-0 bg-white flex flex-col md:flex-row font-sans text-slate-900">
-      {/* Sisi Visual: Desktop Only */}
-      <div className="hidden relative md:flex md:w-1/2 bg-slate-900 items-center justify-center overflow-hidden border-r border-slate-100">
-        <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-emerald-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-emerald-900/30 rounded-full blur-3xl"></div>
+  const allFilled = !otp.some((v) => v === '');
 
-        <div className="relative z-10 text-center p-12">
-          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-2xl rotate-3">
-            <ShieldCheck className="w-8 h-8 text-white" />
-          </div>
-          <h2 className="text-3xl font-black text-white tracking-tight italic">
-            Keamanan Adalah Prioritas
-          </h2>
-          <p className="text-slate-400 mt-4 max-w-xs mx-auto leading-relaxed">
+  return (
+    <div className="flex min-h-screen flex-col bg-white text-slate-900 md:flex-row">
+      {/* Visual side */}
+      <div className="relative hidden items-center justify-center overflow-hidden border-r border-slate-100 bg-slate-900 md:flex md:w-1/2">
+        <div className="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-emerald-600/20 blur-3xl" />
+        <div className="absolute -bottom-10 -left-10 h-96 w-96 rounded-full bg-emerald-900/30 blur-3xl" />
+        <div className="relative z-10 max-w-xs px-12 text-center">
+          <ShieldCheck className="mx-auto mb-6 h-10 w-10 text-emerald-400" />
+          <h2 className="font-display text-3xl font-bold tracking-tight text-white">Keamanan Prioritas</h2>
+          <p className="mt-4 leading-relaxed text-slate-400">
             Kami menjaga akun Anda tetap aman dengan verifikasi dua langkah.
           </p>
         </div>
       </div>
 
-      {/* Sisi Form */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 bg-white overflow-y-auto">
-        <div className="w-full max-w-[400px]">
+      {/* Form side */}
+      <div className="flex flex-1 flex-col justify-center px-6 py-16 md:px-16">
+        <div className="mx-auto w-full max-w-sm">
           {!isVerified ? (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="text-center md:text-left">
-                <h3 className="text-3xl font-black tracking-tight text-slate-900">
-                  Verifikasi Kode
-                </h3>
-                <p className="text-sm text-slate-500 mt-3 leading-relaxed">
-                  Masukkan 6 digit kode OTP yang telah kami kirimkan ke nomor
-                  WhatsApp atau Email Anda.
-                </p>
-              </div>
+            <>
+              <h1 className="font-display text-3xl font-bold tracking-tight">Verifikasi Kode</h1>
+              <p className="mt-3 text-slate-500">
+                Masukkan 6 digit kode OTP yang kami kirim ke email Anda.
+              </p>
 
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="mt-10 space-y-8">
                 <div className="flex justify-between gap-2">
                   {otp.map((data, index) => (
                     <input
                       key={index}
                       type="text"
+                      inputMode="numeric"
                       maxLength="1"
-                      ref={(el) => (inputRefs.current[index] = el)}
+                      ref={(el) => {
+                        inputRefs.current[index] = el;
+                      }}
                       value={data}
                       onChange={(e) => handleChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
-                      className={`w-12 h-16 md:w-14 md:h-20 text-center text-2xl font-black rounded-2xl border-2 transition-all duration-300 outline-none
-                        ${
-                          otp[index]
-                            ? 'border-emerald-500 bg-emerald-50/30 text-emerald-600'
-                            : 'border-slate-100 bg-slate-50 text-slate-400 focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-50'
-                        }
-                      `}
+                      className={`h-16 w-12 rounded-xl border text-center text-2xl font-semibold outline-none transition-all md:h-20 md:w-14 ${
+                        otp[index]
+                          ? 'border-emerald-500 bg-emerald-50/40 text-emerald-700'
+                          : 'border-slate-200 bg-slate-50 text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100'
+                      }`}
                     />
                   ))}
                 </div>
 
-                <div className="space-y-4">
-                  <button
-                    type="submit"
-                    disabled={otp.some((v) => v === '') || isLoading}
-                    className={`w-full py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3
-                      ${
-                        !otp.some((v) => v === '') && !isLoading
-                          ? 'bg-slate-900 text-white hover:bg-emerald-600 shadow-xl shadow-slate-200 active:scale-95'
-                          : 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                      }
-                    `}
-                  >
-                    {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <>
-                        <span>Verifikasi Sekarang</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
+                <button
+                  type="submit"
+                  disabled={!allFilled || isLoading}
+                  className={`group flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-semibold transition-all ${
+                    allFilled && !isLoading ? 'bg-slate-900 text-white hover:bg-emerald-600' : 'cursor-not-allowed bg-slate-100 text-slate-400'
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <>Verifikasi Sekarang <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
+                  )}
+                </button>
 
-                  <div className="text-center">
-                    {timer > 0 ? (
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        Kirim ulang kode dalam{' '}
-                        <span className="text-emerald-600">{timer} detik</span>
-                      </p>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleResend}
-                        className="text-xs font-black text-emerald-600 hover:text-emerald-700 uppercase tracking-[0.2em] underline underline-offset-4"
-                      >
-                        Kirim Ulang OTP
-                      </button>
-                    )}
-                  </div>
+                <div className="text-center text-sm">
+                  {timer > 0 ? (
+                    <p className="text-slate-400">
+                      Kirim ulang kode dalam <span className="font-semibold text-emerald-600">{timer} detik</span>
+                    </p>
+                  ) : (
+                    <button type="button" onClick={handleResend} className="font-semibold text-emerald-600 underline underline-offset-4 hover:text-emerald-700">
+                      Kirim Ulang OTP
+                    </button>
+                  )}
                 </div>
               </form>
-            </div>
+            </>
           ) : (
-            <div className="text-center space-y-8 animate-in zoom-in duration-500">
-              <div className="relative mx-auto w-24 h-24">
-                <div className="absolute inset-0 bg-emerald-100 rounded-full animate-ping opacity-20"></div>
-                <div className="relative w-24 h-24 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-200">
-                  <CheckCircle2 className="w-12 h-12 text-white" />
-                </div>
-              </div>
+            <div className="space-y-8 text-center">
+              <CheckCircle2 className="mx-auto h-20 w-20 text-emerald-500" />
               <div>
-                <h3 className="text-3xl font-black text-slate-900">
-                  Berhasil Diverifikasi!
-                </h3>
-                <p className="text-sm text-slate-500 mt-4 leading-relaxed px-4">
-                  Identitas Anda telah dikonfirmasi. Anda akan diarahkan ke
-                  dashboard dalam beberapa saat.
+                <h1 className="font-display text-3xl font-bold tracking-tight">Berhasil Diverifikasi!</h1>
+                <p className="mt-4 leading-relaxed text-slate-500">
+                  Identitas Anda telah dikonfirmasi. Lanjutkan ke dashboard.
                 </p>
               </div>
               <Link
-                href={'/dashboard'}
-                className="w-full py-5 px-3 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-xl"
+                href="/dashboard"
+                className="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 py-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
               >
                 Masuk ke Dashboard
               </Link>

@@ -311,11 +311,11 @@ export default function BeritaContent({ params }) {
   if (notFound || !article) {
     return (
       <div className="min-h-screen flex items-center justify-center p-8 bg-slate-50">
-        <div className="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl text-center border border-slate-100">
+        <div className="max-w-md w-full bg-white p-10 rounded-xl shadow-sm text-center border border-slate-100">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-red-500 rounded-full mb-6">
             <Bookmark className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 mb-3">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-3">
             Artikel Tidak Ditemukan
           </h2>
           <p className="text-slate-500 mb-8 leading-relaxed">
@@ -427,7 +427,7 @@ export default function BeritaContent({ params }) {
                 {category}
               </div>
 
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1] mb-8">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-slate-900 leading-[1.1] mb-8">
                 {article.title}
               </h1>
 
@@ -452,7 +452,7 @@ export default function BeritaContent({ params }) {
 
             {/* Hero Image */}
             {article.img && (
-              <figure className="relative mb-12 group rounded-3xl overflow-hidden shadow-2xl shadow-slate-200/50">
+              <figure className="relative mb-12 group rounded-xl overflow-hidden shadow-sm shadow-slate-200/50">
                 <div className="aspect-[16/9] w-full bg-slate-100 overflow-hidden">
                   <img
                     src={article.img}
@@ -488,13 +488,13 @@ export default function BeritaContent({ params }) {
                       onClick={handleBookmarked}
                       className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shadow-sm ${
                         isBookmarked
-                          ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
-                          : 'bg-white border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200'
+                          ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                          : 'bg-white border-slate-200 text-slate-400 hover:text-emerald-600 hover:border-emerald-200'
                       }`}
                       title="Simpan artikel"
                     >
                       <Bookmark
-                        className={`w-5 h-5 ${isBookmarked ? 'fill-indigo-600' : ''}`}
+                        className={`w-5 h-5 ${isBookmarked ? 'fill-emerald-600' : ''}`}
                       />
                     </button>
                   </div>
@@ -520,7 +520,7 @@ export default function BeritaContent({ params }) {
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm"
+                    className="w-10 h-10 rounded-full flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm"
                   >
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -534,7 +534,7 @@ export default function BeritaContent({ params }) {
                 <div
                   className="font-normal text-lg md:text-[1.15rem] leading-[1.8] text-slate-800
                       [&>p]:mb-8 [&>p]:text-slate-700
-                      [&>h1]:text-4xl [&>h1]:font-black [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
+                      [&>h1]:text-4xl [&>h1]:font-semibold [&>h1]:text-slate-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight
                       [&>h2]:text-3xl [&>h2]:font-bold [&>h2]:text-slate-900 [&>h2]:mt-14 [&>h2]:mb-6 [&>h2]:tracking-tight [&>h2]:leading-snug
                       [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-slate-900 [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:tracking-tight
                       [&>h4]:text-xl [&>h4]:font-bold [&>h4]:text-slate-900 [&>h4]:mt-8 [&>h4]:mb-4
@@ -632,13 +632,13 @@ export default function BeritaContent({ params }) {
                 </div>
 
                 {/* Newsletter Box */}
-                <div className="mt-16 relative overflow-hidden bg-slate-900 rounded-2xl p-8 lg:p-10 text-white">
+                <div className="mt-16 relative overflow-hidden bg-slate-900 rounded-xl p-8 lg:p-10 text-white">
                   <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-emerald-600/20 blur-3xl"></div>
-                  <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-blue-600/20 blur-3xl"></div>
+                  <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-emerald-600/20 blur-3xl"></div>
 
                   <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                     <div className="flex-1 text-center md:text-left">
-                      <h3 className="text-2xl font-black tracking-tight mb-2">
+                      <h3 className="text-2xl font-semibold tracking-tight mb-2">
                         Briefing Pagi
                       </h3>
                       <p className="text-slate-300">
@@ -667,7 +667,7 @@ export default function BeritaContent({ params }) {
             {/* Recommendations Section */}
             <div className="mt-20 lg:mt-32">
               <div className="flex items-end justify-between mb-8">
-                <h3 className="text-2xl font-black tracking-tight text-slate-900">
+                <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
                   Bacaan Selanjutnya
                 </h3>
                 <div className="h-px flex-1 bg-slate-100 ml-6 hidden sm:block"></div>
@@ -679,7 +679,7 @@ export default function BeritaContent({ params }) {
                     <Link
                       key={item.id}
                       href={`/berita/${item.slug}`}
-                      className="group flex flex-col h-full bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-slate-200/50 hover:border-emerald-100 transition-all duration-300"
+                      className="group flex flex-col h-full bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-sm hover:shadow-slate-200/50 hover:border-emerald-100 transition-all duration-300"
                     >
                       <div className="h-48 overflow-hidden bg-slate-100 relative">
                         <img
@@ -708,7 +708,7 @@ export default function BeritaContent({ params }) {
                     </Link>
                   ))
                 ) : (
-                  <div className="col-span-2 py-12 text-center border-2 border-dashed border-slate-100 rounded-2xl text-slate-400">
+                  <div className="col-span-2 py-12 text-center border-2 border-dashed border-slate-100 rounded-xl text-slate-400">
                     Tidak ada rekomendasi tambahan saat ini.
                   </div>
                 )}
@@ -762,10 +762,10 @@ export default function BeritaContent({ params }) {
             {/* Sticky Container */}
             <div className="sticky top-24 space-y-10">
               {/* Popular Widget */}
-              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 lg:p-8">
+              <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 lg:p-8">
                 <div className="flex items-center gap-2 mb-6 text-slate-900">
                   <TrendingUp className="w-5 h-5 text-emerald-500" />
-                  <h4 className="font-black text-lg tracking-tight">
+                  <h4 className="font-semibold text-lg tracking-tight">
                     Terpopuler
                   </h4>
                 </div>
@@ -833,7 +833,7 @@ export default function BeritaContent({ params }) {
         <div className="container mx-auto px-4 lg:px-8 py-12 lg:py-16">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             <div className="max-w-sm">
-              <div className="font-black text-2xl tracking-tighter mb-4">
+              <div className="font-semibold text-2xl tracking-tighter mb-4">
                 ADE<span className="text-emerald-600">GREEN</span>BERITA
               </div>
               <p className="text-slate-500 text-sm leading-relaxed">

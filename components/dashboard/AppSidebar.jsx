@@ -281,15 +281,15 @@ export default function AppSidebar() {
               <span className="text-left me-1">
                 <ShieldUser
                   size={45}
-                  className="bg-blue-500 text-white ms-2 p-2 rounded-md"
+                  className="bg-emerald-600 text-white ms-2 p-2 rounded-md"
                 />
               </span>
               <div className="me-auto leading-4">
-                <p className="font-extrabold text-lg">
-                  ADE<span className="text-emerald-600">GREEN</span>
-                  <span>PANEL</span>
+                <p className="font-display font-medium text-base">
+                  Ade<span className="text-emerald-600">Green</span>
+                  <span className="text-slate-400"> Panel</span>
                 </p>
-                <small className="text-[.7rem] text-sky-600 font-semibold">
+                <small className="text-[.7rem] text-emerald-600 font-semibold">
                   MANAGEMENT SYSTEM
                 </small>
               </div>
@@ -302,7 +302,7 @@ export default function AppSidebar() {
         {/* GROUP PENGUNJUNG (Single Level) */}
         <SidebarGroup>
           <SidebarSeparator className="mb-6" />
-          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
+          <SidebarGroupLabel className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
             PENGUNJUNG
           </SidebarGroupLabel>
           <SidebarMenu className="gap-2">
@@ -310,14 +310,14 @@ export default function AppSidebar() {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
+                  className="hover:bg-emerald-50 active:bg-emerald-50 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
                 >
                   <Link
                     href={item.url}
                     onClick={() => setPathname(item.url)}
                     className={
                       pathname === item.url
-                        ? 'text-sky-700 bg-sky-600/10'
+                        ? 'text-emerald-700 bg-emerald-600/10'
                         : 'text-gray-500'
                     }
                   >
@@ -332,7 +332,7 @@ export default function AppSidebar() {
 
         {/* GROUP ADMINISTRATOR (Parent-Child Level) */}
         <SidebarGroup className={role === 'pengunjung' ? 'hidden' : ''}>
-          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
+          <SidebarGroupLabel className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
             ADMINISTRATOR
           </SidebarGroupLabel>
           <SidebarMenu>
@@ -347,7 +347,7 @@ export default function AppSidebar() {
                     {parent.items ? (
                       <SidebarMenuButton
                         tooltip={parent.title}
-                        className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 !font-semibold"
+                        className="hover:bg-emerald-50 active:bg-emerald-50 active:text-slate-900 hover:text-slate-900 !font-semibold"
                       >
                         <parent.icon size={20} />
                         <span>{parent.title}</span>
@@ -356,14 +356,14 @@ export default function AppSidebar() {
                     ) : (
                       <SidebarMenuButton
                         asChild
-                        className="hover:bg-sky-100 active:bg-sky-100 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
+                        className="hover:bg-emerald-50 active:bg-emerald-50 active:text-slate-900 hover:text-slate-900 text-slate-900 !font-semibold"
                       >
                         <Link
                           href={parent.url}
                           onClick={() => setPathname(parent.url)}
                           className={
                             pathname === parent.url
-                              ? 'text-sky-700 bg-sky-600/10'
+                              ? 'text-emerald-700 bg-emerald-600/10'
                               : 'text-gray-500'
                           }
                         >
@@ -380,14 +380,14 @@ export default function AppSidebar() {
                           <SidebarMenuSubItem key={child.title}>
                             <SidebarMenuSubButton
                               asChild
-                              className="hover:bg-sky-100 active:bg-sky-100 text-gray-600 active:text-slate-900 hover:text-slate-900"
+                              className="hover:bg-emerald-50 active:bg-emerald-50 text-gray-600 active:text-slate-900 hover:text-slate-900"
                             >
                               <Link
                                 href={child.url}
                                 onClick={() => setPathname(child.url)}
                                 className={
                                   pathname === child.url
-                                    ? 'text-sky-700 font-bold'
+                                    ? 'text-emerald-700 font-medium'
                                     : 'text-gray-500'
                                 }
                               >
@@ -406,7 +406,7 @@ export default function AppSidebar() {
 
         {/* GROUP SUPER ADMIN */}
         <SidebarGroup className={role !== 'super admin' ? 'hidden' : ''}>
-          <SidebarGroupLabel className="text-sm font-bold text-slate-400 mb-3">
+          <SidebarGroupLabel className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2">
             SUPER ADMIN
           </SidebarGroupLabel>
           <SidebarMenu>
@@ -414,7 +414,7 @@ export default function AppSidebar() {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className="hover:bg-sky-100 hover:text-slate-900 !font-semibold"
+                  className="hover:bg-emerald-50 hover:text-slate-900 !font-semibold"
                 >
                   <Link href={item.url} onClick={() => setPathname(item.url)}>
                     <item.icon size={20} />
@@ -444,7 +444,7 @@ export default function AppSidebar() {
                     />
                   </div>
                   <div className="grid flex-1 text-left leading-tight ml-1">
-                    <span className="truncate font-bold text-[13px] text-slate-800">
+                    <span className="truncate font-medium text-[13px] text-slate-800">
                       {user?.fullname}
                     </span>
                     <span className="truncate text-[11px] font-medium text-slate-500 capitalize flex items-center gap-1">
@@ -471,7 +471,7 @@ export default function AppSidebar() {
                       />
                     </div>
                     <div className="grid flex-1 text-left leading-tight">
-                      <span className="truncate font-bold text-sm text-slate-900">
+                      <span className="truncate font-medium text-sm text-slate-900">
                         {user?.fullname}
                       </span>
                       <span className="truncate text-xs text-slate-500 font-medium">
@@ -484,14 +484,14 @@ export default function AppSidebar() {
                 <DropdownMenuSeparator className="bg-slate-200/50 mx-1 my-1.5" />
 
                 <DropdownMenuGroup className="px-1">
-                  <DropdownMenuLabel className="text-[10px] font-extrabold text-slate-400/80 uppercase tracking-widest px-2 py-1.5">
+                  <DropdownMenuLabel className="text-[10px] font-medium text-slate-400/80 tracking-wide px-2 py-1.5">
                     Pengaturan Akun
                   </DropdownMenuLabel>
 
                   {/* SUBMENU: UBAH NAMA */}
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="flex w-full cursor-pointer select-none items-center rounded-lg px-2 py-2 text-[13px] font-medium outline-none text-slate-600 hover:bg-blue-50/50 hover:text-blue-700 focus:bg-blue-50/50 focus:text-blue-700 transition-colors data-[state=open]:bg-blue-50/50 data-[state=open]:text-blue-700">
-                      <div className="mr-3 p-1 rounded-md bg-blue-100/50 text-blue-600">
+                    <DropdownMenuTrigger className="flex w-full cursor-pointer select-none items-center rounded-lg px-2 py-2 text-[13px] font-medium outline-none text-slate-600 hover:bg-emerald-50/50 hover:text-emerald-700 focus:bg-emerald-50/50 focus:text-emerald-700 transition-colors data-[state=open]:bg-emerald-50/50 data-[state=open]:text-emerald-700">
+                      <div className="mr-3 p-1 rounded-md bg-emerald-100/50 text-emerald-600">
                         <User className="h-3.5 w-3.5" />
                       </div>
                       <span>Ubah Nama</span>
@@ -506,14 +506,14 @@ export default function AppSidebar() {
                           <Input
                             value={fullname}
                             onChange={(e) => setFullname(e.target.value)}
-                            className="h-9 text-sm bg-white/50 focus-visible:ring-blue-400/50 border-slate-200/80 rounded-lg"
+                            className="h-9 text-sm bg-white/50 focus-visible:ring-emerald-400/50 border-slate-200/80 rounded-lg"
                             placeholder="Masukkan nama..."
                           />
                         </div>
                         <Button
                           onClick={handleChangeUsername}
                           size="sm"
-                          className="w-full h-9 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-xs font-bold rounded-lg shadow-md shadow-blue-500/20 transition-all hover:shadow-blue-500/40"
+                          className="w-full h-9 bg-emerald-600 hover:bg-emerald-700 text-xs font-medium rounded-lg transition-colors"
                         >
                           Simpan Perubahan
                         </Button>
@@ -523,8 +523,8 @@ export default function AppSidebar() {
 
                   {/* SUBMENU: UBAH PASSWORD */}
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="flex w-full cursor-pointer select-none items-center rounded-lg px-2 py-2 text-[13px] font-medium outline-none text-slate-600 hover:bg-purple-50/50 hover:text-purple-700 focus:bg-purple-50/50 focus:text-purple-700 transition-colors data-[state=open]:bg-purple-50/50 data-[state=open]:text-purple-700">
-                      <div className="mr-3 p-1 rounded-md bg-purple-100/50 text-purple-600">
+                    <DropdownMenuTrigger className="flex w-full cursor-pointer select-none items-center rounded-lg px-2 py-2 text-[13px] font-medium outline-none text-slate-600 hover:bg-slate-50/50 hover:text-slate-700 focus:bg-slate-50/50 focus:text-slate-700 transition-colors data-[state=open]:bg-slate-50/50 data-[state=open]:text-slate-700">
+                      <div className="mr-3 p-1 rounded-md bg-slate-100/50 text-slate-600">
                         <Key className="h-3.5 w-3.5" />
                       </div>
                       <span>Ganti Password</span>
@@ -546,7 +546,7 @@ export default function AppSidebar() {
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="Password Baru"
-                            className="h-9 text-sm bg-white/50 focus-visible:ring-purple-400/50 border-slate-200/80 rounded-lg"
+                            className="h-9 text-sm bg-white/50 focus-visible:ring-slate-400/50 border-slate-200/80 rounded-lg"
                           />
                           <Input
                             type="password"
@@ -555,14 +555,14 @@ export default function AppSidebar() {
                               setConfirmNewPassword(e.target.value)
                             }
                             placeholder="Konfirmasi Password Baru"
-                            className="h-9 text-sm bg-white/50 focus-visible:ring-purple-400/50 border-slate-200/80 rounded-lg"
+                            className="h-9 text-sm bg-white/50 focus-visible:ring-slate-400/50 border-slate-200/80 rounded-lg"
                           />
                         </div>
                         <Button
                           type="submit"
                           onClick={handleChangePassword}
                           size="sm"
-                          className="w-full h-9 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-xs font-bold rounded-lg shadow-md shadow-purple-500/20 transition-all hover:shadow-purple-500/40"
+                          className="w-full h-9 bg-slate-900 hover:bg-slate-800 text-xs font-medium rounded-lg transition-colors"
                         >
                           Perbarui Password
                         </Button>
@@ -574,7 +574,7 @@ export default function AppSidebar() {
                 <DropdownMenuSeparator className="bg-slate-200/50 mx-1 my-1.5" />
 
                 <DropdownMenuGroup className="px-1">
-                  <DropdownMenuLabel className="text-[10px] font-extrabold text-red-400/80 uppercase tracking-widest px-2 py-1.5">
+                  <DropdownMenuLabel className="text-[10px] font-medium text-red-400/80 tracking-wide px-2 py-1.5">
                     Area Berbahaya
                   </DropdownMenuLabel>
                   {/* SUBMENU: HAPUS AKUN */}
@@ -594,7 +594,7 @@ export default function AppSidebar() {
                           <AlertTriangle className="h-6 w-6 text-red-600" />
                         </div>
                         <div className="space-y-1.5">
-                          <p className="text-sm font-bold text-slate-900 leading-tight">
+                          <p className="text-sm font-medium text-slate-900 leading-tight">
                             Hapus Akun Permanen?
                           </p>
                           <p className="text-[11px] text-slate-500 leading-normal px-2">
@@ -606,7 +606,7 @@ export default function AppSidebar() {
                           size="sm"
                           onClick={handleDeleteAccount}
                           variant="destructive"
-                          className="w-full h-9 text-xs font-bold rounded-lg shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
+                          className="w-full h-9 text-xs font-medium rounded-lg shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
                         >
                           Ya, Hapus Sekarang
                         </Button>
