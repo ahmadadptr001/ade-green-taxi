@@ -7,16 +7,7 @@ export default function Landing() {
   const router = useRouter();
 
   const handleStart = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-
-    const time = setTimeout(() => {
-      router.replace("/beranda"); // instant, no scroll transition
-    }, 100);
-
-    return () => clearTimeout(time);
+    router.replace("/beranda"); // instant, no scroll transition
   };
 
   return (
