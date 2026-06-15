@@ -8,6 +8,14 @@ import { ArrowRight } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  // Promote everything to GPU layers and keep the scrub catch-up from stalling
+  // on a single janky frame.
+  gsap.config({ force3D: true });
+  gsap.ticker.lagSmoothing(500, 33);
+  // Mobile browsers fire a resize every time the address bar shows/hides while
+  // scrolling — without this each one would refresh + re-pin the timeline,
+  // which is the #1 cause of mobile scroll stutter here.
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 const PLAYSTORE_URL =
@@ -17,7 +25,7 @@ const INJECTED_STYLES = `
   .gsap-reveal { visibility: hidden; }
   .film-grain {
     position: absolute; inset: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 50; opacity: 0.05; mix-blend-mode: overlay;
+    pointer-events: none; z-index: 50; opacity: 0.045;
     background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
   }
   .bg-grid-theme {
@@ -81,6 +89,26 @@ const INJECTED_STYLES = `
   .btn-modern-light:hover { transform: translateY(-3px); }
   .btn-modern-light:active { transform: translateY(1px); }
   .progress-ring { transform: rotate(-90deg); transform-origin: center; stroke-dasharray: 402; stroke-dashoffset: 402; stroke-linecap: round; }
+
+  /* --- Mobile / low-power: strip the most GPU-expensive effects --- */
+  @media (max-width: 768px) {
+    .film-grain { display: none; }
+    .floating-ui-badge {
+      backdrop-filter: none; -webkit-backdrop-filter: none;
+      background: rgba(8, 20, 16, 0.82);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 12px 24px -8px rgba(0,0,0,0.7);
+    }
+    .premium-depth-card {
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.12);
+    }
+    .iphone-bezel {
+      box-shadow: inset 0 0 0 2px #4a554f, inset 0 0 0 7px #000, 0 20px 40px -12px rgba(0,0,0,0.8);
+    }
+    .card-sheen { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .film-grain { display: none; }
+  }
 `;
 
 export function CinematicHero({
@@ -109,8 +137,19 @@ export function CinematicHero({
   const requestRef = useRef(0);
 
   useEffect(() => {
+    // Pointer parallax is a "nice to have" — it must never compete with the
+    // scroll scrub. Pause it on coarse pointers (touch) and while scrolling.
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    let lastScroll = 0;
+    const onScroll = () => {
+      lastScroll = performance.now();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const handleMouseMove = (e) => {
       if (window.scrollY > window.innerHeight * 2) return;
+      if (performance.now() - lastScroll < 160) return; // mid-scroll: skip
       cancelAnimationFrame(requestRef.current);
       requestRef.current = requestAnimationFrame(() => {
         if (mainCardRef.current && mockupRef.current) {
@@ -126,33 +165,47 @@ export function CinematicHero({
           const xVal = (e.clientX / window.innerWidth - 0.5) * 2;
           const yVal = (e.clientY / window.innerHeight - 0.5) * 2;
           gsap.to(mockupRef.current, {
-            rotationY: xVal * 12,
-            rotationX: -yVal * 12,
+            rotationY: xVal * 10,
+            rotationX: -yVal * 10,
             ease: "power3.out",
-            duration: 1.2,
+            duration: 0.9,
+            overwrite: "auto",
           });
         }
       });
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(requestRef.current);
     };
   }, []);
 
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
+    // The card's base size is 85vw×85vh (92 on mobile); this uniform factor
+    // scales it to exactly fill the viewport — letting us expand it with a GPU
+    // transform instead of animating width/height (which reflows every frame).
+    const fullScale = isMobile ? 100 / 92 : 100 / 85;
+    // Gaussian blur is priced per painted pixel; on high-DPI phones that's 2-3x
+    // the work, so we skip blur reveals entirely on mobile (opacity/scale carry
+    // the effect just fine).
+    const blur = (px) => `blur(${isMobile ? 0 : px}px)`;
     const ctx = gsap.context(() => {
       gsap.set(".text-track", {
         autoAlpha: 0,
         y: 60,
         scale: 0.85,
-        filter: "blur(20px)",
+        filter: blur(10),
         rotationX: -20,
       });
       gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
-      gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
+      gsap.set(".main-card", {
+        y: window.innerHeight + 200,
+        autoAlpha: 1,
+        willChange: "transform",
+      });
       gsap.set(
         [
           ".card-left-text",
@@ -166,7 +219,7 @@ export function CinematicHero({
       gsap.set(".cta-wrapper", {
         autoAlpha: 0,
         scale: 0.8,
-        filter: "blur(30px)",
+        filter: blur(14),
       });
 
       const introTl = gsap.timeline({ delay: 0.3 });
@@ -179,6 +232,7 @@ export function CinematicHero({
           filter: "blur(0px)",
           rotationX: 0,
           ease: "expo.out",
+          clearProps: "filter",
         })
         .to(
           ".text-days",
@@ -198,21 +252,27 @@ export function CinematicHero({
       });
 
       scrollTl
+        // Grid covers the whole viewport — animating a blur on it every frame
+        // is the heaviest paint in the scene, so it only scales + fades.
         .to(
-          [".hero-text-wrapper", ".bg-grid-theme"],
+          ".bg-grid-theme",
+          { scale: 1.15, opacity: 0.2, ease: "power2.inOut", duration: 2 },
+          0,
+        )
+        .to(
+          ".hero-text-wrapper",
           {
             scale: 1.15,
-            filter: "blur(20px)",
             opacity: 0.2,
             ease: "power2.inOut",
             duration: 2,
+            ...(isMobile ? {} : { filter: "blur(8px)" }),
           },
           0,
         )
         .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
         .to(".main-card", {
-          width: "100%",
-          height: "100%",
+          scale: fullScale,
           borderRadius: "0px",
           ease: "power3.inOut",
           duration: 1.5,
@@ -317,8 +377,7 @@ export function CinematicHero({
         .to(
           ".main-card",
           {
-            width: isMobile ? "92vw" : "85vw",
-            height: isMobile ? "92vh" : "85vh",
+            scale: 1,
             borderRadius: isMobile ? "32px" : "40px",
             ease: "expo.inOut",
             duration: 1.8,
@@ -327,7 +386,12 @@ export function CinematicHero({
         )
         .to(
           ".cta-wrapper",
-          { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 },
+          {
+            scale: 1,
+            ease: "expo.inOut",
+            duration: 1.8,
+            ...(isMobile ? {} : { filter: "blur(0px)" }),
+          },
           "pullback",
         )
         .to(".main-card", {
