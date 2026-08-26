@@ -59,10 +59,16 @@ export default function BeritaContent({ params }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const checkProfileLogin = () => {
-    const userStorage = localStorage.getItem("user");
-    if (userStorage) {
-      const dataUser = JSON.parse(userStorage);
-      setUser(dataUser);
+    try {
+      const userStorage = localStorage.getItem("user");
+      if (userStorage) {
+        const dataUser = JSON.parse(userStorage);
+        setUser(dataUser);
+      }
+    } catch (err) {
+      // localStorage korup — jangan biarkan crash, abaikan sesi.
+      console.error("Data sesi lokal rusak:", err);
+      localStorage.removeItem("user");
     }
   };
   useEffect(() => {
@@ -185,7 +191,9 @@ export default function BeritaContent({ params }) {
       if (slug) {
         const found = articles.find((a) => a.slug === slug) || null;
         setArticle(found);
-        if (!found) {
+
+        // Draft (tanpa published_at) tidak boleh diakses publik.
+        if (!found || !found.published_at) {
           setNotFound(true);
           return;
         }

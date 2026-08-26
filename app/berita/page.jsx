@@ -86,8 +86,12 @@ export default function NewsPage() {
           getHighlight(),
         ]);
         if (hi?.highlight?.[0]) setHighlight(hi.highlight[0].text);
-        setArticles(mapArticlesToNews(data?.articles));
-        setPopularArticles(mapArticlesToNews(getPopularArticles(data?.articles, 100)));
+        // Hanya artikel terbit yang tayang publik — draft disembunyikan.
+        const published = (data?.articles ?? []).filter((a) => a.published_at);
+        setArticles(mapArticlesToNews(published));
+        setPopularArticles(
+          mapArticlesToNews(getPopularArticles(published, 100))
+        );
         setTags(tag.tags);
         setTopics(top.topics ?? []);
         setCategories(cat.categories);

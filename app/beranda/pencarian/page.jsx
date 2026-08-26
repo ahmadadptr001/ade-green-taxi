@@ -19,18 +19,24 @@ export default function PencarianPage() {
   const [results, setResults] = useState(null);
   const [searched, setSearched] = useState(false);
 
+  // Penanda urutan permintaan: respons lama tidak boleh menimpa yang baru.
+  const searchSeq = useRef(0);
+
   const runSearch = async (keyword) => {
     const k = (keyword ?? "").trim();
     if (!k) return;
+    const seq = ++searchSeq.current;
     setLoading(true);
     setSearched(true);
     try {
       const resp = await getArticlesByKeyword(k);
+      if (seq !== searchSeq.current) return; // sudah ada pencarian lebih baru
       setResults(resp.articles || []);
     } catch (err) {
+      if (seq !== searchSeq.current) return;
       Swal.fire({ icon: "error", title: err.message });
     } finally {
-      setLoading(false);
+      if (seq === searchSeq.current) setLoading(false);
     }
   };
 

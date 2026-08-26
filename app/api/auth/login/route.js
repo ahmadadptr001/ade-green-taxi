@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import { verifyPassword, hashPassword } from '@/lib/password-compat';
 
 export async function POST(req) {
-  const data = await req.json();
   try {
+    const data = await req.json();
     const { data: dataPorfile, error } = await supabase_coolify
       .from('profiles')
       .select()

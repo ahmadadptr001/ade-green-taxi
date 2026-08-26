@@ -6,7 +6,7 @@ export async function GET(req, { params }) {
   try {
     const { data, error } = await supabase_coolify
       .from('profiles')
-      .select()
+      .select('id, fullname, email, phone, role, status, last_seen')
       .eq('email', email)
       .maybeSingle();
     if (error)

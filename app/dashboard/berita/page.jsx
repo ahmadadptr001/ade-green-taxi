@@ -370,10 +370,12 @@ export default function FeedBeritaComponent() {
                         {categoryName && <span className="h-3 w-px bg-slate-200" />}
                         <span className="inline-flex items-center gap-1">
                           <CalendarDays size={13} />
-                          {new Date(article.published_at).toLocaleDateString(
-                            "id-ID",
-                            { day: "numeric", month: "short", year: "numeric" },
-                          )}
+                          {article.published_at
+                            ? new Date(article.published_at).toLocaleDateString(
+                                "id-ID",
+                                { day: "numeric", month: "short", year: "numeric" },
+                              )
+                            : "Draft"}
                         </span>
                         <span className="h-3 w-px bg-slate-200" />
                         <span className="inline-flex items-center gap-1">

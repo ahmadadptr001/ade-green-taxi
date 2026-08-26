@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   MoreHorizontal,
@@ -308,17 +309,29 @@ export default function ArticleManager() {
   };
 
   const handleExportCSV = () => {
+    // Amankan sel: koma/newline di dalam kutip, kutip digandakan, dan
+    // awalan =+-@ diberi tanda ' agar tidak dieksekusi sebagai formula.
+    const csvCell = (value) => {
+      let s = String(value ?? '');
+      s = s.replace(/^([=+\-@])/, "'$1");
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+
     const headers = ['ID', 'Title', 'Slug', 'Views', 'Published At'];
     const rows = articles.map((a) => [
-      a.id,
-      `"${a.title.replace(/"/g, '""')}"`,
-      a.slug,
-      a.views,
-      a.published_at || 'Draft',
+      csvCell(a.id),
+      csvCell(a.title),
+      csvCell(a.slug),
+      csvCell(a.views),
+      csvCell(a.published_at || 'Draft'),
     ]);
 
-    const csvContent = [headers, ...rows].map((e) => e.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = [headers, ...rows]
+      .map((e) => e.join(','))
+      .join('\r\n');
+    const blob = new Blob(["\ufeff" + csvContent], {
+      type: 'text/csv;charset=utf-8;',
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
@@ -327,6 +340,8 @@ export default function ArticleManager() {
       `articles_report_${new Date().toISOString().split('T')[0]}.csv`
     );
     link.click();
+    // Lepas blob dari memori setelah dipakai.
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const openEditModal = (article) => {
@@ -336,7 +351,8 @@ export default function ArticleManager() {
   };
 
   const handleSaveEdit = async () => {
-    const htmlContent = editorContentHtml;
+    // Sanitasi sebelum dikirim — sama seperti jalur create di halaman tulis.
+    const htmlContent = DOMPurify.sanitize(editorContentHtml);
 
     Swal.fire({
       icon: 'info',

@@ -47,13 +47,10 @@ async function main() {
   );
   console.log("[copy-standalone] .next/static -> .next/standalone/.next/static");
 
-  // env files (jika ada) — untuk variabel runtime sisi server
-  for (const f of [
-    ".env",
-    ".env.production",
-    ".env.local",
-    ".env.production.local",
-  ]) {
+  // env files (jika ada) — untuk variabel runtime sisi server.
+  // PENTING: file *.local TIDAK disalin — nilai .env.local dari mesin
+  // developer akan mengalahkan .env.production di VPS (urutan preload Next).
+  for (const f of [".env", ".env.production"]) {
     if (await exists(join(root, f))) {
       await cp(join(root, f), join(standalone, f));
       console.log(`[copy-standalone] ${f} -> .next/standalone/${f}`);

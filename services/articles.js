@@ -35,32 +35,20 @@ export async function getArticlesByKeyword(keyword) {
 
 export async function uploadMainImageArticle(file) {
   try {
-    console.log('file debug: ', file);
+    // Upload lewat API server (validasi tipe & ukuran di sisi server),
+    // bukan langsung ke storage dari browser.
+    const formData = new FormData();
+    formData.append('file', file);
 
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `images/${fileName}`;
-
-    const { data, error } = await supabase_coolify.storage
-      .from('articles') //
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
-
-    if (error) {
-      console.error('Upload error:', error.message);
-      throw error;
-    }
-
-    // ambil public url
-    const { data: publicData } = supabase_coolify.storage
-      .from('articles')
-      .getPublicUrl(data.path);
+    const resp = await axios.post('/api/article/upload/image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    if (resp.status !== 200)
+      throw new Error(resp.data?.message || 'Gagal mengupload gambar utama berita');
 
     return {
-      message: 'Berhasil mengupload gambar utama berita',
-      url: publicData.publicUrl,
+      message: resp.data.message,
+      url: resp.data.url,
     };
   } catch (err) {
     console.log(err);

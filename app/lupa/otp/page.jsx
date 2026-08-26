@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Loader2, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Loader2, CheckCircle2, ShieldCheck, Key } from 'lucide-react';
 import Link from 'next/link';
-import { otpValidate, sendOTP } from '@/services/auth';
+import { otpValidate, sendOTP, changePassword } from '@/services/auth';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { getUserByEmail } from '@/services/users';
@@ -14,6 +14,10 @@ export default function OTP() {
   const [isVerified, setIsVerified] = useState(false);
   const [timer, setTimer] = useState(59);
   const [email, setEmail] = useState(null);
+  const [profileId, setProfileId] = useState(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
   const inputRefs = useRef([]);
   const sentRef = useRef(false);
 
@@ -78,9 +82,13 @@ export default function OTP() {
       setIsLoading(true);
       const result = await otpValidate(email, otpCode);
       setIsLoading(false);
+
+      // Sesi HANYA disimpan jika OTP benar-benar tervalidasi.
+      if (!result || !result.success) return;
+
       const dataUser = await getUserByEmail(email);
       localStorage.setItem('user', JSON.stringify(dataUser.data));
-      if (!result) return;
+      setProfileId(dataUser.data?.id ?? null);
       setIsVerified(true);
     } catch (err) {
       Swal.fire({ icon: 'error', title: err.message });
@@ -94,6 +102,40 @@ export default function OTP() {
       await sendOTP(email);
     } catch (err) {
       Swal.fire({ icon: 'error', title: 'Gagal menerima kode OTP', text: err.message });
+    }
+  };
+
+  // Tujuan akhir alur lupa password: benar-benar mengganti password.
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!newPassword || !confirmNewPassword) {
+      Swal.fire({ icon: 'error', text: 'Kolom tidak boleh kosong' });
+      return;
+    }
+    if (newPassword.length < 6) {
+      Swal.fire({ icon: 'error', text: 'Password minimal 6 karakter' });
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      Swal.fire({ icon: 'error', text: 'Password tidak sama' });
+      return;
+    }
+    try {
+      setIsResetting(true);
+      const result = await changePassword(profileId, newPassword);
+      Swal.fire({
+        icon: 'success',
+        title: 'Password berhasil diubah!',
+        text: result.message,
+        confirmButtonText: 'Masuk sekarang',
+      }).then(() => {
+        localStorage.removeItem('email');
+        router.replace('/masuk');
+      });
+    } catch (err) {
+      Swal.fire({ icon: 'error', text: err.message });
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -175,21 +217,60 @@ export default function OTP() {
               </form>
             </>
           ) : (
-            <div className="space-y-8 text-center">
-              <CheckCircle2 className="mx-auto h-20 w-20 text-emerald-500" />
-              <div>
-                <h1 className="font-display text-3xl font-bold tracking-tight">Berhasil Diverifikasi!</h1>
-                <p className="mt-4 leading-relaxed text-slate-500">
-                  Identitas Anda telah dikonfirmasi. Lanjutkan ke dashboard.
+            <>
+              <div className="mb-8 text-center md:text-left">
+                <CheckCircle2 className="mx-auto h-14 w-14 text-emerald-500 md:mx-0" />
+                <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Berhasil Diverifikasi!</h1>
+                <p className="mt-3 leading-relaxed text-slate-500">
+                  Identitas Anda terkonfirmasi. Silakan buat password baru untuk akun Anda.
                 </p>
               </div>
-              <Link
-                href="/dashboard"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-slate-900 py-4 text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
-              >
-                Masuk ke Dashboard
-              </Link>
-            </div>
+
+              <form onSubmit={handleResetPassword} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-600">Password Baru</label>
+                  <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
+                    <Key className="h-5 w-5 shrink-0 text-slate-400" />
+                    <input
+                      type="password"
+                      placeholder="Minimal 6 karakter"
+                      className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-600">Konfirmasi Password Baru</label>
+                  <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
+                    <Key className="h-5 w-5 shrink-0 text-slate-400" />
+                    <input
+                      type="password"
+                      placeholder="Ulangi password baru"
+                      className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isResetting}
+                  className={`group flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-semibold transition-all ${
+                    !isResetting ? 'bg-slate-900 text-white hover:bg-emerald-600' : 'cursor-not-allowed bg-slate-100 text-slate-400'
+                  }`}
+                >
+                  {isResetting ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <>Simpan Password Baru <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
+                  )}
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>

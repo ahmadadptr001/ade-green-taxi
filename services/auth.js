@@ -7,7 +7,7 @@ export async function sendOTP(email) {
   try {
     const response = await axios.post(base_url, { email });
     if (response?.data.status === 200) return;
-    throw new Error('Gagal mengirim OTP : ', response.data.message);
+    throw new Error(`Gagal mengirim OTP : ${response?.data?.message || 'coba lagi nanti'}`);
   } catch (err) {
     throw err;
   }

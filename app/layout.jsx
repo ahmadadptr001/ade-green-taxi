@@ -55,9 +55,8 @@ export const metadata = {
     "kendaraan listrik",
     "eco mobility Kendari",
   ],
-  alternates: {
-    canonical: "/",
-  },
+  // Tidak ada canonical global: canonical "/" yang ter-waris ke semua halaman
+  // membuat Google menganggap seluruh situs duplikat homepage.
   applicationName: "Ade Green TX",
   authors: [{ name: "Ade Green TX" }],
   openGraph: {

@@ -9,11 +9,11 @@ export async function POST(req) {
       .update({
         fullname: newFullname
       })
-      .select()
+      // Kolom password (hash) tidak boleh ikut dalam response.
+      .select('id, fullname, email, phone, role, status, last_seen')
       .eq('id', id)
       .maybeSingle()
 
-      console.log('user log: ', user)
     if (error) {
       console.log('[ERROR DEBUG] gagal mengubah nama pengguna : ', error.message )
       return NextResponse.json({message: error.message}, {status: 400})

@@ -2,8 +2,8 @@ import { supabase_coolify } from '@/config/supabase';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const { email } = await req.json();
   try {
+    const { email } = await req.json();
     const { data, error } = await supabase_coolify
       .from('profiles')
       .select('id, email, phone')

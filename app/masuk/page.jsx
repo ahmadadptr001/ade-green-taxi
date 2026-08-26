@@ -45,6 +45,8 @@ export default function LoginPage() {
         title: 'Login Berhasil!',
         text: 'Berhasil login ke akun Anda',
         confirmButtonText: 'Masuk ke dashboard',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
       }).then((result) => {
         if (result.isConfirmed) {
           localStorage.setItem('user', JSON.stringify(dataUser.data));

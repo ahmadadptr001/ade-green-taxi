@@ -31,8 +31,12 @@ export default function SavedArticlesList({ title, subtitle, icon: Icon, relatio
 
   const list = useMemo(() => {
     if (!articles) return null;
+    // Tanpa user yang valid, jangan cocokkan apa pun (mencegah baris orphan
+    // dengan profiles null dianggap milik pengguna).
+    const uid = user?.id;
+    if (!uid) return [];
     return articles.filter((a) =>
-      a[relationKey]?.some((x) => x.profiles?.id === user?.id)
+      a[relationKey]?.some((x) => x.profiles?.id === uid)
     );
   }, [articles, relationKey, user]);
 

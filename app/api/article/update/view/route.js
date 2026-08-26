@@ -2,8 +2,8 @@ import { supabase_coolify } from '@/config/supabase';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const { view, slug } = await req.json();
   try {
+    const { view, slug } = await req.json();
     const { data, error } = await supabase_coolify
       .from('articles')
       .update({

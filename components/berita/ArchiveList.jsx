@@ -26,7 +26,9 @@ export default function ArchiveList({ params, fetcher, kind }) {
         const { slug: s } = await params;
         setSlug(s);
         const resp = await fetcher(s);
-        setArticles(resp?.articles || []);
+        // Draft (tanpa published_at) disembunyikan dari daftar publik.
+        const all = resp?.articles || [];
+        setArticles(all.filter((a) => a.published_at));
       } catch (e) {
         console.error(e);
         setArticles([]);

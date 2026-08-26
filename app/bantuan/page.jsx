@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link'; // Import Link
 import Header from '@/components/Header';
 import Footer from '@/components/home/Footer';
@@ -19,6 +19,15 @@ export default function BantuanPage() {
     type: 'loading',
     message: '',
   });
+
+  const alertTimerRef = useRef(null);
+
+  useEffect(() => {
+    // Bersihkan timer alert saat halaman meninggalkan DOM.
+    return () => {
+      if (alertTimerRef.current) clearTimeout(alertTimerRef.current);
+    };
+  }, []);
 
   /* =========================
       FORM STATE (FINAL)
@@ -81,7 +90,6 @@ export default function BantuanPage() {
     try {
       const payload = { ...formData };
 
-      console.log('PAYLOAD:', payload);
       await reportUser(payload);
 
       setAlert({
@@ -113,7 +121,9 @@ export default function BantuanPage() {
       });
     } finally {
       setLoading(false);
-      setTimeout(() => setAlert({ open: false }), 2500);
+      // Bersihkan timer sebelumnya agar tidak setState setelah unmount.
+      if (alertTimerRef.current) clearTimeout(alertTimerRef.current);
+      alertTimerRef.current = setTimeout(() => setAlert({ open: false }), 2500);
     }
   }
 
