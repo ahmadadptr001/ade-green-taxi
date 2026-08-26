@@ -8,11 +8,13 @@
     "languageChoice": "Indonesia"
   },
   "mainNavbar": {
+    "home": "Beranda",
     "about": "Tentang",
     "service": "Layanan",
     "feature": "Fitur",
     "company": "Perusahaan",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "news": "Berita"
   },
   "servicesHeaderTitle": "Layanan Utama Kami",
   "servicesHeaderDesc": "Ade Green TX menghadirkan perjalanan taksi listrik yang aman, cepat, dan ramah lingkungan untuk mobilitas harian Anda.",

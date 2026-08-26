@@ -1,17 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useLanguageStore } from "@/store/languageStore";
 import ID from "../../locales/id.json";
 import EN from "../../locales/en.json";
 import { ArrowRight } from "lucide-react";
 import { WordsPullUp } from "@/components/ui/words-pull-up";
-
-// WebGL car is client-only + lazy so it never blocks first paint / LCP.
-const CarModel = dynamic(() => import("../three/CarModel"), {
-  ssr: false,
-  loading: () => null,
-});
 
 const CREAM = "#E7E5D8";
 
@@ -29,17 +22,26 @@ export default function Hero() {
       id="hero"
       className="relative h-screen w-full overflow-hidden bg-[#07090e]"
     >
-      {/* 3D car background (replaces the demo video) */}
+      {/* Fullscreen video background */}
       <div className="absolute inset-0">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0b1018] via-[#08090f] to-[#050608]" />
         <div className="pointer-events-none absolute -top-32 right-[8%] h-[34rem] w-[34rem] rounded-full bg-teal-500/10 blur-[130px]" />
-        <CarModel className="absolute inset-0 h-full w-full" />
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/opening-car-image.jpg"
+          src="/opening-car.mp4"
+        />
       </div>
 
       {/* Noise + gradient overlays */}
       <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.5] mix-blend-overlay" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#05060a] via-transparent to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
 
       {/* Hero content (bottom) */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 sm:px-6 md:px-10">

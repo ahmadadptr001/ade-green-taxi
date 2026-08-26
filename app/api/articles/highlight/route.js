@@ -1,4 +1,4 @@
-import { supabase_coolify } from '@/config/supabase';
+import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

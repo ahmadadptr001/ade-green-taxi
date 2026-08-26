@@ -1,6 +1,6 @@
-import { supabase_coolify } from '@/config/supabase';
+import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from 'next/server';
-import { verifyPassword, hashPassword } from '@/lib/password-compat';
+import { verifyPassword, hashPassword, signToken } from '@/lib/api-auth';
 
 export async function POST(req) {
   try {
@@ -39,8 +39,11 @@ export async function POST(req) {
     // Jangan pernah kirim kolom password (kini berisi hash) ke client.
     delete dataPorfile.password;
 
+    // Terbitkan token sesi (HMAC) untuk otorisasi endpoint terlindungi.
+    const token = signToken(dataPorfile);
+
     return NextResponse.json(
-      { message: 'Berhasil masuk ke akun anda', data: dataPorfile },
+      { message: 'Berhasil masuk ke akun anda', token, data: dataPorfile },
       { status: 200 }
     );
   } catch (err) {

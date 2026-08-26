@@ -1,35 +1,25 @@
-import { supabase_coolify } from '@/config/supabase';
 import axios from 'axios';
+import { getAuthHeaders, getApiErrorMessage } from '@/lib/client-auth';
 
 export async function getViewsAllArticle() {
-  try {
-    const response = await axios.get('/api/articles/views');
-    if (!response.statusText) throw response;
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+  const response = await axios.get('/api/articles/views');
+  return response.data;
 }
 
 export async function getCountsAllArticle() {
-  try {
-    const response = await axios.get('/api/articles/counts');
-    if (!response.statusText) throw response;
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+  const response = await axios.get('/api/articles/counts');
+  return response.data;
 }
 
 export async function getArticles() {
   const response = await axios.get('/api/articles');
-  if (!response.statusText) throw response;
   return response.data;
 }
 
 export async function getArticlesByKeyword(keyword) {
-  const response = await axios.get('/api/articles/' + keyword);
-  if (!response) throw new Error(response.message);
+  const response = await axios.get(
+    '/api/articles/' + encodeURIComponent(keyword)
+  );
   return response.data;
 }
 
@@ -41,10 +31,10 @@ export async function uploadMainImageArticle(file) {
     formData.append('file', file);
 
     const resp = await axios.post('/api/article/upload/image', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { ...getAuthHeaders(), 'Content-Type': 'multipart/form-data' },
     });
     if (resp.status !== 200)
-      throw new Error(resp.data?.message || 'Gagal mengupload gambar utama berita');
+      throw new Error(getApiErrorMessage(resp.data?.message, 'Gagal mengupload gambar utama berita'));
 
     return {
       message: resp.data.message,
@@ -57,59 +47,75 @@ export async function uploadMainImageArticle(file) {
 }
 
 export async function insertDataArticle(payload) {
-  const response = await axios.post('/api/article/upload/data', { payload });
-  if (!response.statusText) throw response;
+  const response = await axios.post(
+    '/api/article/upload/data',
+    { payload },
+    { headers: getAuthHeaders() }
+  );
+  if (response.status !== 200)
+    throw new Error(getApiErrorMessage(response.data?.message, 'Gagal menyimpan artikel'));
   return response.data;
 }
 
 export async function insertDataTag(tags, article_id) {
   // tags = [..,...,...]
-  const response = await axios.post('/api/articles/tag/upload/data', {
-    tags,
-    article_id,
-  });
-  if (!response.statusText) throw response;
+  const response = await axios.post(
+    '/api/articles/tag/upload/data',
+    { tags, article_id },
+    { headers: getAuthHeaders() }
+  );
+  if (response.status !== 200)
+    throw new Error(getApiErrorMessage(response.data?.message, 'Gagal menautkan tag'));
   return response.data;
 }
+
 export async function insertDataArticleCategorie(categorie_id, article_id) {
-  const response = await axios.post('/api/articles/category/upload/data', {
-    categorie_id,
-    artID: article_id,
-  });
-  if (!response.statusText) throw response;
+  const response = await axios.post(
+    '/api/articles/category/upload/data',
+    { categorie_id, artID: article_id },
+    { headers: getAuthHeaders() }
+  );
+  if (response.status !== 200)
+    throw new Error(getApiErrorMessage(response.data?.message, 'Gagal menautkan kategori'));
   return response.data;
 }
 
 export async function insertDataArticleTopic(article_id, topic_id) {
-  const response = await axios.post('/api/articles/topic/upload/data', {
-    artID: article_id,
-    topic_id,
-  });
-  if (!response.statusText) throw response;
+  const response = await axios.post(
+    '/api/articles/topic/upload/data',
+    { artID: article_id, topic_id },
+    { headers: getAuthHeaders() }
+  );
+  if (response.status !== 200)
+    throw new Error(getApiErrorMessage(response.data?.message, 'Gagal menautkan topik'));
   return response.data;
 }
 
 export async function updateViewArticle(view, slug) {
+  // View dihitung server-side; nilai view dari client tidak dipercaya.
   const response = await axios.post('/api/article/update/view', {
-    view,
+    view: null,
     slug,
   });
   return response.data;
 }
 
-export async function updateIsLikeArticle(article_id, profile_id) {
-  const response = await axios.post('/api/article/update/like', {
-    article_id,
-    profile_id,
-  });
+export async function updateIsLikeArticle(article_id) {
+  // Identitas like diambil server dari token sesi.
+  const response = await axios.post(
+    '/api/article/update/like',
+    { article_id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 
-export async function updateIsBookmarkedArticle(article_id, profile_id) {
-  const response = await axios.post('/api/article/update/bookmark', {
-    article_id,
-    profile_id,
-  });
+export async function updateIsBookmarkedArticle(article_id) {
+  const response = await axios.post(
+    '/api/article/update/bookmark',
+    { article_id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 
@@ -133,84 +139,118 @@ export async function getArticlesByCategorySlug(slug) {
   return response.data;
 }
 export async function getArticlesByTagSlug(slug) {
-  try {
-    const response = await axios.get('/api/articles/tag/' + slug);
-    if (!response.statusText) throw response;
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+  const response = await axios.get('/api/articles/tag/' + slug);
+  return response.data;
 }
 export async function getArticlesByTopicSlug(slug) {
-  try {
-    const response = await axios.get('/api/articles/topic/' + slug);
-    if (!response.statusText) throw response;
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+  const response = await axios.get('/api/articles/topic/' + slug);
+  return response.data;
 }
 
 export async function getHighlight() {
-  try {
-    const response = await axios.get('/api/articles/highlight/');
-    if (!response.statusText) throw response;
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
+  const response = await axios.get('/api/articles/highlight/');
+  return response.data;
+}
+
+export async function updateHighlightMessage(text) {
+  const response = await axios.post(
+    '/api/articles/highlight/update',
+    { text },
+    { headers: getAuthHeaders() }
+  );
+  if (response.status !== 200)
+    throw new Error(getApiErrorMessage(response.data?.message, 'Gagal mempublikasikan'));
+  return response.data;
 }
 
 export async function addTag(name, slug) {
-  const response = await axios.post('/api/articles/tag/add', { name, slug });
+  const response = await axios.post(
+    '/api/articles/tag/add',
+    { name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function removeTag(id) {
-  const response = await axios.post('/api/articles/tag/remove', { id });
+  const response = await axios.post(
+    '/api/articles/tag/remove',
+    { id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function addTopic(name, slug) {
-  const response = await axios.post('/api/articles/topic/add', { name, slug });
+  const response = await axios.post(
+    '/api/articles/topic/add',
+    { name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function removeTopic(id) {
-  const response = await axios.post('/api/articles/topic/remove', { id });
+  const response = await axios.post(
+    '/api/articles/topic/remove',
+    { id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function addCategory(name, slug) {
-  const response = await axios.post('/api/articles/category/add', {
-    name,
-    slug,
-  });
+  const response = await axios.post(
+    '/api/articles/category/add',
+    { name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function removeCategory(id) {
-  const response = await axios.post('/api/articles/category/remove', { id });
+  const response = await axios.post(
+    '/api/articles/category/remove',
+    { id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 
 export async function updateCategory(id, name, slug) {
-  const response = await axios.post('/api/articles/category/update', { id, name, slug });
+  const response = await axios.post(
+    '/api/articles/category/update',
+    { id, name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function updateTag(id, name, slug) {
-  const response = await axios.post('/api/articles/tag/update', { id, name, slug });
+  const response = await axios.post(
+    '/api/articles/tag/update',
+    { id, name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 export async function updateTopic(id, name, slug) {
-  const response = await axios.post('/api/articles/topic/update', { id, name, slug });
+  const response = await axios.post(
+    '/api/articles/topic/update',
+    { id, name, slug },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 
 export async function updateContentArticle(id, content) {
-  const response = await axios.post('/api/article/update/content', {
-    id,
-    content,
-  });
+  const response = await axios.post(
+    '/api/article/update/content',
+    { id, content },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }
 
 export async function deleteArticle(id) {
-  const response = await axios.post('/api/article/delete', { id });
+  const response = await axios.post(
+    '/api/article/delete',
+    { id },
+    { headers: getAuthHeaders() }
+  );
   return response.data;
 }

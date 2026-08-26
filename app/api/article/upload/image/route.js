@@ -1,5 +1,6 @@
-import { supabase_coolify } from '@/config/supabase';
+﻿import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from 'next/server';
+import { requireAuth, ADMIN_ROLES } from '@/lib/api-auth';
 
 const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
@@ -12,6 +13,10 @@ const EXT_BY_MIME = {
 
 export async function POST(req) {
   try {
+    // Hanya admin/super admin yang boleh mengunggah gambar.
+    const { error: authError } = requireAuth(req, { roles: ADMIN_ROLES });
+    if (authError) return NextResponse.json({ message: authError }, { status: 403 });
+
     const formData = await req.formData();
     const file = formData.get('file');
 

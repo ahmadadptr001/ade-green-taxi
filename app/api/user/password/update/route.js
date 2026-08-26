@@ -1,10 +1,21 @@
-import { supabase_coolify } from "@/config/supabase"
+import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from "next/server"
-import { hashPassword } from "@/lib/password-compat"
+import { requireAuth, hashPassword } from "@/lib/api-auth"
 
 export async function POST(req) {
-  const { id, newPassword } = await req.json()
   try {
+    const { id, newPassword } = await req.json()
+
+    // Hanya pemilik akun atau admin yang boleh mengubah password.
+    const { error: authError } = requireAuth(req, { self: id })
+    if (authError) return NextResponse.json({ message: authError }, { status: 403 })
+
+    if (!id || typeof newPassword !== 'string' || newPassword.length < 6)
+      return NextResponse.json(
+        { message: 'Password baru minimal 6 karakter' },
+        { status: 400 }
+      )
+
     // Simpan sebagai hash scrypt, bukan plaintext.
     const { error } = await supabase_coolify
       .from('profiles')
@@ -12,14 +23,15 @@ export async function POST(req) {
         password: hashPassword(newPassword)
       })
       .eq('id', id)
-    
+
     if (error) {
-      console.log('[ERROR DEBUG] gagal mengubah password : ', error.message )
-      return NextResponse.json({message: error.message}, {status: 400})
+      console.log('[ERROR DEBUG] gagal mengubah password : ', error.message)
+      return NextResponse.json({ message: 'Gagal mengubah password' }, { status: 500 })
     }
-    return NextResponse.json({message: 'Passsword berhasil diubah!'}, {status: 200})
+    return NextResponse.json({ message: 'Passsword berhasil diubah!' }, { status: 200 })
 
   } catch (err) {
-    return NextResponse.json({message: err.message}, {status: 500})
+    console.log('[ERROR DEBUG] gagal mengubah password : ', err.message)
+    return NextResponse.json({ message: 'Terjadi kesalahan pada server' }, { status: 500 })
   }
 }

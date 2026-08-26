@@ -1,9 +1,14 @@
-import { supabase_coolify } from '@/config/supabase';
+﻿import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from 'next/server';
 import DOMPurify from 'isomorphic-dompurify';
+import { requireAuth, ADMIN_ROLES } from '@/lib/api-auth';
 
 export async function POST(req) {
   try {
+    // Hanya admin/super admin yang boleh mengubah konten artikel.
+    const { error: authError } = requireAuth(req, { roles: ADMIN_ROLES });
+    if (authError) return NextResponse.json({ message: authError }, { status: 403 });
+
     const { id, content } = await req.json();
 
     if (!id || typeof content !== 'string')

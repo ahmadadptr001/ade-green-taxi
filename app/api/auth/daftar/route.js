@@ -1,10 +1,10 @@
-import { supabase_coolify } from '@/config/supabase';
+import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
 import { NextResponse } from 'next/server';
-import { hashPassword } from '@/lib/password-compat';
+import { hashPassword, signToken, isValidEmail } from '@/lib/api-auth';
 
 export async function POST(req) {
-  const body = await req.json();
   try {
+    const body = await req.json();
     // Whitelist field agar role/status tidak bisa dipalsukan lewat body.
     // Password disimpan sebagai hash scrypt (sesuai format akun di database).
     const payload = {
@@ -16,23 +16,40 @@ export async function POST(req) {
       status: 'aktif',
     };
 
-    if (!payload.fullname || !payload.email || !body.password)
+    if (!payload.fullname || !isValidEmail(payload.email) || typeof body.password !== 'string')
       return NextResponse.json({ message: 'Data registrasi tidak lengkap' }, { status: 400 });
+
+    // Cegah duplikat email
+    const { data: existing } = await supabase_coolify
+      .from('profiles')
+      .select('id')
+      .eq('email', payload.email)
+      .maybeSingle();
+    if (existing)
+      return NextResponse.json(
+        { message: 'Email sudah terdaftar. Silakan masuk atau gunakan email lain.' },
+        { status: 409 }
+      );
 
     const { data: dataPorfile, error } = await supabase_coolify
       .from('profiles')
       .insert(payload)
-      .select()
+      .select('id, fullname, email, phone, role, status, last_seen')
       .maybeSingle()
 
-    if (error)
-      return NextResponse.json({ message: error.message }, { status: 500 });
+    if (error || !dataPorfile) {
+      console.log('[ERROR] daftar:', error?.message);
+      return NextResponse.json(
+        { message: 'Gagal membuat akun. Silakan coba lagi.' },
+        { status: 500 }
+      );
+    }
 
-    // Jangan kirim kolom password ke client.
-    if (dataPorfile) delete dataPorfile.password;
+    // Langsung terbitkan sesi — registrasi tanpa verifikasi email.
+    const token = signToken(dataPorfile);
 
     return NextResponse.json(
-      { message: 'Berhasil melakukan registrasi akun', data: dataPorfile },
+      { message: 'Berhasil melakukan registrasi akun', token, data: dataPorfile },
       { status: 200 }
     );
   } catch (err) {

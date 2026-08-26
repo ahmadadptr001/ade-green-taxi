@@ -1,4 +1,4 @@
-import { supabase_coolify } from "@/config/supabase";
+import { supabase_server_coolify as supabase_coolify } from "@/config/supabase-server";
 
 const SITE_URL = "https://adegreentx.id";
 

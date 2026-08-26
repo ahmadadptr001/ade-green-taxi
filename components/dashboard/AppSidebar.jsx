@@ -166,6 +166,7 @@ export default function AppSidebar() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         router.replace('/berita');
       }
     });
@@ -261,6 +262,7 @@ export default function AppSidebar() {
         if (res.isConfirmed) {
           setFullname('');
           localStorage.removeItem('user');
+          localStorage.removeItem('token');
           window.location.replace('/berita');
         }
       });

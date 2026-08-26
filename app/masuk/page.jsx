@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Leaf, Loader2, Lock, Mail, Eye, EyeOff, ChevronLeft } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
 import { login, updateLoginHostory } from '@/services/auth';
@@ -12,8 +12,10 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const emailOk = formData.email.includes('@') && formData.email.includes('.');
     setIsValid(emailOk && formData.password.length >= 6);
   }, [formData]);
@@ -39,7 +41,13 @@ export default function LoginPage() {
         });
         return;
       }
-      await updateLoginHostory(dataUser.data.id);
+      localStorage.setItem('user', JSON.stringify(dataUser.data));
+      if (dataUser.token) localStorage.setItem('token', dataUser.token);
+      try {
+        await updateLoginHostory(dataUser.data.id);
+      } catch (activityErr) {
+        console.error('Gagal mencatat aktivitas login:', activityErr);
+      }
       Swal.fire({
         icon: 'success',
         title: 'Login Berhasil!',
@@ -49,7 +57,6 @@ export default function LoginPage() {
         allowEscapeKey: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          localStorage.setItem('user', JSON.stringify(dataUser.data));
           router.replace('/dashboard/berita');
         }
       });
@@ -65,110 +72,114 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-slate-900 md:flex-row">
-      {/* Visual side */}
-      <div className="relative hidden items-center justify-center overflow-hidden border-r border-slate-100 bg-slate-100 md:flex md:w-1/2">
-        <img
-          src="/bg-auth.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/70 via-emerald-900/20 to-transparent" />
-        <div className="relative z-10 max-w-xs px-12 text-center">
-          <Leaf className="mx-auto mb-6 h-10 w-10 text-white" />
-          <h2 className="font-display text-3xl font-bold tracking-tight text-white">
-            Ade<span className="text-emerald-400">Green</span> TX
-          </h2>
-          <p className="mt-3 leading-relaxed text-emerald-50/80">
-            Masuk untuk mengelola konten dan mendapatkan pembaruan ekosistem hijau.
-          </p>
-        </div>
-      </div>
+    <div className="flex min-h-screen flex-col bg-white md:flex-row">
+      {/* Left form side */}
+      <div className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-10 md:px-14 lg:px-20">
+        <div className="mx-auto w-full max-w-md">
+          {/* Heading */}
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            Welcome back. Sign in to Ade Green TX
+          </h1>
 
-      {/* Form side */}
-      <div className="flex flex-1 flex-col justify-center px-6 py-16 md:px-16">
-        <div className="mx-auto w-full max-w-sm">
-          <Link
-            href="/beranda"
-            className="mb-12 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-emerald-600"
-          >
-            <ChevronLeft size={16} /> Kembali
-          </Link>
-
-          <h1 className="font-display text-3xl font-bold tracking-tight">Selamat Datang</h1>
-          <p className="mt-3 text-slate-500">
-            Masukkan email dan kata sandi Anda untuk melanjutkan.
-          </p>
-
-          <form onSubmit={handleSubmit} className="mt-10 space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-600">Alamat Email</label>
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
-                <Mail className="h-5 w-5 shrink-0 text-slate-400" />
-                <input
-                  type="email"
-                  placeholder="nama@email.com"
-                  className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
-                  value={formData.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="mt-10 space-y-5">
+            {/* Email */}
+            <div>
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-sm text-slate-800 outline-none placeholder:text-slate-400 transition-all duration-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100"
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+              />
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-slate-600">Kata Sandi</label>
-                <Link href="/lupa" className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
-                  Lupa?
-                </Link>
-              </div>
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 focus-within:border-emerald-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-emerald-100">
-                <Lock className="h-5 w-5 shrink-0 text-slate-400" />
+            {/* Password */}
+            <div>
+              <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 transition-all duration-200 focus-within:border-sky-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-sky-100">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  className="w-full bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                  placeholder="Password"
+                  className="w-full bg-transparent px-5 py-3.5 text-sm text-slate-800 outline-none placeholder:text-slate-400"
                   value={formData.password}
                   onChange={(e) => handleChange('password', e.target.value)}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="shrink-0 px-4 text-slate-400 hover:text-slate-600 transition-colors"
                   aria-label={showPassword ? 'Sembunyikan' : 'Tampilkan'}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
 
+            {/* Forgot password */}
+            <div className="flex justify-end">
+              <Link href="/lupa" className="text-sm font-medium text-sky-500 hover:text-sky-600 transition-colors">
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* CTA */}
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className={`group flex w-full items-center justify-center gap-2 rounded-xl py-4 text-sm font-semibold transition-all ${
+              className={`group flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-semibold transition-all duration-300 ${
                 isValid && !isLoading
-                  ? 'bg-slate-900 text-white hover:bg-emerald-600'
+                  ? 'bg-gradient-to-r from-sky-500 to-sky-400 text-white shadow-lg shadow-sky-500/25 hover:from-sky-400 hover:to-sky-300 hover:shadow-sky-400/30'
                   : 'cursor-not-allowed bg-slate-100 text-slate-400'
               }`}
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                <>
-                  Masuk Sekarang
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </>
+                'Sign In'
               )}
             </button>
           </form>
 
-          <p className="mt-12 text-center text-sm text-slate-500">
-            Belum memiliki akun?{' '}
-            <Link href="/daftar" className="font-semibold text-emerald-600 hover:text-emerald-700">
-              Daftar Akun Baru
+          {/* Sign up link */}
+          <p className="mt-8 text-center text-sm text-slate-500">
+            Don&rsquo;t have an account?{' '}
+            <Link href="/daftar" className="font-semibold text-sky-500 hover:text-sky-600 transition-colors">
+              Sign Up
             </Link>
           </p>
+
+          {/* Footer links */}
+          <div className="mt-12 flex items-center justify-center gap-6 border-t border-slate-100 pt-6">
+            <Link href="/terms" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/privacy" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Right visual side */}
+      <div className="relative h-56 w-full overflow-hidden sm:h-64 md:h-auto md:w-[45%] md:flex-shrink-0 lg:w-[50%]">
+        <img
+          src="/login-bg.jpeg"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        {/* Bottom overlay text */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent p-6 pt-16 sm:p-8 sm:pt-20">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-sm">
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Ade Green TX</p>
+              <p className="text-xs text-white/60">Electric Taxi Mobility</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

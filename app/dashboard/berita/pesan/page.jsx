@@ -1,10 +1,10 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Megaphone, Trash2, Info, Send } from 'lucide-react';
-import { supabase_coolify } from '@/config/supabase';
 import Swal from 'sweetalert2';
 import { useUser } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
+import { updateHighlightMessage } from '@/services/articles';
 
 export default function HighlightPage() {
   const user = useUser();
@@ -20,22 +20,24 @@ export default function HighlightPage() {
       }).then((result) => {
         if (result.isConfirmed) router.replace('/dashboard/berita');
       });
+      return;
     }
   }, []);
 
   const handleSave = async () => {
     if (!message.trim()) return;
     setLoading(true);
-    const { error } = await supabase_coolify
-      .from('highlight')
-      .upsert({ id: 1, text: message });
-    setLoading(false);
-    if (error) {
-      Swal.fire({ icon: 'error', title: 'Gagal mempublikasikan', text: error.message });
-      return;
+    try {
+      // Tulis lewat API (server memvalidasi token & role) — client tidak
+      // lagi menulis langsung ke database.
+      const result = await updateHighlightMessage(message);
+      Swal.fire({ icon: 'success', title: result.message });
+      setMessage('');
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'Gagal mempublikasikan', text: err.message });
+    } finally {
+      setLoading(false);
     }
-    Swal.fire({ icon: 'success', title: 'Pesan Highlight berhasil dipublikasikan!' });
-    setMessage('');
   };
 
   return (

@@ -14,6 +14,7 @@ export default function LayoutSidebar({ children }) {
   useEffect(() => {
     const dataLocalUser = localStorage.getItem('user');
     if (!dataLocalUser || dataLocalUser === 'undefined') {
+      localStorage.removeItem('token');
       Swal.fire({
         icon: 'warning',
         text: 'Silahkan login ke akun Anda terlebih dahulu',

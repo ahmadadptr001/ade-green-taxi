@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -57,6 +57,11 @@ const INJECTED_STYLES = `
     box-shadow: 0 40px 100px -20px rgba(0,0,0,0.9), 0 20px 40px -20px rgba(0,0,0,0.8),
       inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -2px 4px rgba(0,0,0,0.8);
     border: 1px solid rgba(255,255,255,0.04); position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   .card-sheen {
     position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 50;
@@ -78,6 +83,8 @@ const INJECTED_STYLES = `
     background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
     box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05), inset 0 -1px 1px rgba(0,0,0,0.5);
     border: 1px solid rgba(255,255,255,0.03);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   .floating-ui-badge {
     background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
@@ -89,6 +96,22 @@ const INJECTED_STYLES = `
   .btn-modern-light:hover { transform: translateY(-3px); }
   .btn-modern-light:active { transform: translateY(1px); }
   .progress-ring { transform: rotate(-90deg); transform-origin: center; stroke-dasharray: 402; stroke-dashoffset: 402; stroke-linecap: round; }
+
+  .ha-draw {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: haDraw 1.5s ease-out 1.5s forwards;
+  }
+  .ha-text {
+    animation: haBounce 1.8s ease-in-out infinite;
+  }
+  @keyframes haDraw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes haBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(5px); }
+  }
 
   /* --- Mobile / low-power: strip the most GPU-expensive effects --- */
   @media (max-width: 768px) {
@@ -108,6 +131,9 @@ const INJECTED_STYLES = `
   }
   @media (prefers-reduced-motion: reduce) {
     .film-grain { display: none; }
+    .scroll-indicator-fill { animation: none; }
+    .ha-draw { animation: none; stroke-dashoffset: 0; }
+    .ha-text { animation: none; }
   }
 `;
 
@@ -135,6 +161,31 @@ export function CinematicHero({
   const mainCardRef = useRef(null);
   const mockupRef = useRef(null);
   const requestRef = useRef(0);
+  const indicatorRef = useRef(null);
+  const [showScroll, setShowScroll] = useState(false);
+
+  // Show scroll indicator after intro animation
+  useEffect(() => {
+    const timer = setTimeout(() => setShowScroll(true), 2200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Hide scroll indicator when user scrolls past hero
+  useEffect(() => {
+    const el = indicatorRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (window.scrollY > 60) {
+        el.style.opacity = "0";
+        el.style.transition = "opacity 0.3s ease-out";
+      } else {
+        el.style.opacity = "";
+        el.style.transition = "";
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     // Pointer parallax is a "nice to have" — it must never compete with the
@@ -244,7 +295,7 @@ export function CinematicHero({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: isMobile ? "+=3800" : "+=7000",
+          end: isMobile ? "+=2200" : "+=3500",
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -252,11 +303,9 @@ export function CinematicHero({
       });
 
       scrollTl
-        // Grid covers the whole viewport — animating a blur on it every frame
-        // is the heaviest paint in the scene, so it only scales + fades.
         .to(
           ".bg-grid-theme",
-          { scale: 1.15, opacity: 0.2, ease: "power2.inOut", duration: 2 },
+          { scale: 1.15, opacity: 0.2, ease: "power2.inOut", duration: 1.5 },
           0,
         )
         .to(
@@ -265,17 +314,17 @@ export function CinematicHero({
             scale: 1.15,
             opacity: 0.2,
             ease: "power2.inOut",
-            duration: 2,
+            duration: 1.5,
             ...(isMobile ? {} : { filter: "blur(8px)" }),
           },
           0,
         )
-        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+        .to(".main-card", { y: 0, ease: "power3.inOut", duration: 1.5 }, 0)
         .to(".main-card", {
           scale: fullScale,
           borderRadius: "0px",
           ease: "power3.inOut",
-          duration: 1.5,
+          duration: 1,
         })
         .fromTo(
           ".mockup-scroll-wrapper",
@@ -295,9 +344,9 @@ export function CinematicHero({
             autoAlpha: 1,
             scale: 1,
             ease: "expo.out",
-            duration: 2.5,
+            duration: 1.8,
           },
-          "-=0.8",
+          "-=0.6",
         )
         .fromTo(
           ".phone-widget",
@@ -306,26 +355,26 @@ export function CinematicHero({
             y: 0,
             autoAlpha: 1,
             scale: 1,
-            stagger: 0.15,
+            stagger: 0.1,
             ease: "back.out(1.2)",
-            duration: 1.5,
+            duration: 1,
           },
-          "-=1.5",
+          "-=1.2",
         )
         .to(
           ".progress-ring",
-          { strokeDashoffset: 60, duration: 2, ease: "power3.inOut" },
-          "-=1.2",
+          { strokeDashoffset: 0, duration: 1.5, ease: "none" },
+          "-=1.0",
         )
         .to(
           ".counter-val",
           {
             innerHTML: metricValue,
             snap: { innerHTML: 1 },
-            duration: 2,
-            ease: "expo.out",
+            duration: 1.5,
+            ease: "none",
           },
-          "-=2.0",
+          "-=1.5",
         )
         .fromTo(
           ".floating-badge",
@@ -336,27 +385,27 @@ export function CinematicHero({
             scale: 1,
             rotationZ: 0,
             ease: "back.out(1.5)",
-            duration: 1.5,
-            stagger: 0.2,
+            duration: 1,
+            stagger: 0.15,
           },
-          "-=2.0",
+          "-=1.5",
         )
         .fromTo(
           ".card-left-text",
           { x: -50, autoAlpha: 0 },
-          { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 },
-          "-=1.5",
+          { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1 },
+          "-=1.0",
         )
         .fromTo(
           ".card-right-text",
           { x: 50, autoAlpha: 0, scale: 0.8 },
-          { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 },
+          { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1 },
           "<",
         )
-        .to({}, { duration: 2.5 })
+        .to({}, { duration: 1 })
         .set(".hero-text-wrapper", { autoAlpha: 0 })
         .set(".cta-wrapper", { autoAlpha: 1 })
-        .to({}, { duration: 1.5 })
+        .to({}, { duration: 0.8 })
         .to(
           [
             ".mockup-scroll-wrapper",
@@ -370,8 +419,8 @@ export function CinematicHero({
             z: -200,
             autoAlpha: 0,
             ease: "power3.in",
-            duration: 1.2,
-            stagger: 0.05,
+            duration: 0.8,
+            stagger: 0.04,
           },
         )
         .to(
@@ -380,7 +429,7 @@ export function CinematicHero({
             scale: 1,
             borderRadius: isMobile ? "32px" : "40px",
             ease: "expo.inOut",
-            duration: 1.8,
+            duration: 1.2,
           },
           "pullback",
         )
@@ -389,7 +438,7 @@ export function CinematicHero({
           {
             scale: 1,
             ease: "expo.inOut",
-            duration: 1.8,
+            duration: 1.2,
             ...(isMobile ? {} : { filter: "blur(0px)" }),
           },
           "pullback",
@@ -397,7 +446,7 @@ export function CinematicHero({
         .to(".main-card", {
           y: -window.innerHeight - 300,
           ease: "power3.in",
-          duration: 1.5,
+          duration: 1,
         });
     }, containerRef);
 
@@ -481,23 +530,23 @@ export function CinematicHero({
           className="main-card premium-depth-card relative overflow-hidden gsap-reveal flex items-center justify-center pointer-events-auto w-[92vw] md:w-[85vw] h-[92vh] md:h-[85vh] rounded-[32px] md:rounded-[40px]"
         >
           <div className="card-sheen" aria-hidden="true" />
-          <div className="relative w-full h-full max-w-7xl mx-auto px-4 lg:px-12 flex flex-col justify-evenly lg:grid lg:grid-cols-3 items-center lg:gap-8 z-10 py-6 lg:py-0">
+          <div className="relative w-full h-full max-w-7xl mx-auto px-5 lg:px-16 flex flex-col justify-evenly lg:grid lg:grid-cols-3 items-center lg:gap-6 z-10 py-6 lg:py-0">
             {/* Brand */}
-            <div className="card-right-text gsap-reveal order-1 lg:order-3 flex justify-center lg:justify-end z-20 w-full">
-              <h2 className="text-5xl md:text-[5rem] lg:text-[6.5rem] font-black uppercase tracking-tighter text-card-silver-matte">
+            <div className="card-right-text gsap-reveal order-1 lg:order-3 flex justify-center lg:justify-end z-20 w-full lg:self-center">
+              <h2 className="text-5xl md:text-[5.5rem] lg:text-[7rem] font-black uppercase tracking-tighter text-card-silver-matte">
                 {brandName}
               </h2>
             </div>
 
             {/* Phone mockup */}
             <div
-              className="mockup-scroll-wrapper order-2 lg:order-2 relative w-full h-[380px] lg:h-[600px] flex items-center justify-center z-10"
+              className="mockup-scroll-wrapper order-2 lg:order-2 relative w-full h-[400px] md:h-[480px] lg:h-[600px] flex items-center justify-center z-10"
               style={{ perspective: "1000px" }}
             >
-              <div className="relative w-full h-full flex items-center justify-center transform scale-[0.65] md:scale-85 lg:scale-100">
+              <div className="relative w-full h-full flex items-center justify-center transform scale-[0.72] md:scale-[0.85] lg:scale-100">
                 <div
                   ref={mockupRef}
-                  className="relative w-[280px] h-[580px] rounded-[3rem] iphone-bezel flex flex-col will-change-transform"
+                  className="relative w-[280px] h-[580px] md:w-[300px] md:h-[620px] rounded-[3rem] iphone-bezel flex flex-col will-change-transform"
                 >
                   <div
                     className="absolute top-[120px] -left-[3px] w-[3px] h-[25px] hardware-btn rounded-l-md z-0"
@@ -523,23 +572,24 @@ export function CinematicHero({
                     <div className="absolute top-[5px] left-1/2 -translate-x-1/2 w-[100px] h-[28px] bg-black rounded-full z-50 flex items-center justify-end px-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
                     </div>
-                    <div className="relative w-full h-full pt-12 px-5 pb-8 flex flex-col">
+                    <div className="relative w-full h-full pt-14 px-6 pb-8 flex flex-col">
                       <div className="phone-widget flex justify-between items-center mb-8">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-neutral-400 uppercase tracking-widest font-bold mb-1">
+                          <span className="text-[11px] text-neutral-400 uppercase tracking-widest font-bold mb-1">
                             Hari Ini
                           </span>
-                          <span className="text-xl font-bold tracking-tight text-white drop-shadow-md">
+                          <span className="text-2xl font-bold tracking-tight text-white drop-shadow-md">
                             Perjalanan
                           </span>
                         </div>
-                        <div className="w-9 h-9 rounded-full bg-white/5 text-neutral-200 flex items-center justify-center font-bold text-sm border border-white/10">
+                        <div className="w-10 h-10 rounded-full bg-white/5 text-neutral-200 flex items-center justify-center font-bold text-sm border border-white/10">
                           AG
                         </div>
                       </div>
-                      <div className="phone-widget relative w-44 h-44 mx-auto flex items-center justify-center mb-8 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+                      <div className="phone-widget relative w-48 h-48 mx-auto flex items-center justify-center mb-8 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
                         <svg
                           className="absolute inset-0 w-full h-full"
+                          viewBox="0 0 176 176"
                           aria-hidden="true"
                         >
                           <circle
@@ -560,20 +610,20 @@ export function CinematicHero({
                             strokeWidth="12"
                           />
                         </svg>
-                        <div className="text-center z-10 flex flex-col items-center">
-                          <span className="counter-val text-4xl font-extrabold tracking-tighter text-white">
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center">
+                          <span className="counter-val text-5xl font-extrabold tracking-tighter text-white">
                             0
                           </span>
-                          <span className="text-[8px] text-emerald-200/50 uppercase tracking-[0.1em] font-bold mt-0.5">
+                          <span className="text-[9px] text-emerald-200/50 uppercase tracking-[0.1em] font-bold mt-0.5">
                             {metricLabel}
                           </span>
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 flex items-center justify-center mr-3 border border-emerald-400/20 shadow-inner">
+                        <div className="phone-widget widget-depth rounded-2xl p-3.5 flex items-center">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 flex items-center justify-center mr-3 border border-emerald-400/20 shadow-inner">
                             <svg
-                              className="w-4 h-4 text-emerald-400"
+                              className="w-5 h-5 text-emerald-400"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -588,14 +638,14 @@ export function CinematicHero({
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <div className="h-2 w-20 bg-neutral-300 rounded-full mb-2" />
-                            <div className="h-1.5 w-12 bg-neutral-600 rounded-full" />
+                            <div className="h-2.5 w-24 bg-neutral-300 rounded-full mb-2" />
+                            <div className="h-2 w-16 bg-neutral-600 rounded-full" />
                           </div>
                         </div>
-                        <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/20 to-teal-600/5 flex items-center justify-center mr-3 border border-teal-400/20 shadow-inner">
+                        <div className="phone-widget widget-depth rounded-2xl p-3.5 flex items-center">
+                          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500/20 to-teal-600/5 flex items-center justify-center mr-3 border border-teal-400/20 shadow-inner">
                             <svg
-                              className="w-4 h-4 text-teal-300"
+                              className="w-5 h-5 text-teal-300"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -610,43 +660,43 @@ export function CinematicHero({
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <div className="h-2 w-16 bg-neutral-300 rounded-full mb-2" />
-                            <div className="h-1.5 w-24 bg-neutral-600 rounded-full" />
+                            <div className="h-2.5 w-20 bg-neutral-300 rounded-full mb-2" />
+                            <div className="h-2 w-28 bg-neutral-600 rounded-full" />
                           </div>
                         </div>
                       </div>
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/20 rounded-full" />
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[140px] h-[5px] bg-white/20 rounded-full" />
                     </div>
                   </div>
                 </div>
 
                 {/* Floating badges */}
-                <div className="floating-badge absolute flex top-6 lg:top-12 left-[-15px] lg:left-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
-                  <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-emerald-500/20 to-emerald-900/10 flex items-center justify-center border border-emerald-400/30 shadow-inner">
-                    <span className="text-base lg:text-xl" aria-hidden="true">
+                <div className="floating-badge absolute flex top-4 lg:top-12 left-2 lg:left-[-90px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-2.5 lg:gap-4 z-30">
+                  <div className="w-9 h-9 lg:w-11 lg:h-11 rounded-full bg-gradient-to-b from-emerald-500/20 to-emerald-900/10 flex items-center justify-center border border-emerald-400/30 shadow-inner shrink-0">
+                    <span className="text-lg lg:text-2xl" aria-hidden="true">
                       🍃
                     </span>
                   </div>
-                  <div>
-                    <p className="text-white text-xs lg:text-sm font-bold tracking-tight">
+                  <div className="min-w-0">
+                    <p className="text-white text-[11px] lg:text-sm font-bold tracking-tight leading-tight">
                       100% Listrik
                     </p>
-                    <p className="text-emerald-200/50 text-[10px] lg:text-xs font-medium">
+                    <p className="text-emerald-200/50 text-[9px] lg:text-xs font-medium leading-tight">
                       Armada hijau
                     </p>
                   </div>
                 </div>
-                <div className="floating-badge absolute flex bottom-12 lg:bottom-20 right-[-15px] lg:right-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
-                  <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-teal-500/20 to-teal-900/10 flex items-center justify-center border border-teal-400/30 shadow-inner">
-                    <span className="text-base lg:text-lg" aria-hidden="true">
+                <div className="floating-badge absolute flex bottom-10 lg:bottom-20 right-2 lg:right-[-90px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-2.5 lg:gap-4 z-30">
+                  <div className="w-9 h-9 lg:w-11 lg:h-11 rounded-full bg-gradient-to-b from-teal-500/20 to-teal-900/10 flex items-center justify-center border border-teal-400/30 shadow-inner shrink-0">
+                    <span className="text-lg lg:text-xl" aria-hidden="true">
                       ⚡
                     </span>
                   </div>
-                  <div>
-                    <p className="text-white text-xs lg:text-sm font-bold tracking-tight">
+                  <div className="min-w-0">
+                    <p className="text-white text-[11px] lg:text-sm font-bold tracking-tight leading-tight">
                       Nol Emisi
                     </p>
-                    <p className="text-emerald-200/50 text-[10px] lg:text-xs font-medium">
+                    <p className="text-emerald-200/50 text-[9px] lg:text-xs font-medium leading-tight">
                       Perjalanan bersih
                     </p>
                   </div>
@@ -655,8 +705,8 @@ export function CinematicHero({
             </div>
 
             {/* Accountability text */}
-            <div className="card-left-text gsap-reveal order-3 lg:order-1 flex flex-col justify-center text-center lg:text-left z-20 w-full lg:max-w-none px-4 lg:px-0">
-              <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-0 lg:mb-5 tracking-tight">
+            <div className="card-left-text gsap-reveal order-3 lg:order-1 flex flex-col justify-center text-center lg:text-left z-20 w-full lg:max-w-none px-4 lg:px-0 lg:self-center">
+              <h3 className="text-white text-2xl md:text-3xl lg:text-5xl font-bold mb-0 lg:mb-5 tracking-tight">
                 {cardHeading}
               </h3>
               <p className="hidden md:block text-emerald-100/70 text-sm md:text-base lg:text-lg font-normal leading-relaxed mx-auto lg:mx-0 max-w-sm lg:max-w-none">
@@ -682,6 +732,44 @@ export function CinematicHero({
               </a>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Scroll indicator — hand-drawn curvy arrow + straight text */}
+      <div
+        ref={indicatorRef}
+        className={cn(
+          "scroll-indicator-wrap absolute right-2 md:right-6 bottom-8 md:bottom-12 z-30 transition-all duration-1000 pointer-events-none",
+          showScroll
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-4"
+        )}
+        aria-hidden="true"
+      >
+        <div className="relative" style={{ width: 90, height: 100 }}>
+          <svg
+            className="absolute inset-0"
+            width="90"
+            height="100"
+            viewBox="0 0 90 100"
+            fill="none"
+          >
+            <path
+              className="ha-draw"
+              d="M10 8 C22 8, 42 16, 38 32 C34 46, 54 46, 58 38 C62 30, 52 50, 42 64 C38 72, 36 82, 34 100 M22 90 L34 100 L46 90"
+              stroke="#0f172a"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+          </svg>
+          <span
+            className="absolute text-[11px] font-bold tracking-[0.2em] text-[#0f172a] uppercase ha-text"
+            style={{ left: 60, top: 26, writingMode: 'vertical-rl' }}
+          >
+            scroll
+          </span>
         </div>
       </div>
     </div>

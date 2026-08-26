@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { otpValidate, sendOTP, changePassword } from '@/services/auth';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
-import { getUserByEmail } from '@/services/users';
 
 export default function OTP() {
   const router = useRouter();
@@ -84,11 +83,12 @@ export default function OTP() {
       setIsLoading(false);
 
       // Sesi HANYA disimpan jika OTP benar-benar tervalidasi.
-      if (!result || !result.success) return;
+      // Profil + token langsung dari respons OTP (tanpa fetch terpisah).
+      if (!result || !result.success || !result.data) return;
 
-      const dataUser = await getUserByEmail(email);
-      localStorage.setItem('user', JSON.stringify(dataUser.data));
-      setProfileId(dataUser.data?.id ?? null);
+      localStorage.setItem('user', JSON.stringify(result.data));
+      if (result.token) localStorage.setItem('token', result.token);
+      setProfileId(result.data.id ?? null);
       setIsVerified(true);
     } catch (err) {
       Swal.fire({ icon: 'error', title: err.message });

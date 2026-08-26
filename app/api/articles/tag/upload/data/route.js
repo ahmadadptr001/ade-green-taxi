@@ -1,10 +1,17 @@
-import { supabase_coolify } from '@/config/supabase';
+﻿import { supabase_server_coolify as supabase_coolify } from '@/config/supabase-server';
+import { requireAuth, ADMIN_ROLES } from '@/lib/api-auth';
 import { slugify } from '@/utils/slug';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
+  // Hanya admin/super admin yang boleh melakukan aksi ini.
+  const auth = requireAuth(req, { roles: ADMIN_ROLES });
+  if (auth.error) return NextResponse.json({ message: auth.error }, { status: auth.status });
   const { tags, article_id } = await req.json();
   try {
+    if (!Array.isArray(tags) || !article_id)
+      return NextResponse.json({ message: 'Data penautan tidak valid' }, { status: 400 });
+
     const tagSlugs = tags.map(slugify);
     const { data: existingTags, error: tagFetchError } = await supabase_coolify
       .from('tags')
@@ -47,7 +54,18 @@ export async function POST(req) {
       tag_id: tag.id,
     }));
 
-    await supabase_coolify.from('article_tags').insert(articleTagsPayload);
+    // Cek error hasil penautan — jangan diam-diam dianggap sukses.
+    const { error: linkError } = await supabase_coolify
+      .from('article_tags')
+      .insert(articleTagsPayload);
+
+    if (linkError) {
+      console.log('[ERROR] link tags:', linkError.message);
+      return NextResponse.json(
+        { message: 'Gagal menautkan tags ke artikel' },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { message: 'Berhasil menautkan tags ke artikel' },

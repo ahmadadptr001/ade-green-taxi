@@ -1,4 +1,3 @@
-import { supabase } from '@/config/supabase';
 import axios from 'axios';
 
 export const reportUser = async (dataReport) => {
