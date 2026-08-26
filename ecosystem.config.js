@@ -19,7 +19,7 @@ module.exports = {
       cwd: "/home/debian/ade-green-taxi",
 
       exec_mode: "cluster",
-      instances: -1, // semua core, sisakan 1 untuk OS/nginx (KVM 8 -> 7 worker)
+      instances: 2, // traffic web rendah — sisakan core untuk kebutuhan lain
 
       max_memory_restart: "1G", // restart worker bila > 1 GB (cegah OOM)
       autorestart: true,
