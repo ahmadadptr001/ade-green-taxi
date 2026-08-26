@@ -371,22 +371,26 @@ export default function UserActivityManager() {
                       <td className="px-6 py-4">
                         <div className="text-sm">
                           <p className="font-medium text-slate-700">
-                            {formatDistanceToNow(parseISO(user.last_seen), {
-                              addSuffix: true,
-                              locale: id,
-                            })}
+                            {user.last_seen
+                              ? formatDistanceToNow(parseISO(user.last_seen), {
+                                  addSuffix: true,
+                                  locale: id,
+                                })
+                              : 'Belum pernah masuk'}
                           </p>
                           <p className="text-[11px] text-slate-400">
-                            {new Date(user.last_seen).toLocaleDateString(
-                              'id-ID',
-                              {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              }
-                            )}
+                            {user.last_seen
+                              ? new Date(user.last_seen).toLocaleDateString(
+                                  'id-ID',
+                                  {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  }
+                                )
+                              : '-'}
                           </p>
                         </div>
                       </td>

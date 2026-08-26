@@ -135,8 +135,9 @@ export default function AppSidebar() {
   const [width, setWidth] = useState(0);
   const [pathname, setPathname] = useState('');
   const [fullname, setFullname] = useState(user?.fullname);
-  const [newPassword, setNewPassword] = useState(user?.password);
-  const [confirmNewPassword, setConfirmNewPassword] = useState(user?.password);
+  // Jangan seed dari user.password (kini berisi hash, bukan password asli).
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [mounted, setMounted] = useState(true);
 
   useEffect(() => {
