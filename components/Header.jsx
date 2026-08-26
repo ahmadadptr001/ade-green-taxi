@@ -13,7 +13,18 @@ export default function Header() {
   const searchInputRef = useRef(null); // desktop dropdown input
   const mobileInputRef = useRef(null); // mobile inline input
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
   const isBeranda = pathname === "/beranda" || pathname === "/";
+
+  useEffect(() => {
+    if (!isBeranda) return;
+    const onScroll = () => setScrolled(window.scrollY > 200);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isBeranda]);
+
+  const showGlass = isBeranda && !scrolled;
 
   const { language, setLanguage } = useLanguageStore();
   const t = language === "id" ? ID : EN;
@@ -49,7 +60,7 @@ export default function Header() {
       {/* FLOATING LIGHT PILL */}
       <header className="fixed left-1/2 top-3 z-[120] w-[calc(100%-1rem)] -translate-x-1/2 md:w-auto">
         <div className={`flex items-center gap-2 rounded-full px-2 py-2 shadow-sm md:gap-4 md:px-4 transition-all duration-300 ${
-          isBeranda
+          showGlass
             ? "border border-white/10 bg-white/5 backdrop-blur-xl shadow-black/20"
             : "border border-slate-200 bg-white/90 shadow-slate-900/5 backdrop-blur-md"
         }`}>
@@ -60,18 +71,18 @@ export default function Header() {
               runSearch(mobileInputRef.current?.value);
             }}
             className={`flex flex-1 items-center gap-2 rounded-full px-3 py-1.5 md:hidden ${
-              isBeranda
+              showGlass
                 ? "bg-white/10"
                 : "bg-slate-100"
             }`}
           >
-            <Search size={17} className={`shrink-0 ${isBeranda ? "text-white/50" : "text-slate-400"}`} />
+            <Search size={17} className={`shrink-0 ${showGlass ? "text-white/50" : "text-slate-400"}`} />
             <input
               ref={mobileInputRef}
               type="text"
               placeholder={isID ? "Cari di ADEGREEN..." : "Search ADEGREEN..."}
               className={`w-full min-w-0 bg-transparent text-sm focus:outline-none ${
-                isBeranda
+                showGlass
                   ? "text-white placeholder:text-white/40"
                   : "text-slate-800 placeholder:text-slate-400"
               }`}
@@ -85,7 +96,7 @@ export default function Header() {
                 key={item.label}
                 href={item.href}
                 className={`text-sm font-medium transition-colors ${
-                  isBeranda
+                  showGlass
                     ? "text-white/70 hover:text-white"
                     : "text-slate-600 hover:text-emerald-600"
                 }`}
@@ -95,7 +106,7 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className={`mx-0.5 hidden h-4 w-px md:block ${isBeranda ? "bg-white/10" : "bg-slate-200"}`} />
+          <div className={`mx-0.5 hidden h-4 w-px md:block ${showGlass ? "bg-white/10" : "bg-slate-200"}`} />
 
           {/* DESKTOP: search icon (opens dropdown) + language */}
           <button
@@ -104,7 +115,7 @@ export default function Header() {
             className={`hidden rounded-full p-1.5 transition-colors md:inline-flex ${
               searchOpen
                 ? "bg-emerald-50 text-emerald-600"
-                : isBeranda
+                : showGlass
                   ? "text-white/60 hover:bg-white/10"
                   : "text-slate-500 hover:bg-slate-100"
             }`}
@@ -114,7 +125,7 @@ export default function Header() {
           <button
             onClick={() => setLanguage(language === "id" ? "en" : "id")}
             className={`hidden items-center gap-1 text-sm font-medium transition-colors md:flex ${
-              isBeranda
+              showGlass
                 ? "text-white/60 hover:text-white"
                 : "text-slate-600 hover:text-slate-900"
             }`}
@@ -128,7 +139,7 @@ export default function Header() {
             title={open ? (isID ? "Tutup" : "Close") : "Menu"}
             onClick={() => setOpen((v) => !v)}
             className={`shrink-0 rounded-full p-1.5 transition-colors md:hidden ${
-              isBeranda
+              showGlass
                 ? "text-white/70 hover:bg-white/10"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
@@ -140,7 +151,7 @@ export default function Header() {
         {/* DESKTOP search dropdown */}
         <div
           className={`absolute left-1/2 top-full mt-2 hidden w-[min(92vw,36rem)] -translate-x-1/2 overflow-hidden rounded-2xl shadow-lg transition-all duration-300 md:block ${
-            isBeranda
+            showGlass
               ? `border border-white/10 bg-black/60 backdrop-blur-xl shadow-black/30 ${
                   searchOpen
                     ? "max-h-24 opacity-100"
@@ -160,7 +171,7 @@ export default function Header() {
             }}
             className="flex items-center gap-3 px-5 py-4"
           >
-            <Search size={20} className={isBeranda ? "text-white/40" : "text-slate-400"} />
+            <Search size={20} className={showGlass ? "text-white/40" : "text-slate-400"} />
             <input
               ref={searchInputRef}
               type="text"
@@ -168,7 +179,7 @@ export default function Header() {
                 isID ? "Cari di ADEGREEN..." : "Search in ADEGREEN..."
               }
               className={`w-full bg-transparent text-base focus:outline-none ${
-                isBeranda
+                showGlass
                   ? "text-white placeholder:text-white/40"
                   : "text-slate-800 placeholder:text-slate-400"
               }`}
@@ -176,7 +187,7 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setSearchOpen(false)}
-              className={isBeranda ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}
+              className={showGlass ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}
             >
               <X size={18} />
             </button>
